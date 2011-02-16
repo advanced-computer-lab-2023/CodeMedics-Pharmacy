@@ -14,7 +14,7 @@ const getAllMedicineNames = async (req, res) => {
         return res.status(200).json({ medicineNames });
     } catch (error) {
         console.error('Error fetching medicines:', error);
-        return res.status(500).json({ error: 'Failed to fetch medicines.' });
+        return res.status(500).json({ message: 'Failed to fetch medicines.' });
     }
 };
 module.exports = {getAllMedicineNames};

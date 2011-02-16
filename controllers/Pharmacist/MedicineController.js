@@ -49,7 +49,7 @@ const editMedicine = async (req, res) => {
         const medicine = await medicineModel.findOne({ name });
 
         if (!medicine) {
-            return res.status(404).json({ error: 'Medicine not found' });
+            return res.status(404).json({ message: 'Medicine not found' });
         }
         for (const key in updates) {
             if (Object.hasOwnProperty.call(updates, key)) {
@@ -70,7 +70,7 @@ const editMedicine = async (req, res) => {
 
         res.status(200).json({ message: 'Medicine details updated successfully', medicine });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -128,7 +128,7 @@ const viewMedicines = async (req, res) => {
         return res.status(200).json({ medicines });
     } catch (error) {
         console.error('Error fetching medicines:', error);
-        return res.status(500).json({ error: 'Failed to fetch medicines.' });
+        return res.status(500).json({ message: 'Failed to fetch medicines.' });
     }
 };
 
@@ -152,7 +152,7 @@ const viewAlternativeMedicines = async (req, res) => {
 
     } catch (error) {
         console.error("Error fetching alternative medicines", error);
-        return res.status(500).json({ error: "Failed to fetch alternative medicines." });
+        return res.status(500).json({ message: "Failed to fetch alternative medicines." });
     }
 };
 
@@ -169,7 +169,7 @@ const viewMedicinesPharmacist = async (req, res) => {
         return res.status(200).json({ medicines });
     } catch (error) {
         console.error('Error fetching medicines:', error);
-        return res.status(500).json({ error: 'Failed to fetch medicines.' });
+        return res.status(500).json({ message: 'Failed to fetch medicines.' });
     }
 };
 
@@ -179,7 +179,7 @@ const archiveMedicine = async (req, res) => {
         const medicine = await medicineModel.findOne({ name });
 
         if (!medicine) {
-            return res.status(404).json({ error: 'Medicine not found' });
+            return res.status(404).json({ message: 'Medicine not found' });
         }
 
         medicine.archived = true;
@@ -187,7 +187,7 @@ const archiveMedicine = async (req, res) => {
 
         res.status(200).json({ message: 'Medicine archived successfully', medicine });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -197,7 +197,7 @@ const unarchiveMedicine = async (req, res) => {
         const medicine = await medicineModel.findOne({ name });
 
         if (!medicine) {
-            return res.status(404).json({ error: 'Medicine not found' });
+            return res.status(404).json({ message: 'Medicine not found' });
         }
 
         medicine.archived = false;
@@ -205,7 +205,7 @@ const unarchiveMedicine = async (req, res) => {
 
         res.status(200).json({ message: 'Medicine unarchived successfully', medicine });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ message: error.message });
     }
 };
 

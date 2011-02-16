@@ -14,10 +14,10 @@ const payOrder = async(req, res) =>{
     }
     const pharmacyWallet = pharmacy[0];
     if(!patient){
-        res.status.json({message : "Patient not found"});
+        res.status(404).json({message : "Patient not found"});
     }
     if(paymentMethod == "CashOnDelivery"){
-        res.status.json({message : "Order has been placed successfully"});
+        res.status(201).json({message : "Order has been placed successfully"});
         res.redirect(300, "http://localhost:"+process.env.PORT);
         const curOrder = {PatientId: patientId, status: "Ordered", amount: total, isWallet: false, DeliveryAddress: deliveryAddress, items: items};
         const order = await Order.create(curOrder);
@@ -44,7 +44,7 @@ const payOrder = async(req, res) =>{
             }
         total = total - total * discount;
         if(patient.Wallet < total){
-            res.status.json({message : "Insufficient funds"});
+            res.status(400).json({message : "Insufficient funds"});
         }
         else{
             total = Math.max(total, 0);
@@ -60,7 +60,7 @@ const payOrder = async(req, res) =>{
         }
     }
     else{
-        res.status.json({message : "Invalid payment method"});
+        res.status(400).json({message : "Invalid payment method"});
     }
 }
 

@@ -83,7 +83,7 @@ const registerPharmacist = asyncHandler(async (req, res) => {
         res.status(201).json(newPharm); // Respond with the created PharmRequest details
     } catch (error) {
         console.error('Error processing request:', error);
-        res.status(500).json({error: 'Error processing request', detailedError: error.message});
+        res.status(500).json({message: 'Error processing request', detailedError: error.message});
     }
 });
 

@@ -53,7 +53,7 @@ const updateMedicine = async (req, res) => {
         return res.status(200).json({Cart: patient.Cart});
     } catch (err) {
         console.log(err);
-        return res.status(500).json(err);
+        return res.status(500).json({message: err.message});
     }
 }
 
@@ -78,7 +78,7 @@ const getCart = async (req, res) => {
         return res.status(200).json(medicineArray);
     } catch (err) {
         console.log(err)
-        return res.status(400).json(err);
+        return res.status(400).json({message: err.message});
     }
 
 }

@@ -39,7 +39,7 @@ const createAdmin = async (req, res) => {
         res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
         return res.status(201).json("Admin created successfully!");
     } else
-        return res.status(400).json("Username already exists. Please choose another one.");
+        return res.status(400).json({message: "Username already exists. Please choose another one."});
 };
 
 module.exports = { createAdmin };

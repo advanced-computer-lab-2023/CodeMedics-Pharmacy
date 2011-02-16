@@ -12,7 +12,7 @@ exports.changePassword = async (req, res) => {
         const user = await patientModel.findOne({ Username: username }) || await pharmacistModel.findOne({Username: username}) || await adminModel.findOne({Username: username});
         console.log(user);
         if (!user) {
-            return res.status(404).json({ error: 'Patient not found' });
+            return res.status(404).json({ message: 'Patient not found' });
         }
 
         // // Verify if the current password matches the one in the database
