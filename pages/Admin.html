@@ -1,0 +1,21 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Registration</title>
+</head>
+<body>
+    <h1>User Registration</h1>
+    <!-- Add a button to redirect to the medicines page -->
+    <button id="viewMedicinesButton">View Medicines</button>
+
+    <script>
+        // JavaScript to redirect to the medicines page when the button is clicked
+        document.getElementById('viewMedicinesButton').addEventListener('click', function () {
+            window.location.href = '/medicine';
+        });
+    </script>
+</body>
+</html>

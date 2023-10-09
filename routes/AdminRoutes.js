@@ -11,7 +11,9 @@ router.delete('/removePharmacist', (req, res) => {
 router.delete('/removePatient', (req, res) => {
     AdminController.removePatient(req, res);
 });
-
+router.get('/viewMedicine', (req, res) => {
+    AdminController.viewList(req, res);
+});
 
 
 module.exports = router;
