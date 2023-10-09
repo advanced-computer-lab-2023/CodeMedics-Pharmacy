@@ -26,12 +26,12 @@ const viewList = require('./controllers/AdminController');
 
 // Add a route for the home page
 app.get("/register", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "index.html");
+    const filePath = path.join(__dirname, "pages", "PPatientRegister.html");
     res.sendFile(filePath);
 });
 
 // Define your /addUser route here to handle the POST request
-app.post("/registerPPatient", registerPPatient);
+app.post("/addUser", registerPPatient);
 
 // Start the server
 app.listen(Port, () => {
