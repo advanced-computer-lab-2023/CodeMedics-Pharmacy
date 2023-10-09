@@ -1,8 +1,10 @@
 const adminModel = require('../models/Administrator.js');
 const pharmacistModel = require('../models/Pharmacist.js');
-const patientModel = require('../models/Patient.js');
+const patientModel = require('../models/pharmacyPatient.js');
 const {default: mongoose} = require('mongoose');
 const getUsername = require('../config/usernameGetter');
+const medicineModel = require('../models/Medicine.js');
+
 
 const createAdmin = async (req, res) => {
     //create an admin in the database
@@ -14,7 +16,7 @@ const createAdmin = async (req, res) => {
 
     for (const variable of requiredVariables) {
         if (!req.body[variable]) {
-            return res.status(400).json({message: `Missing ${variable} in the request body`});
+            return res.status(400).json({message: 'Missing ${variable} in the request body'});
         }
     }
 
@@ -45,8 +47,8 @@ const updateAdmin = async (req, res) => {
     //update an admin in the database
 }
 
-const removeAdmin = async (req, res) => {
-    //delete an Admin from the database
+const removePharmacist = async (req, res) => {
+    //update an admin in the database
     if (Object.keys(req.body).length === 0) {
         return res.status(400).json({message: 'Request body is empty'});
     }
@@ -59,8 +61,8 @@ const removeAdmin = async (req, res) => {
         const username = await getUsername.get(req, res);
         try {
             await Promise.all([
-                adminModel.deleteOne({Username: username}),
-                patientModel.deleteOne({Username: username}),
+                //adminModel.deleteOne({Username: username}),
+                //patientModel.deleteOne({Username: username}),
                 pharmacistModel.deleteOne({Username: username})
             ]);
 
@@ -74,10 +76,49 @@ const removeAdmin = async (req, res) => {
         return res.status(404).json("User not found in database!");
     }
 }
-const getAllDoctorsApps = async (req, res) => {
-    //get all doctors applications from the database
 
+const removePatient = async (req, res) => {
+    //delete an Admin from the database
+    if (Object.keys(req.body).length === 0) {
+        return res.status(400).json({message: 'Request body is empty'});
+    }
+    // Check if 'Username' is present in the request body
+    if (!req.body['Username']) {
+        return res.status(400).json({message: 'Missing Username in the request body'});
+    }
+    const {Username} = req.body;
+    if (await getUsername.get(req, res) != '') {
+        const username = await getUsername.get(req, res);
+        try {
+            await Promise.all([
+                //adminModel.deleteOne({Username: username}),
+                patientModel.deleteOne({Username: username}),
+                //pharmacistModel.deleteOne({Username: username})
+            ]);
+
+            console.log('User deleted successfully:', Username);
+            return res.status(201).json(Username + "'s account has been Deleted!")
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            return res.status(500).json({message: 'Error deleting user'});
+        }
+    } else {
+        return res.status(404).json("User not found in database!");
+    }
 }
 
 
-module.exports = {createAdmin, getAllAdmins, updateAdmin, removeAdmin};
+const viewList = async (req, res) => {
+    //get list of all medicine
+    try {
+        const medicines = await Medicine.find({}, 'Name Description Price ImageURL');
+        // Send the list of medicines as JSON response
+        res.json(medicines);
+    } catch (error) {
+        console.error('Error fetching medicines:', error);
+        res.status(500).json({ message: 'Error fetching medicines' });
+    }
+}
+
+
+module.exports = {createAdmin, getAllAdmins, updateAdmin, removePatient, removePharmacist, viewList};

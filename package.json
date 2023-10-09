@@ -1,0 +1,32 @@
+{
+  "name": "codemedics-pharmacy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/advanced-computer-lab-2023/CodeMedics-Pharmacy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/advanced-computer-lab-2023/CodeMedics-Pharmacy/issues"
+  },
+  "homepage": "https://github.com/advanced-computer-lab-2023/CodeMedics-Pharmacy#readme",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "colors": "^1.4.0",
+    "cookie": "^0.5.0",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.6.0",
+    "morgan": "^1.10.0",
+    "parser": "^0.1.4"
+  }
+}
