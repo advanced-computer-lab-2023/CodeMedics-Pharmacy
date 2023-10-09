@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.net/ClinicPharmaDB')
+mongoose.connect('mongodb+srv://rawanelashmawy:rawanelashmawy@infodb.srentmg.mongodb.net/ClinicPharmaDB')
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -22,6 +22,7 @@ mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.n
 const path = require('path');
 const { registerPPatient, loginUser } = require('./controllers/GuestController');
 const viewList = require('./controllers/AdminController');
+const MedicineController = require('./controllers/MedicineController'); // Import MedicineController
 
 
 // Add a route for the home page
@@ -30,8 +31,11 @@ app.get("/register", (req, res) => {
     res.sendFile(filePath);
 });
 
+
 // Define your /addUser route here to handle the POST request
 app.post("/addUser", registerPPatient);
+
+app.post("/addMedicine", MedicineController.addMedicine);
 
 // Start the server
 app.listen(Port, () => {
@@ -59,3 +63,5 @@ app.get("/pharmacist", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Pharmacist.html");
     res.sendFile(filePath);
 });
+
+

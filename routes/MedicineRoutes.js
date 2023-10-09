@@ -27,3 +27,12 @@
 
 // // Export the Medicine Model
 // module.exports = Medicine;
+
+const express = require('express');
+const router = express.Router();
+const addMedicine = require('./controllers/MedicineController');
+
+// Route to handle adding a new medicine
+router.post('/addMedicine', MedicineController.addMedicine);
+
+module.exports = router;

@@ -1,4 +1,4 @@
-<!-- medicines.html -->
+medicines.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -90,4 +90,80 @@
         fetchAndDisplayMedicines();
     </script>
 </body>
+</html>
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medicine</title>
+</head>
+
+<body>
+    <h1>Add Medicine</h1>
+    <form id="medicineForm">
+        <label for="name">Medicine Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="activeIngredients">Active Ingredients (comma-separated):</label>
+        <input type="text" id="activeIngredients" name="activeIngredients" required><br><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" min="0" step="0.01" required><br><br>
+
+        <label for="medicalUse">Medical Use:</label>
+        <input type="text" id="medicalUse" name="medicalUse" required><br><br>
+
+        <label for="availableQuantity">Available Quantity:</label>
+        <input type="number" id="availableQuantity" name="availableQuantity" min="0" required><br><br>
+
+        <button type="submit">Add Medicine</button>
+    </form>
+
+    <script>
+        document.getElementById('medicineForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const activeIngredients = document.getElementById('activeIngredients').value.split(',');
+            const price = parseFloat(document.getElementById('price').value);
+            const medicalUse = document.getElementById('medicalUse').value;
+            const availableQuantity = parseInt(document.getElementById('availableQuantity').value);
+
+            // Create an object with the form data
+            const formData = {
+                name: name,
+                activeIngredients: activeIngredients,
+                price: price,
+                medicalUse: medicalUse,
+                availableQuantity: availableQuantity
+            };
+
+            // Send a POST request to your server with the form data
+            fetch('/addMedicine', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Handle the response from the server here
+            })
+            .catch(error => console.error(error));
+        });
+    </script>
+</body>
+
 </html>
