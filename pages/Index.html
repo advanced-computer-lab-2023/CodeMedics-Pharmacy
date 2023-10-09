@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>User Registration</h1>
-    <form id="registrationForm" action="/addUser" method="POST">
+    <form id="registrationForm" action="/registerPPatient" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
@@ -76,7 +76,7 @@
             formDataDisplay.innerHTML = `<pre>${JSON.stringify(formData, null, 2)}</pre>`;
             
 
-fetch('/addUser', {
+fetch('/regiserPPatient', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

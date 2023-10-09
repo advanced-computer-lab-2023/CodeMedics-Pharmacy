@@ -1,9 +1,10 @@
-const User = require('../models/pharmacyPatient');
+const PPatient = require('../models/pharmacyPatient');
+
 
 // User Registration
-const registerUser = async (req, res) => {
+const registerPPatient = async (req, res) => {
     try {
-        console.log("hallo");
+        console.log("hello");
       const {
             username,
             name,
@@ -15,8 +16,13 @@ const registerUser = async (req, res) => {
             emergencyContact
         } = req.body;
         console.log(req.body)
+        
+    const existingUser = await PPatient.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
+        }
 
-        const user = new User({
+        const ppatient = new PPatient({
             username,
             name,
             email,
@@ -27,8 +33,8 @@ const registerUser = async (req, res) => {
             emergencyContact
         });
 
-        await user.save();
-        res.status(201).json(user);
+        await ppatient.save();
+        res.status(201).json(ppatient);
     } catch (error) {
         res.status(500).json({ error: 'Error creating user' });
     }
@@ -36,10 +42,10 @@ const registerUser = async (req, res) => {
 
 // User Login
 const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
     try {
-        const user = await User.findOne({ email });
+        const user = await PPatient.findOne({ username });
 
         if (!user) {
             return res.status(404).json({ message: 'No user found' });
@@ -55,4 +61,4 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerUser, loginUser };
+module.exports = { registerPPatient, loginUser };

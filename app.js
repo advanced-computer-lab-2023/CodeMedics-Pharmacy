@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://janakorayem12:12345@trialcluster.0fqtxij.mongodb.net/?retryWrites=true&w=majority')
+mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.net/ClinicPharmaDB')
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -20,7 +20,7 @@ mongoose.connect('mongodb+srv://janakorayem12:12345@trialcluster.0fqtxij.mongodb
 
 // Import your routes here
 const path = require('path');
-const { registerUser, loginUser } = require('./controllers/GuestController');
+const { registerPPatient, loginUser } = require('./controllers/GuestController');
 
 // Add a route for the home page
 app.get("/register", (req, res) => {
@@ -29,7 +29,7 @@ app.get("/register", (req, res) => {
 });
 
 // Define your /addUser route here to handle the POST request
-app.post("/addUser", registerUser);
+app.post("/registerPPatient", registerPPatient);
 
 // Start the server
 app.listen(Port, () => {
