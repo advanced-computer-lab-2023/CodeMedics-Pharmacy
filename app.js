@@ -23,7 +23,7 @@ const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 const viewList = require('./controllers/AdminController');
 const MedicineController = require('./controllers/MedicineController'); // Import MedicineController
-
+const AuthRoutes = require('./routes/AuthRoutes');
 
 // Add a route for the home page
 app.get("/register", (req, res) => {
@@ -31,14 +31,17 @@ app.get("/register", (req, res) => {
     res.sendFile(filePath);
 });
 
-
-app.get("/PharmReg", (req, res) => {
+app.get("/Pharmregister", (req, res) => {
     const filePath = path.join(__dirname, "pages", "PharmRegister.html");
     res.sendFile(filePath);
 });
+
+app.use('/register', AuthRoutes);
+app.use('/Pharmregister', AuthRoutes);
+
 // Define your /addUser route here to handle the POST request
-app.post("/addUser", registerPPatient);
-app.post("/PharmacistRequest",registerPharmacist);
+app.post("/register", registerPPatient);
+app.post("/Pharmregister",registerPharmacist);
 app.post("/putMedicine",MedicineController.addMedicine);
 // Start the server
 app.listen(Port, () => {

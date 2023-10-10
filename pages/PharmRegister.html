@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Pharmacist Registration Request</h1>
-    <form id="requestForm" action="/PharmReg" method="POST">
+    <form id="requestForm" action="/Pharmregister" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
@@ -74,7 +74,7 @@
             formDataDisplay.innerHTML = `<pre>${JSON.stringify(formData, null, 2)}</pre>`;
             
 
-fetch('/PharmReg', {
+fetch('/Pharmregister', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

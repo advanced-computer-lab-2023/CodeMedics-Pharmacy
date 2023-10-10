@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>User Registration</h1>
-    <form id="registrationForm" action="/addUser" method="POST">
+    <form id="registrationForm" action="/register" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
@@ -87,8 +87,7 @@ fetch('/register', {
     if (response.ok) {
         return response.json(); // Parse the JSON response for successful requests
     } else {
-        //console.log(response);
-        //throw new Error('Network response was not ok.'); // Handle non-2xx status codes as errors
+        throw new Error('Network response was not ok.'); // Handle non-2xx status codes as errors
     }
 })
 .then(data => {
