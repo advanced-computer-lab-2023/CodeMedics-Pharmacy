@@ -4,7 +4,7 @@ const { registerPPatient, loginUser, registerPharmacist } = require('../controll
 const router = express.Router();
 
 // User Registration
-router.post('/register', registerPPatient);
+//router.post('/register', registerPPatient);
 //router.post('/Pharmregister', registerPharmacist);
 
 // User Login

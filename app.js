@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://rawanelashmawy:rawanelashmawy@infodb.srentmg.mongodb.net/ClinicPharmaDB')
+mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.net/ClinicPharmaDB')
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -38,8 +38,8 @@ app.get("/PharmReg", (req, res) => {
 });
 // Define your /addUser route here to handle the POST request
 app.post("/addUser", registerPPatient);
-app.post("/PharmReg",registerPharmacist);
-app.post("/addMedicine",MedicineController.addMedicine);
+app.post("/PharmacistRequest",registerPharmacist);
+app.post("/putMedicine",MedicineController.addMedicine);
 // Start the server
 app.listen(Port, () => {
     console.log("Server running at http://localhost:" + Port + "/");

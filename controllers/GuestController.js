@@ -19,7 +19,7 @@ const registerPPatient = async (req, res) => {
         } = req.body;
         console.log(req.body)
         
-    const existingUser = patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({Username})  ;
+    const existingUser = patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username})  ;
         if (existingUser) {
             return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
         }
@@ -36,7 +36,7 @@ const registerPPatient = async (req, res) => {
         });
 
         await ppatient.save();
-        res.status(201).json(ppatient);
+        res.status(200).json(ppatient);
     } catch (error) {
         res.status(500).json({ error: 'Error creating user' });
     }
