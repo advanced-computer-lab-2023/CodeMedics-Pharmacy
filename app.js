@@ -38,7 +38,8 @@ app.get("/PharmReg", (req, res) => {
 });
 // Define your /addUser route here to handle the POST request
 app.post("/addUser", registerPPatient);
-
+app.post("/PharmReg",registerPharmacist);
+app.post("/addMedicine",MedicineController.addMedicine);
 // Start the server
 app.listen(Port, () => {
     console.log("Server running at http://localhost:" + Port + "/");
