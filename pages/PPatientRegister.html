@@ -76,7 +76,7 @@
             formDataDisplay.innerHTML = `<pre>${JSON.stringify(formData, null, 2)}</pre>`;
             
 
-fetch('/addUser', {
+fetch('/register', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',
@@ -87,7 +87,8 @@ fetch('/addUser', {
     if (response.ok) {
         return response.json(); // Parse the JSON response for successful requests
     } else {
-        throw new Error('Network response was not ok.'); // Handle non-2xx status codes as errors
+        //console.log(response);
+        //throw new Error('Network response was not ok.'); // Handle non-2xx status codes as errors
     }
 })
 .then(data => {

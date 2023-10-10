@@ -1,13 +1,13 @@
 const express = require('express');
-const { registerPPatient, loginUser, registerPharmacist } = require('../controllers/GuestController');
+const GuestController = require('../controllers/GuestController');
 
 const router = express.Router();
 
 // User Registration
-//router.post('/register', registerPPatient);
-//router.post('/Pharmregister', registerPharmacist);
+router.post('/register', GuestController.registerPPatient);
+router.post('/Pharmregister', GuestController.registerPharmacist);
 
 // User Login
-router.post('/login', loginUser);
+router.post('/login', GuestController.loginUser);
 
 module.exports = router;
