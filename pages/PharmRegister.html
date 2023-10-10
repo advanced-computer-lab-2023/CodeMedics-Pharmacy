@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Registration</title>
+    <title>Pharmacist Registration Request</title>
 </head>
 <body>
-    <h1>User Registration</h1>
-    <form id="registrationForm" action="/addUser" method="POST">
+    <h1>Pharmacist Registration Request</h1>
+    <form id="requestForm" action="/PharmReg" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required><br><br>
 
@@ -33,27 +33,27 @@
         <label for="mobileNumber">Mobile Number:</label>
         <input type="text" id="mobileNumber" name="mobileNumber" required><br><br>
 
-        <!-- Emergency Contact Fields -->
-        <label for="emergencyContactName">Emergency Contact Full Name:</label>
-        <input type="text" id="emergencyContactName" name="emergencyContact.fullName" required><br><br>
+        <label for="hourlyRate">Hourly Rate:</label>
+        <input type="text" id="hourlyRate" name="hourlyRate" required><br><br>
 
-        <label for="emergencyContactMobile">Emergency Contact Mobile Number:</label>
-        <input type="text" id="emergencyContactMobile" name="emergencyContact.mobileNumber" required><br><br>
+        <label for="Affiliation">Afilliation:</label>
+        <input type="text" id="Affiliation" name="Affiliation" required><br><br>
 
-        <label for="emergencyContactRelation">Emergency Contact Relation:</label>
-        <input type="text" id="emergencyContactRelation" name="emergencyContact.relation" required><br><br>
 
-        <button type="submit">Register</button>
+        <label for="EducationalBackground">Educational Background:</label>
+        <input type="text" id="EducationalBackground" name="EducationalBackground" required><br><br>
+
+        <button type="submit">send Request</button>
     </form>
 
     <!-- Display the form data -->
     <div id="formDataDisplay"></div>
 
     <script>
-        const registrationForm = document.getElementById('registrationForm');
+        const requestForm = document.getElementById('requestForm');
         const formDataDisplay = document.getElementById('formDataDisplay');
 
-        registrationForm.addEventListener('submit', function (event) {
+        requestForm.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting
 
             // Collect form data
@@ -65,18 +65,16 @@
                 dob: document.getElementById('dob').value,
                 gender: document.getElementById('gender').value,
                 mobileNumber: document.getElementById('mobileNumber').value,
-                emergencyContact: {
-                    fullName: document.getElementById('emergencyContactName').value,
-                    mobileNumber: document.getElementById('emergencyContactMobile').value,
-                    relation: document.getElementById('emergencyContactRelation').value,
-                },
+                hourlyRate : document.getElementById('hourlyRate').value,
+                Affiliation : document.getElementById('Affiliation').value,
+                EducationalBackground : document.getElementById('EducationalBackground').value
             };
 
             // Display the form data on the web page
             formDataDisplay.innerHTML = `<pre>${JSON.stringify(formData, null, 2)}</pre>`;
             
 
-fetch('/addUser', {
+fetch('/PharmReg', {
     method: 'POST',
     headers: {
         'Content-Type': 'application/json',

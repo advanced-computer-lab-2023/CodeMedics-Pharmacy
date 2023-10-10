@@ -1,7 +1,9 @@
 const PPatient = require('../models/pharmacyPatient');
-
-
-// User Registration
+const Pharmacist = require("../models/Pharmacist");
+const patientModel = require("../models/pharmacyPatient");
+const Administrator = require("../models/Administrator");
+const PharmRequest = require("../models/pharmacistRequests");
+// patient Registration
 const registerPPatient = async (req, res) => {
     try {
         console.log("hello");
@@ -17,7 +19,7 @@ const registerPPatient = async (req, res) => {
         } = req.body;
         console.log(req.body)
         
-    const existingUser = await PPatient.findOne({ username });
+    const existingUser = patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({Username})  ;
         if (existingUser) {
             return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
         }
@@ -40,6 +42,45 @@ const registerPPatient = async (req, res) => {
     }
 };
 
+//Pharmacist
+const registerPharmacist = async (req, res) => {
+    try {
+        console.log("hello");
+      const {
+            username,
+            name,
+            email,
+            password,
+            dob,
+            gender,
+            hourlyRate, 
+            affiliation , 
+            educationalBackground
+        } = req.body;
+        console.log(req.body)
+        
+    const existingUser = patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username})  ;
+        if (existingUser) {
+            return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
+        }
+
+        const newPharm = new PharmRequest({
+            username,
+            name,
+            email,
+            password,
+            dob,
+            gender,
+            hourlyRate, 
+            affiliation , 
+            educationalBackground
+        });
+        await newPharm.save();
+        res.status(201).json(newPharm);
+    } catch (error) {
+        res.status(500).json({ error: 'Error sending request' });
+    }
+};
 // User Login
 const loginUser = async (req, res) => {
     const { username, password } = req.body;
@@ -61,4 +102,4 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerPPatient, loginUser };
+module.exports = { registerPPatient,registerPharmacist, loginUser };
