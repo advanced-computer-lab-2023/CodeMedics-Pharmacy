@@ -22,7 +22,7 @@ mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.n
 const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 const viewList = require('./controllers/AdminController');
-const {addMedicine} = require('./controllers/MedicineController'); // Import MedicineController
+const {addMedicine, editMedicine} = require('./controllers/MedicineController'); // Import MedicineController
 const AuthRoutes = require('./routes/AuthRoutes');
 const {Pharmacist} = require ('./controllers/PharmacistController');
 // Add a route for the home page
@@ -47,6 +47,8 @@ app.use('/Pharmregister', AuthRoutes);
 app.post("/register", registerPPatient);
 app.post("/Pharmregister",registerPharmacist);
 app.post("/addMedicine", addMedicine);
+
+app.put('/editMedicine',editMedicine);
 // Start the server
 app.listen(Port, () => {
     console.log("Server running at http://localhost:" + Port + "/");
