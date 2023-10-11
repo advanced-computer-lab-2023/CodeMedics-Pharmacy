@@ -6,6 +6,14 @@ const medicineSchema = new Schema({
         type: String,
         required: [true, 'Please enter the medicine name'],
     },
+    Description :{
+        type: String,
+        required: [true, 'Please enter the medicine description'],
+    },
+    Picture : {
+        type: String,
+        required: [true, 'Please enter the medicine picture']
+    },
     activeIngredients: {
         type: [String],
         required: [true, 'Please enter the active ingredients'],
@@ -19,11 +27,17 @@ const medicineSchema = new Schema({
         type: String,
         required: [true, 'Please enter the medical use'],
     },
+    sales:{
+        type: Number,
+    
+        default :0,
+    },
     availableQuantity: {
         type: Number,
         required: [true, 'Please enter the available quantity'],
-        min: [0, 'Quantity cannot be negative'],
+     
     },
+    
 }, { timestamps: true });
 
 

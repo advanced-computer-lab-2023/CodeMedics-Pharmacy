@@ -24,7 +24,7 @@ const { registerPPatient, registerPharmacist, loginUser } = require('./controlle
 const viewList = require('./controllers/AdminController');
 const {addMedicine} = require('./controllers/MedicineController'); // Import MedicineController
 const AuthRoutes = require('./routes/AuthRoutes');
-
+const {Pharmacist} = require ('./controllers/PharmacistController');
 // Add a route for the home page
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
@@ -74,4 +74,4 @@ app.get("/pharmacist", (req, res) => {
     res.sendFile(filePath);
 });
 
-
+app.post('/addPharmacist' , Pharmacist);
