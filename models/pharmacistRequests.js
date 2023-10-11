@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const pharmacistSchema = new Schema({
+const pharmacistReqSchema = new Schema({
     username: { type: String, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true },
@@ -13,6 +13,6 @@ const pharmacistSchema = new Schema({
     educationalBackground: { type: String, required: true }
 }, { timestamps: true });
 
-const pharmacistRequests = mongoose.model('pharmacistRequests', pharmacistSchema);
+const pharmacistRequests = mongoose.model('pharmacistRequests', pharmacistReqSchema);
 
 module.exports = pharmacistRequests;
