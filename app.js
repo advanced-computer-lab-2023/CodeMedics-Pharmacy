@@ -26,6 +26,10 @@ const MedicineController = require('./controllers/MedicineController'); // Impor
 const AuthRoutes = require('./routes/AuthRoutes');
 
 // Add a route for the home page
+app.get("/", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "Home.html");
+    res.sendFile(filePath);
+});
 app.get("/register", (req, res) => {
     const filePath = path.join(__dirname, "pages", "PPatientRegister.html");
     res.sendFile(filePath);
