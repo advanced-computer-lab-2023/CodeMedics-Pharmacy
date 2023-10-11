@@ -14,6 +14,13 @@
         <label for="name">Medicine Name:</label>
         <input type="text" id="name" name="name" required><br><br>
 
+        <label for="description">Medicine Description:</label>
+        <input type="text" id="description" name="description" required><br><br>
+
+        <label for="picture">Medicine Picture:</label>
+        <input type="text" id="picture" name="picture" required><br><br>
+
+
         <label for="activeIngredients">Active Ingredients (comma-separated):</label>
         <input type="text" id="activeIngredients" name="activeIngredients" required><br><br>
 
@@ -34,6 +41,8 @@
             event.preventDefault();
 
             const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const picture = document.getElementById('picture').value;
             const activeIngredients = document.getElementById('activeIngredients').value.split(',');
             const price = parseFloat(document.getElementById('price').value);
             const medicalUse = document.getElementById('medicalUse').value;
@@ -42,6 +51,8 @@
             // Create an object with the form data
             const formData = {
                 name: name,
+                Description :description,
+                Picture : picture,
                 activeIngredients: activeIngredients,
                 price: price,
                 medicalUse: medicalUse,

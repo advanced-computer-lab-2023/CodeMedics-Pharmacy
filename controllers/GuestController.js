@@ -19,11 +19,11 @@ const registerPPatient = async (req, res) => {
         } = req.body;
         console.log(req.body)
         
-    const existingUser = await patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username})  ;
+    const existingUser = await patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username}) || await PharmRequest.findOne({username});
         if (existingUser) {
             return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
         }
-    const existingUser2 = await patientModel.findOne({email}) || await Pharmacist.findOne({email}) || await Administrator.findOne({email})  ;
+    const existingUser2 = await patientModel.findOne({email}) || await Pharmacist.findOne({email}) || await Administrator.findOne({email}) || await PharmRequest.findOne({email}) ;
         if (existingUser2) {
             return res.status(400).json({ error: 'email already exists. Please choose another one.' });
         }
@@ -62,11 +62,11 @@ const registerPharmacist = async (req, res) => {
         } = req.body;
         console.log(req.body)
         
-    const existingUser = await patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username})  ;
+    const existingUser = await patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username}) || await PharmRequest.findOne({username})  ;
         if (existingUser) {
             return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
         }
-    const existingUser2 = await patientModel.findOne({email}) || await Pharmacist.findOne({email}) || await Administrator.findOne({email})  ;
+    const existingUser2 = await patientModel.findOne({email}) || await Pharmacist.findOne({email}) || await Administrator.findOne({email}) || await PharmRequest.findOne({email}) ;
         if (existingUser2) {
             return res.status(400).json({ error: 'email already exists. Please choose another one.' });
         }

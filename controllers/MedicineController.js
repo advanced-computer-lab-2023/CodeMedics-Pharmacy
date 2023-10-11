@@ -5,15 +5,17 @@
 
  const addMedicine = async (req, res) => {
     try {
-        const { name, activeIngredients, price, medicalUse , availableQuantity } = req.body;
+        const { name, Description, Picture,activeIngredients, price, medicalUse , availableQuantity } = req.body;
         console.log(req.body);
         // Create a new medicine instance
         const newMedicine = new medicineModel({
             name,
+            Description,
+            Picture,
             activeIngredients,
             price,
             medicalUse,
-            availableQuantity
+            availableQuantity,
         });
 
         // Save the medicine to the database
