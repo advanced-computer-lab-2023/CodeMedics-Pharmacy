@@ -28,6 +28,35 @@
     }
 };
 
-module.exports = {addMedicine};
+const editMedicine = async (req, res) => {
+    try {
+      const { name, ...updates } = req.body;
+  
+      // Find the medicine by name
+      const medicine = await medicineModel.findOne({ name });
+  
+      if (!medicine) {
+        return res.status(404).json({ error: 'Medicine not found' });
+      }
+  
+      // Update the medicine's details dynamically based on the keys in the request body
+      for (const key in updates) {
+        if (Object.hasOwnProperty.call(updates, key)) {
+          medicine[key] = updates[key];
+        }
+      }
+  
+      // Save the updated medicine to the database
+      await medicine.save();
+  
+      res.status(200).json({ message: 'Medicine details updated successfully', medicine });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error updating medicine details' });
+    }
+  };
+  
+  module.exports = { addMedicine,editMedicine };
+
 
  
