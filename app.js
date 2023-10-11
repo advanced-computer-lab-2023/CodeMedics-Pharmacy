@@ -22,7 +22,7 @@ mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.n
 const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 const viewList = require('./controllers/AdminController');
-const MedicineController = require('./controllers/MedicineController'); // Import MedicineController
+const {addMedicine} = require('./controllers/MedicineController'); // Import MedicineController
 const AuthRoutes = require('./routes/AuthRoutes');
 
 // Add a route for the home page
@@ -42,7 +42,7 @@ app.use('/Pharmregister', AuthRoutes);
 // Define your /addUser route here to handle the POST request
 app.post("/register", registerPPatient);
 app.post("/Pharmregister",registerPharmacist);
-app.post("/putMedicine",MedicineController.addMedicine);
+app.post("/addMedicine", addMedicine);
 // Start the server
 app.listen(Port, () => {
     console.log("Server running at http://localhost:" + Port + "/");
@@ -54,8 +54,8 @@ app.get("/admin", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.get("/medicine", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "Medicine.html");
+app.get("/addMedicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "addMedicine.html");
     res.sendFile(filePath);
 });
 
