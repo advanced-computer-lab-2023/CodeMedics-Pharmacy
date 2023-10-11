@@ -50,24 +50,49 @@
     <div id="formDataDisplay"></div>
 
     <script>
-        const requestForm = document.getElementById('requestForm');
+           const requestForm = document.getElementById('requestForm');
         const formDataDisplay = document.getElementById('formDataDisplay');
 
         requestForm.addEventListener('submit', function (event) {
             event.preventDefault(); // Prevent the form from submitting
 
             // Collect form data
+            const username = document.getElementById('username').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const dob = document.getElementById('dob').value;
+            const gender = document.getElementById('gender').value;
+            const mobileNumber = document.getElementById('mobileNumber').value;
+            const hourlyRate = parseFloat(document.getElementById('hourlyRate').value); // Parse to float
+            const affiliation = document.getElementById('Affiliation').value;
+            const educationalBackground = document.getElementById('EducationalBackground').value;
+
+            // Validate date of birth (dob)
+            const dobDate = new Date(dob);
+            if (isNaN(dobDate.getTime())) {
+                alert('Invalid Date of Birth');
+                return;
+            }
+
+            // Validate hourly rate (numeric value)
+            if (isNaN(hourlyRate) || hourlyRate <= 0) {
+                alert('Invalid Hourly Rate');
+                return;
+            }
+
+            // Create the form data object
             const formData = {
-                username: document.getElementById('username').value,
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                password: document.getElementById('password').value,
-                dob: document.getElementById('dob').value,
-                gender: document.getElementById('gender').value,
-                mobileNumber: document.getElementById('mobileNumber').value,
-                hourlyRate : document.getElementById('hourlyRate').value,
-                Affiliation : document.getElementById('Affiliation').value,
-                EducationalBackground : document.getElementById('EducationalBackground').value
+                username: username,
+                name: name,
+                email: email,
+                password: password,
+                dob: dob,
+                gender: gender,
+                mobileNumber: mobileNumber,
+                hourlyRate: hourlyRate,
+                affiliation: affiliation,
+                educationalBackground: educationalBackground
             };
 
             // Display the form data on the web page
