@@ -18,18 +18,24 @@ mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.n
         console.error("MongoDB connection error:", error);
     });
 
+app.listen(Port, () => {
+    console.log("Server running at http://localhost:" + Port + "/");
+});
+
 // Import your routes here
 const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
-const viewList = require('./controllers/AdminController');
+const {viewList, createAdmin} = require('./controllers/AdminController');
 const {addMedicine} = require('./controllers/MedicineController'); // Import MedicineController
 const AuthRoutes = require('./routes/AuthRoutes');
-const {Pharmacist} = require ('./controllers/PharmacistController');
-// Add a route for the home page
+const {createPharmacist} = require('./controllers/PharmacistController');
+
+
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
     res.sendFile(filePath);
 });
+
 app.get("/register", (req, res) => {
     const filePath = path.join(__dirname, "pages", "PPatientRegister.html");
     res.sendFile(filePath);
@@ -39,19 +45,6 @@ app.get("/Pharmregister", (req, res) => {
     const filePath = path.join(__dirname, "pages", "PharmRegister.html");
     res.sendFile(filePath);
 });
-
-app.use('/register', AuthRoutes);
-app.use('/Pharmregister', AuthRoutes);
-
-// Define your /addUser route here to handle the POST request
-app.post("/register", registerPPatient);
-app.post("/Pharmregister",registerPharmacist);
-app.post("/addMedicine", addMedicine);
-// Start the server
-app.listen(Port, () => {
-    console.log("Server running at http://localhost:" + Port + "/");
-});
-
 
 app.get("/admin", (req, res) => {
     const filePath = path.join(__dirname, "pages", "admin.html");
@@ -63,7 +56,6 @@ app.get("/addMedicine", (req, res) => {
     res.sendFile(filePath);
 });
 
-
 app.get("/ppatient", (req, res) => {
     const filePath = path.join(__dirname, "pages", "PPatient.html");
     res.sendFile(filePath);
@@ -74,4 +66,60 @@ app.get("/pharmacist", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.post('/addPharmacist' , Pharmacist);
+app.get("/medicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "Medicine.html");
+    res.sendFile(filePath);
+});
+
+app.get("/CreateAdmin", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "CreateAdmin.html");
+    res.sendFile(filePath);
+});
+
+app.get("/createPharmacist", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "createPharmacist.html");
+    res.sendFile(filePath);
+});
+
+app.get("/viewPharmacists", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "ViewPharmacists.html");
+    res.sendFile(filePath);
+});
+
+app.get("/viewPatients", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewPatients.html");
+    res.sendFile(filePath);
+});
+
+app.get("/searchMedicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "Medicine.html");
+    res.sendFile(filePath);
+});
+
+app.get("/viewPharmacistApplications", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
+    res.sendFile(filePath);
+});
+
+app.get("/getMedicalUses", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "Medicine.html");
+    res.sendFile(filePath);
+});
+
+app.get("/getMedicinesByMedicalUse", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "Medicine.html");
+    res.sendFile(filePath);
+});
+
+
+app.use('/register', AuthRoutes);
+app.use('/Pharmregister', AuthRoutes);
+app.use('/CreateAdmin', AdminRoutes);
+
+
+app.post("/register", registerPPatient);
+app.post("/Pharmregister",registerPharmacist);
+app.post("/addMedicine", addMedicine);
+app.post("/addUser", registerPPatient);
+app.post("/CreateAdmin", createAdmin);
+app.post("/createPharmacist", createPharmacist);
