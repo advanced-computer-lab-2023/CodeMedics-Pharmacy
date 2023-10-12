@@ -25,8 +25,10 @@ app.listen(Port, () => {
 // Import your routes here
 const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
-const {viewList, createAdmin} = require('./controllers/AdminController');
-const {addMedicine} = require('./controllers/MedicineController'); // Import MedicineController
+
+const viewList = require('./controllers/AdminController');
+const {addMedicine, editMedicine} = require('./controllers/MedicineController'); // Import MedicineController
+
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
 
@@ -44,6 +46,21 @@ app.get("/register", (req, res) => {
 app.get("/Pharmregister", (req, res) => {
     const filePath = path.join(__dirname, "pages", "PharmRegister.html");
     res.sendFile(filePath);
+});
+
+
+app.use('/register', AuthRoutes);
+app.use('/Pharmregister', AuthRoutes);
+
+// Define your /addUser route here to handle the POST request
+app.post("/register", registerPPatient);
+app.post("/Pharmregister",registerPharmacist);
+app.post("/addMedicine", addMedicine);
+
+app.put('/editMedicine',editMedicine);
+// Start the server
+app.listen(Port, () => {
+    console.log("Server running at http://localhost:" + Port + "/");
 });
 
 app.get("/admin", (req, res) => {
