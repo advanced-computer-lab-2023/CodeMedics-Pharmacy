@@ -55,8 +55,22 @@ const editMedicine = async (req, res) => {
       res.status(500).json({ error: 'Error updating medicine details' });
     }
   };
+
+  const viewMedicines = async (req, res) => {
+    try {
+        const medicines = await medicineModel.find();
+
+        if (!medicines || medicines.length === 0) {
+            return res.status(404).json({ message: 'No medicines found.' });
+        }
+       
+        return res.status(200).json({ medicines });
+    } catch (error) {
+        return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
+    }
+};
   
-  module.exports = { addMedicine,editMedicine };
+  module.exports = { addMedicine,editMedicine, viewMedicines };
 
 
  

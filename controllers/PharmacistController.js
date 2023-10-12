@@ -6,15 +6,19 @@ const getUsername = require('../config/usernameGetter');
 const medicineModel = require('../models/Medicine.js');
 
 
-const viewList = async (req, res) => {
-    try {
-        const medicines = await Medicine.find({}, 'Name Description Price ImageURL');
-        res.json(medicines);
-    } catch (error) {
-        console.error('Error fetching medicines:', error);
-        res.status(500).json({ message: 'Error fetching medicines' });
-    }
-}
+// const viewMedicines = async (req, res) => {
+//     try {
+//         const medicines = await medicineModel.find();
+
+//         if (!medicines || medicines.length === 0) {
+//             return res.status(404).json({ message: 'No medicines found.' });
+//         }
+       
+//         return res.status(200).json({ medicines });
+//     } catch (error) {
+//         return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
+//     }
+// };
 
 const getPharmacits = async (req, res) => {
     try {
@@ -49,4 +53,4 @@ const createPharmacist = async (req, res) => {
 
 
 
-module.exports = {viewList, getPharmacits, createPharmacist};
+module.exports = { getPharmacits, createPharmacist};

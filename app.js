@@ -28,7 +28,7 @@ const { registerPPatient, registerPharmacist, loginUser } = require('./controlle
 
 const AdminRoutes = require('./routes/AdminRoutes')
 const {viewList, createAdmin} = require('./controllers/AdminController');
-const {addMedicine, editMedicine} = require('./controllers/MedicineController'); // Import MedicineController
+const {addMedicine, editMedicine, viewMedicines} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
@@ -49,14 +49,14 @@ app.get("/Pharmregister", (req, res) => {
     res.sendFile(filePath);
 });
 
+app.get("/viewMedicines", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewMedicines.html");
+    res.sendFile(filePath);
+});
 
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
 
-// Define your /addUser route here to handle the POST request
-app.post("/register", registerPPatient);
-app.post("/Pharmregister",registerPharmacist);
-app.post("/addMedicine", addMedicine);
 
 app.put('/editMedicine',editMedicine);
 // Start the server
@@ -139,3 +139,9 @@ app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
+
+app.get("/Medicines",viewMedicines);
+// Define your /addUser route here to handle the POST request
+// app.post("/register", registerPPatient);
+// app.post("/Pharmregister",registerPharmacist);
+// app.post("/addMedicine", addMedicine);

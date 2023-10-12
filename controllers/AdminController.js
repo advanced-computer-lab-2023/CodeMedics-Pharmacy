@@ -66,19 +66,19 @@ const removePatient = async (req, res) => {
         return res.status(404).json("User not found in database!");
 };
 
-const viewMedicines = async (req, res) => {
-    try {
-        const medicines = await medicineModel.find();
+// const viewMedicines = async (req, res) => {
+//     try {
+//         const medicines = await medicineModel.find();
 
-        if (!medicines || medicines.length === 0) {
-            return res.status(404).json({ message: 'No medicines found.' });
-        }
+//         if (!medicines || medicines.length === 0) {
+//             return res.status(404).json({ message: 'No medicines found.' });
+//         }
        
-        return res.status(200).json({ medicines });
-    } catch (error) {
-        return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
-    }
-};
+//         return res.status(200).json({ medicines });
+//     } catch (error) {
+//         return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
+//     }
+// };
 
 const viewPharmacists = async (req, res) => {
     try {
@@ -175,4 +175,4 @@ const getMedicinesByMedicalUse = async (req, res) => {
     }
 };
 
-module.exports = {createAdmin, removePatient, removePharmacist, viewMedicines, viewPharmacists, viewPharmacistApplications, viewPatients, searchMedicine, getMedicalUses, getMedicinesByMedicalUse};
+module.exports = {createAdmin, removePatient, removePharmacist, viewPharmacists, viewPharmacistApplications, viewPatients, searchMedicine, getMedicalUses, getMedicinesByMedicalUse};
