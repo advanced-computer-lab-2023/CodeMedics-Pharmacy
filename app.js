@@ -26,7 +26,8 @@ app.listen(Port, () => {
 const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 
-const viewList = require('./controllers/AdminController');
+const AdminRoutes = require('./routes/AdminRoutes')
+const {viewList, createAdmin} = require('./controllers/AdminController');
 const {addMedicine, editMedicine} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
@@ -59,9 +60,7 @@ app.post("/addMedicine", addMedicine);
 
 app.put('/editMedicine',editMedicine);
 // Start the server
-app.listen(Port, () => {
-    console.log("Server running at http://localhost:" + Port + "/");
-});
+
 
 app.get("/admin", (req, res) => {
     const filePath = path.join(__dirname, "pages", "admin.html");
