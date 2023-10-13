@@ -66,19 +66,6 @@ const removePatient = async (req, res) => {
         return res.status(404).json("User not found in database!");
 };
 
-// const viewMedicines = async (req, res) => {
-//     try {
-//         const medicines = await medicineModel.find();
-
-//         if (!medicines || medicines.length === 0) {
-//             return res.status(404).json({ message: 'No medicines found.' });
-//         }
-       
-//         return res.status(200).json({ medicines });
-//     } catch (error) {
-//         return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
-//     }
-// };
 
 const viewPharmacists = async (req, res) => {
     try {
@@ -122,57 +109,71 @@ const viewPatients = async (req, res) => {
     }
 };
 
-const searchMedicine = async (req, res) => {
+// const searchMedicine = async (req, res) => {
 
-    const searchQuery = req.body.name
-    try {
-        const medicines = await medicineModel.find({
-            name: { $regex: new RegExp(`^${searchQuery}`, 'i') }, 
+//     const searchQuery = req.body.name
+//     try {
+//         const medicines = await medicineModel.find({
+//             name: { $regex: new RegExp(`^${searchQuery}`, 'i') }, 
          
-        });
+//         });
 
-        if (medicines.length === 0) {
-            return res.status(404).json({ message: 'No medicines found with the provided name.' });
-        }
+//         if (medicines.length === 0) {
+//             return res.status(404).json({ message: 'No medicines found with the provided name.' });
+//         }
 
-        return res.status(200).json(medicines);
-    } catch (error) {
-        console.error('Error searching for medicines:', error);
-        return res.status(500).json({ error: 'Failed to search for medicines.' });
-    }
-};
+//         return res.status(200).json(medicines);
+//     } catch (error) {
+//         console.error('Error searching for medicines:', error);
+//         return res.status(500).json({ error: 'Failed to search for medicines.' });
+//     }
+// };
 
-const getMedicalUses = async (req, res) => {
-    try {
-        const uniqueMedicalUses = await medicineModel.distinct('medicalUse');
+// const getMedicalUses = async (req, res) => {
+//     try {
+//         const uniqueMedicalUses = await medicineModel.distinct('medicalUse');
 
-        if (uniqueMedicalUses.length === 0) {
-            return res.status(404).json({ message: 'No unique medical uses found.' });
-        }
+//         if (uniqueMedicalUses.length === 0) {
+//             return res.status(404).json({ message: 'No unique medical uses found.' });
+//         }
 
-        return res.status(200).json({ medicalUses: uniqueMedicalUses });
-    } catch (error) {
-        console.error('Error retrieving medical uses:', error);
-        return res.status(500).json({ error: 'Failed to retrieve medical uses.' });
-    }
+//         return res.status(200).json({ medicalUses: uniqueMedicalUses });
+//     } catch (error) {
+//         console.error('Error retrieving medical uses:', error);
+//         return res.status(500).json({ error: 'Failed to retrieve medical uses.' });
+//     }
 
-};
+// };
 
-const getMedicinesByMedicalUse = async (req, res) => {
-    const { medicalUse } = req.body;
+// const getMedicinesByMedicalUse = async (req, res) => {
+//     const { medicalUse } = req.body;
 
-    try {
-        const medicines = await medicineModel.find({ medicalUse });
+//     try {
+//         const medicines = await medicineModel.find({ medicalUse });
 
-        if (medicines.length === 0) {
-            return res.status(404).json({ message: 'No medicines found with the specified medical use.' });
-        }
+//         if (medicines.length === 0) {
+//             return res.status(404).json({ message: 'No medicines found with the specified medical use.' });
+//         }
 
-        return res.status(200).json(medicines);
-    } catch (error) {
-        console.error('Error retrieving medicines by medical use:', error);
-        return res.status(500).json({ error: 'Failed to retrieve medicines by medical use.' });
-    }
-};
+//         return res.status(200).json(medicines);
+//     } catch (error) {
+//         console.error('Error retrieving medicines by medical use:', error);
+//         return res.status(500).json({ error: 'Failed to retrieve medicines by medical use.' });
+//     }
+// };
+// const viewMedicines = async (req, res) => {
+    //     try {
+    //         const medicines = await medicineModel.find();
+    
+    //         if (!medicines || medicines.length === 0) {
+    //             return res.status(404).json({ message: 'No medicines found.' });
+    //         }
+           
+    //         return res.status(200).json({ medicines });
+    //     } catch (error) {
+    //         return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
+    //     }
+    // };
+    
 
-module.exports = {createAdmin, removePatient, removePharmacist, viewPharmacists, viewPharmacistApplications, viewPatients, searchMedicine, getMedicalUses, getMedicinesByMedicalUse};
+module.exports = {createAdmin, removePatient, removePharmacist, viewPharmacists, viewPharmacistApplications, viewPatients};
