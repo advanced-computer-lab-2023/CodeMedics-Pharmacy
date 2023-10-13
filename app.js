@@ -27,7 +27,7 @@ const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
-const {createAdmin, removePharmacist, removePatient} = require('./controllers/AdminController');
+const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications} = require('./controllers/AdminController');
 const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
@@ -112,11 +112,6 @@ app.get("/searchMedicine", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.get("/viewPharmacistApplications", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
-    res.sendFile(filePath);
-});
-
 app.get("/getMedicalUses", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Medicine.html");
     res.sendFile(filePath);
@@ -135,6 +130,27 @@ app.get("/removePatient", (req, res) => {
     const filePath = path.join(__dirname, "pages", "removePatient.html");
     res.sendFile(filePath);
 });
+// app.get("/viewPharmacistApplications", (req, res) => {
+//     console.log('Request to viewPharmacistApplications received');
+//     const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
+//     res.sendFile(filePath);
+// });
+app.get("/iewPharmacistApplications", viewPharmacistApplications);
+
+app.get("/viewPharmacistApplications", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
+    res.sendFile(filePath);
+});
+
+// app.get("/viewPharmacistApplications", async (req, res) => {
+//     try {
+//         const pharmacistApplications = await viewPharmacistApplications();
+//         res.status(200).json({ pharmacistApplications });
+//     } catch (error) {
+//         console.error('Error fetching pharmacist applications:', error);
+//         res.status(500).json({ error: 'Failed to fetch pharmacist applications', detailedError: error.message });
+//     }
+// });
 
 
 
@@ -151,14 +167,15 @@ app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
 app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient" , removePatient);
+//app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 app.get("/Medicines",viewMedicines);
 app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
 app.post("/searchMedicine", searchMedicine);
 app.get("/getMedicalUses", getMedicalUses);
 app.get("/filterMedicine", getMedicinesByMedicalUse);
+
 // Define your /addUser route here to handle the POST request
 // app.post("/register", registerPPatient);
 // app.post("/Pharmregister",registerPharmacist);
 // app.post("/addMedicine", addMedicine);
- 
