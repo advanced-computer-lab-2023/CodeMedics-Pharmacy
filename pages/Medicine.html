@@ -1,6 +1,6 @@
-medicines.html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,19 +12,22 @@ medicines.html
             position: absolute;
             background-color: #f1f1f1;
             min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             z-index: 1;
         }
+
         .filter-dropdown a {
             padding: 12px 16px;
             text-decoration: none;
             display: block;
         }
+
         .filter-dropdown a:hover {
             background-color: #ddd;
         }
     </style>
 </head>
+
 <body>
     <h1>List of Medicines</h1>
 
@@ -32,64 +35,86 @@ medicines.html
     <div class="filter-dropdown-container">
         <button id="openFilterDropdown">Filter</button>
         <div class="filter-dropdown" id="filterDropdown">
-            <a href="#" data-filter="all">All</a>
-            <a href="#" data-filter="pain">Pain Relief</a>
-            <a href="#" data-filter="fever">Fever</a>
-            <a href="#" data-filter="cough">Cough and Cold</a>
-            <!-- Add more filter options here -->
+            <!-- Dynamically populate filter options using JavaScript -->
         </div>
+    </div>
+
+    <!-- Search bar for searching medicines by name -->
+    <div>
+        <label for="searchMedicine">Search by Name:</label>
+        <input type="text" id="searchMedicine" placeholder="Enter medicine name">
+        <button id="searchButton">Search</button>
     </div>
 
     <ul id="medicineList"></ul>
 
     <script>
-        // JavaScript to fetch and display medicines and handle filtering
         const medicineList = document.getElementById('medicineList');
-        const filterButton = document.getElementById('openFilterDropdown');
         const filterDropdown = document.getElementById('filterDropdown');
+        const searchInput = document.getElementById('searchMedicine');
+        const searchButton = document.getElementById('searchButton');
 
-        function fetchAndDisplayMedicines(filter = 'all') {
-            fetch('/medicines')
-                .then(response => response.json())
-                .then(data => {
-                    // Clear existing medicine list
-                    medicineList.innerHTML = '';
-
-                    data.forEach(medicine => {
-                        // Check if the medicine matches the selected filter
-                        if (filter === 'all' || medicine.medicinalUse === filter) {
-                            const listItem = document.createElement('li');
-                            listItem.innerHTML = `
-                                <img src="${medicine.imageUrl}" alt="${medicine.name}">
-                                <h2>${medicine.name}</h2>
-                                <p>${medicine.description}</p>
-                                <p>Price: $${medicine.price.toFixed(2)}</p>
-                            `;
-                            medicineList.appendChild(listItem);
-                        }
-                    });
-                })
-                .catch(error => console.error('Error:', error));
-        }
-
-        // Event listener for the filter button to toggle the filter dropdown
-        filterButton.addEventListener('click', () => {
-            filterDropdown.style.display = (filterDropdown.style.display === 'block') ? 'none' : 'block';
-        });
+        // Fetch and populate filter options dynamically
+        fetch('/getMedicalUses')
+            .then(response => response.json())
+            .then(data => {
+                const filterOptions = data.medicalUses;
+                filterDropdown.innerHTML = '<a href="#" data-filter="all">All</a>';
+                filterOptions.forEach(option => {
+                    const filterItem = document.createElement('a');
+                    filterItem.href = '#';
+                    filterItem.dataset.filter = option;
+                    filterItem.textContent = option;
+                    filterDropdown.appendChild(filterItem);
+                });
+            })
+            .catch(error => console.error('Error fetching filter options:', error));
 
         // Event listener for filter options in the dropdown
         filterDropdown.addEventListener('click', (event) => {
             if (event.target.dataset.filter) {
                 const selectedFilter = event.target.dataset.filter;
                 fetchAndDisplayMedicines(selectedFilter);
-                filterDropdown.style.display = 'none'; // Close the dropdown after selection
             }
         });
+
+        // Event listener for the search button
+        searchButton.addEventListener('click', () => {
+            const searchQuery = searchInput.value.trim();
+            if (searchQuery) {
+                fetchAndDisplayMedicines(searchQuery);
+            } else {
+                fetchAndDisplayMedicines();
+            }
+        });
+
+        function fetchAndDisplayMedicines(filter = 'all') {
+            // Fetch medicines from the server based on filter
+            fetch(`/filterMedicine?medicalUse=${filter}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Clear existing medicine list
+                    medicineList.innerHTML = '';
+
+                    data.medicines.forEach(medicine => {
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `
+                            <img src="${medicine.Picture}" alt="${medicine.name}">
+                            <h2>${medicine.name}</h2>
+                            <p>${medicine.Description}</p>
+                            <p>Price: $${medicine.price.toFixed(2)}</p>
+                        `;
+                        medicineList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
 
         // Fetch and display medicines initially
         fetchAndDisplayMedicines();
     </script>
 </body>
+
 </html>
 
 

@@ -28,7 +28,7 @@ const { registerPPatient, registerPharmacist, loginUser } = require('./controlle
 
 const AdminRoutes = require('./routes/AdminRoutes')
 const {viewList, createAdmin} = require('./controllers/AdminController');
-const {addMedicine, editMedicine, viewMedicines} = require('./controllers/MedicineController'); // Import MedicineController
+const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
@@ -59,7 +59,6 @@ app.use('/Pharmregister', AuthRoutes);
 
 
 app.put('/editMedicine',editMedicine);
-// Start the server
 
 
 app.get("/admin", (req, res) => {
@@ -140,8 +139,14 @@ app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
 
+
 app.get("/Medicines",viewMedicines);
+app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
+app.post("/searchMedicine", searchMedicine);
+app.get("/getMedicalUses", getMedicalUses);
+app.get("/filterMedicine", getMedicinesByMedicalUse);
 // Define your /addUser route here to handle the POST request
 // app.post("/register", registerPPatient);
 // app.post("/Pharmregister",registerPharmacist);
 // app.post("/addMedicine", addMedicine);
+ 
