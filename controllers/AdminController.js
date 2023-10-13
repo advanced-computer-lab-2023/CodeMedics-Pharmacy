@@ -84,6 +84,7 @@ const viewPharmacists = async (req, res) => {
 const viewPharmacistApplications = async (req, res) => {
     try {
         const pharmacistApplications = await pharmacistRequests.find();
+        console.log('Pharmacist Applications:', pharmacistApplications);
 
         if (!pharmacistApplications || pharmacistApplications.length == 0) {
             return res.status(404).json({ message: 'No pharmacist applications found.' });
