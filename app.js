@@ -27,7 +27,7 @@ const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
-const {createAdmin} = require('./controllers/AdminController');
+const {createAdmin, removePharmacist, removePatient} = require('./controllers/AdminController');
 const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
@@ -53,6 +53,7 @@ app.get("/viewMedicines", (req, res) => {
     const filePath = path.join(__dirname, "pages", "viewMedicines.html");
     res.sendFile(filePath);
 });
+
 
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
@@ -126,6 +127,16 @@ app.get("/getMedicinesByMedicalUse", (req, res) => {
     res.sendFile(filePath);
 });
 
+app.get("/removePharmacist", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "removePharmacist.html");
+    res.sendFile(filePath);
+});
+app.get("/removePatient", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "removePatient.html");
+    res.sendFile(filePath);
+});
+
+
 
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
@@ -138,7 +149,8 @@ app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
-
+app.delete("/removePharmacist", removePharmacist);
+app.delete("/removePatient" , removePatient);
 
 app.get("/Medicines",viewMedicines);
 app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
