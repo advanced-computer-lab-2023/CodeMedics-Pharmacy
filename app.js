@@ -50,7 +50,11 @@ app.get("/Pharmregister", (req, res) => {
 });
 
 
-
+app.post("/edit", editMedicine);
+app.get("/editMedicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "editMedicine.html");
+    res.sendFile(filePath);
+});
 
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
