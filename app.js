@@ -64,6 +64,8 @@ app.get("/admin", (req, res) => {
     res.sendFile(filePath);
 });
 
+
+
 app.get("/addMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "addMedicine.html");
     res.sendFile(filePath);
