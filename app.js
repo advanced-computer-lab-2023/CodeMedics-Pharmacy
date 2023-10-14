@@ -99,7 +99,10 @@ app.get("/viewPharmacists", (req, res) => {
     res.sendFile(filePath);
 });
 
-
+app.get("/viewMedicinePharmacist", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "ViewMedicinePharmacist.html");
+    res.sendFile(filePath);
+});
 
 
 app.get("/viewPatient", (req, res) => {
