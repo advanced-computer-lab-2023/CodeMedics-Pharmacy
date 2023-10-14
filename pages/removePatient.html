@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Patient</title>
+</head>
+<body>
+    <h1>Remove Patient</h1>
+    <form id="removePatientForm">
+        <label for="username">Patient Username:</label>
+        <input type="text" id="username" name="Username" required><br><br>
+        <button type="submit">Remove Patient</button>
+    </form>
+
+    <script>
+        const removePatientForm = document.getElementById('removePatientForm');
+
+        removePatientForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const formData = new FormData(removePatientForm);
+            const requestData = {};
+            formData.forEach((value, key) => {
+                requestData[key] = value;
+            });
+
+            fetch('/removePatient', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                alert('Patient removed successfully!');
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Failed to remove patient. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>

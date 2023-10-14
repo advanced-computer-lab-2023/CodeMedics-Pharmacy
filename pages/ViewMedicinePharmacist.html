@@ -46,13 +46,15 @@
                 <th>Description</th>
                 <th>Picture</th>
                 <th>Price</th>
+                <th>Sales</th>
+                <th>Quantity Available</th>
             </tr>
         </thead>
         <tbody id="MedicineTableBody"></tbody>
     </table>
 
     <script>
-          fetch("/Medicines")
+          fetch("/MedicinesPharmacist")
         .then((response) => response.json())
         .then((data) => {
           const MedicineTableBody = document.getElementById(
@@ -67,7 +69,8 @@
               <td>${medicine.Description}</td>
               <td>${medicine.Picture}</td>
               <td>${medicine.price}</td>
-              
+              <td>${medicine.sales}</td>
+              <td>${medicine.availableQuantity}</td>
             `;
             MedicineTableBody.appendChild(row);
           });
@@ -122,6 +125,8 @@
                     <td>${medicine.Description}</td>
                     <td>${medicine.Picture}</td>
                     <td>${medicine.price}</td>
+                    <td>${medicine.sales}</td>
+                    <td>${medicine.availableQuantity}</td>
                 `;
                 MedicineTableBody.appendChild(row);
             });

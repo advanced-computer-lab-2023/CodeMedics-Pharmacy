@@ -7,7 +7,7 @@
     <title></title>
 </head>
 <body>
-    <h1></h1>
+    <h1>Welcome Pharmacist</h1>
     <!-- Add a button to redirect to the medicines page -->
     <button id="viewMedicinesButton">View Medicines</button>
 
@@ -17,6 +17,33 @@
             window.location.href = '/medicine';
         });
     </script>
+     <button onclick="window.location.href='/addMedicine'">add medicine</button> <br><br>
+     
+     
+
+
+
+
+     <button id="editMedicineButton">Edit Medicines</button>
+
+     <script>
+         // JavaScript to redirect to the medicines page when the button is clicked
+         document.getElementById('editMedicineButton').addEventListener('click', function () {
+             window.location.href = '/editMedicine';
+         });
+     </script>
+
+<button id="viewMedicinesButton">Edit Medicines</button>
+
+<script>
+    // JavaScript to redirect to the medicines page when the button is clicked
+    document.getElementById('viewMedicinesButton').addEventListener('click', function () {
+        window.location.href = '/viewMedicinePharmacist';
+    });
+</script>
+
+
+      <br><br>
 </body>
 </html>
 no
