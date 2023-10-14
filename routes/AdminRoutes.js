@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const AdminController = require('../controllers/AdminController');
-const {createAdmin, viewPharmacistApplications, viewPharmacists, viewPatients, searchMedicine, getMedicalUses, getMedicinesByMedicalUse} = require('../controllers/AdminController');
+const {createAdmin, viewPharmacistApplications, viewPharmacists, viewPatients} = require('../controllers/AdminController');
 
 router.post('/createAdmin', createAdmin);
 
@@ -23,7 +23,7 @@ router.delete('/removePatient', (req, res) => {
 
 // router.get('/viewPharmacists', viewPharmacists);
 router.get('/viewPharmacistApplications', viewPharmacistApplications);
-router.get('/viewPatients', viewPatients);
+router.get('/viewPatient', viewPatients);
 // router.get('/viewMedicines', viewMedicines);
 //// router.get('/getMedicalUses', getMedicalUses);
 // router.get('/getMedicinesByMedicalUse', getMedicinesByMedicalUse);
