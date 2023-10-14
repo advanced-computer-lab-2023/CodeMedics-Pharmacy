@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacists</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Pharmacists</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Date Of Birth</th>
+                <th>Hourly Rate</th>
+                <th>Affiliation</th>
+                <th>Degree</th>
+            </tr>
+        </thead>
+        <tbody id="PharmacistsTableBody"></tbody>
+    </table>
+
+    <script>
+          fetch("/iewPharmacists")
+        .then((response) => response.json())
+        .then((data) => {
+          const PharmacistsTableBody = document.getElementById(
+            "PharmacistsTableBody"
+          );
+          PharmacistsTableBody.innerHTML = "";
+
+          data.pharmacists.forEach((pharmacists) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${pharmacists.Name}</td>
+              <td>${pharmacists.Username}</td>
+              <td>${pharmacists.Email}</td>
+              <td>${pharmacists.DateOfBirth}</td>
+              <td>${pharmacists.HourlyRate}</td>
+              <td>${pharmacists.affiliation}</td>
+              <td>${pharmacists.Degree}</td>
+              
+            `;
+            PharmacistsTableBody.appendChild(row);
+          });
+        })
+      
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
+    </script>
+</body>
+
+</html>

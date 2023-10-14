@@ -27,7 +27,7 @@ const path = require('path');
 const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
-const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications} = require('./controllers/AdminController');
+const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists} = require('./controllers/AdminController');
 const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
@@ -171,6 +171,7 @@ app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
+app.get("/iewPharmacists", viewPharmacists);
 app.get("/Medicines",viewMedicines);
 app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
 app.post("/earchMedicine", searchMedicine);
