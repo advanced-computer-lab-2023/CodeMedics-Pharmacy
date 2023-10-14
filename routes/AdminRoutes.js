@@ -21,7 +21,7 @@ router.delete('/removePatient', (req, res) => {
 //     AdminController.getMedicinesByMedicalUse(req, res);
 // });
 
-router.get('/viewPharmacists', viewPharmacists);
+// router.get('/viewPharmacists', viewPharmacists);
 router.get('/viewPharmacistApplications', viewPharmacistApplications);
 router.get('/viewPatients', viewPatients);
 // router.get('/viewMedicines', viewMedicines);
