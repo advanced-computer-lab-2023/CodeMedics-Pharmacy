@@ -108,16 +108,18 @@ const editMedicine = async (req, res) => {
 
 
 const getMedicinesByMedicalUse = async (req, res) => {
-  const { medicalUse } = req.body;
+  const { medicalUse } = req.query;
+
+  console.log(medicalUse);
 
   try {
-      const medicines = await medicineModel.find({ medicalUse });
-
+      const medicines = await medicineModel.find( {medicalUse} );
+        console.log(medicines);
       if (medicines.length === 0) {
           return res.status(404).json({ message: 'No medicines found with the specified medical use.' });
       }
-
-      return res.status(200).json(medicines);
+      console.log("before return");
+      return res.status(200).json({medicines: medicines});
   } catch (error) {
       console.error('Error retrieving medicines by medical use:', error);
       return res.status(500).json({ error: 'Failed to retrieve medicines by medical use.' });
@@ -136,7 +138,6 @@ const searchMedicine = async (req, res) => {
       if (medicines.length === 0) {
           return res.status(404).json({ message: 'No medicines found with the provided name.' });
       }
-
       return res.status(200).json(medicines);
   } catch (error) {
       console.error('Error searching for medicines:', error);
