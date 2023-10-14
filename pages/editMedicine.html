@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Medicine</title>
+</head>
+
+<body>
+    <h1>Edit Medicine Details</h1>
+    <form id="editMedicineForm">
+        <label for="name">Medicine Name:</label>
+        <input type="text" id="name" name="name"><br>
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="Description"><br>
+
+        <label for="picture">Picture URL:</label>
+        <input type="text" id="picture" name="Picture"><br>
+
+        <label for="activeIngredients">Active Ingredients (comma-separated):</label>
+        <input type="text" id="activeIngredients" name="activeIngredients"><br>
+
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price"><br>
+
+        <label for="medicalUse">Medical Use:</label>
+        <input type="text" id="medicalUse" name="medicalUse"><br>
+
+        <label for="availableQuantity">Available Quantity:</label>
+        <input type="number" id="availableQuantity" name="availableQuantity"><br>
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+    <script>
+        const form = document.getElementById('editMedicineForm');
+
+        form.addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+            const requestBody = {};
+
+            // Iterate through the form data and add non-empty values to the request body
+            for (let [key, value] of formData.entries()) {
+                if (value !== '') {
+                    requestBody[key] = value;
+                }
+            }
+
+            try {
+                const response = await fetch('/edit', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message);
+                    // Optionally, redirect the user to another page or update the UI
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Error updating medicine details');
+            }
+        });
+    </script>
+</body>
+
+</html>

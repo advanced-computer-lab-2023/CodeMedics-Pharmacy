@@ -147,6 +147,13 @@ app.get("/viewPharmacistApplications", (req, res) => {
     res.sendFile(filePath);
 });
 
+
+
+app.post("/edit", editMedicine);
+app.get("/editMedicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "editMedicine.html");
+    res.sendFile(filePath);
+});
 // app.get("/viewPharmacistApplications", async (req, res) => {
 //     try {
 //         const pharmacistApplications = await viewPharmacistApplications();
