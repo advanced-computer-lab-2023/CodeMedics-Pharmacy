@@ -50,7 +50,11 @@ app.get("/Pharmregister", (req, res) => {
 });
 
 
-
+app.post("/edit", editMedicine);
+app.get("/editMedicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "editMedicine.html");
+    res.sendFile(filePath);
+});
 
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
@@ -148,7 +152,6 @@ app.get("/viewPharmacistApplications", (req, res) => {
 });
 
 
-
 app.post("/edit", editMedicine);
 app.get("/editMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "editMedicine.html");
@@ -187,6 +190,7 @@ app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
+app.get("/ditMedicine", editMedicine);
 app.get("/iewPatients", viewPatients);
 app.get("/iewPharmacists", viewPharmacists);
 app.get("/Medicines",viewMedicines);

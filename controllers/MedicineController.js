@@ -3,25 +3,61 @@
  //const Medicine = require('../models/Medicine'); 
  const medicineModel = require('../models/Medicine');
 
- const addMedicine = async (req, res) => {
+//  const addMedicine = async (req, res) => {
+//     try {
+//         const { name, Description, Picture,activeIngredients, price, medicalUse , availableQuantity } = req.body;
+//         console.log(req.body);
+//         // Create a new medicine instance
+//         const newMedicine = new medicineModel({
+//             name,
+//             Description,
+//             Picture,
+//             activeIngredients,
+//             price,
+//             medicalUse,
+//             availableQuantity,
+//         });
+
+//         // Save the medicine to the database
+//         await newMedicine.save();
+
+//         res.status(201).json(newMedicine);
+//     } catch (error) {
+//         console.error(error); // Log the actual error to the console
+//         res.status(500).json({ error: 'Error adding medicine' });
+//     }
+// };
+
+
+const addMedicine = async (req, res) => {
     try {
-        const { name, Description, Picture,activeIngredients, price, medicalUse , availableQuantity } = req.body;
-        console.log(req.body);
-        // Create a new medicine instance
-        const newMedicine = new medicineModel({
-            name,
-            Description,
-            Picture,
-            activeIngredients,
-            price,
-            medicalUse,
-            availableQuantity,
-        });
+        const { name, Description, Picture, activeIngredients, price, medicalUse, availableQuantity } = req.body;
 
-        // Save the medicine to the database
-        await newMedicine.save();
+        // Check if the medicine already exists in the database
+        const existingMedicine = await medicineModel.findOne({ name });
 
-        res.status(201).json(newMedicine);
+        if (existingMedicine) {
+            // If the medicine already exists, update the available quantity
+            existingMedicine.availableQuantity += availableQuantity;
+            await existingMedicine.save();
+            res.status(200).json(existingMedicine);
+        } else {
+            // If the medicine doesn't exist, create a new medicine instance
+            const newMedicine = new medicineModel({
+                name,
+                Description,
+                Picture,
+                activeIngredients,
+                price,
+                medicalUse,
+                availableQuantity: availableQuantity, // Set the available quantity to the specified quantity
+            });
+
+            // Save the new medicine to the database
+            await newMedicine.save();
+
+            res.status(201).json(newMedicine);
+        }
     } catch (error) {
         console.error(error); // Log the actual error to the console
         res.status(500).json({ error: 'Error adding medicine' });
@@ -69,7 +105,6 @@ const editMedicine = async (req, res) => {
 //         return res.status(500).json({ error: 'Failed to fetch pharmacists.' });
 //     }
 // };
-
 
 
 const getMedicinesByMedicalUse = async (req, res) => {
