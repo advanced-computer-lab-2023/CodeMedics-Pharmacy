@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://JanaKorayem:JanaKorayem@infodb.srentmg.mongodb.net/ClinicPharmaDB')
+mongoose.connect('mongodb+srv://rawanelashmawy:rawanelashmawy@infodb.srentmg.mongodb.net/ClinicPharmaDB')
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -49,10 +49,7 @@ app.get("/Pharmregister", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.get("/viewMedicines", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "viewMedicines.html");
-    res.sendFile(filePath);
-});
+
 
 
 app.use('/register', AuthRoutes);
@@ -152,6 +149,11 @@ app.get("/viewPharmacistApplications", (req, res) => {
 //     }
 // });
 
+app.get("/viewMedicines", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewMedicines.html");
+    res.sendFile(filePath);
+});
+
 
 
 app.use('/register', AuthRoutes);
@@ -171,9 +173,9 @@ app.delete("/removePatient" , removePatient);
 
 app.get("/Medicines",viewMedicines);
 app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
-app.post("/searchMedicine", searchMedicine);
-app.get("/getMedicalUses", getMedicalUses);
-app.get("/filterMedicine", getMedicinesByMedicalUse);
+app.post("/earchMedicine", searchMedicine);
+app.get("/MedicalUses", getMedicalUses);
+app.get("/ilterMedicine", getMedicinesByMedicalUse);
 
 // Define your /addUser route here to handle the POST request
 // app.post("/register", registerPPatient);
