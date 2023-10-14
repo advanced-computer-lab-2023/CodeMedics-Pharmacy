@@ -4,118 +4,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>List of Medicines</title>
+    <title>Medicines</title>
     <style>
-        /* Style for the filter dropdown */
-        .filter-dropdown {
-            display: none;
-            position: absolute;
-            background-color: #f1f1f1;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            z-index: 1;
+        table {
+            width: 100%;
+            border-collapse: collapse;
         }
 
-        .filter-dropdown a {
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
+        th,
+        td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
         }
 
-        .filter-dropdown a:hover {
-            background-color: #ddd;
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 
 <body>
-    <h1>List of Medicines</h1>
+    <h1>Medicines</h1>
 
-    <!-- Filter button to open the dropdown menu -->
-    <div class="filter-dropdown-container">
-        <button id="openFilterDropdown">Filter</button>
-        <div class="filter-dropdown" id="filterDropdown">
-            <!-- Dynamically populate filter options using JavaScript -->
-        </div>
-    </div>
+    <!-- Filter by medicinal use dropdown -->
+    <label for="medicinalUseFilter">Filter by Medicinal Use:</label>
+    <select id="medicinalUseFilter">
+        <option value="">All</option>
+        <!-- Filter options will be dynamically populated using JavaScript -->
+    </select>
 
     <!-- Search bar for searching medicines by name -->
-    <div>
-        <label for="searchMedicine">Search by Name:</label>
-        <input type="text" id="searchMedicine" placeholder="Enter medicine name">
-        <button id="searchButton">Search</button>
-    </div>
+    <label for="medicineSearch">Search by Name:</label>
+    <input type="text" id="medicineSearch" placeholder="Enter medicine name">
+    <button onclick="searchMedicine()">Search</button>
 
-    <ul id="medicineList"></ul>
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine Name</th>
+                <th>Description</th>
+                <th>Picture</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody id="MedicineTableBody"></tbody>
+    </table>
 
     <script>
-        const medicineList = document.getElementById('medicineList');
-        const filterDropdown = document.getElementById('filterDropdown');
-        const searchInput = document.getElementById('searchMedicine');
-        const searchButton = document.getElementById('searchButton');
+          fetch("/Medicines")
+        .then((response) => response.json())
+        .then((data) => {
+          const MedicineTableBody = document.getElementById(
+            "MedicineTableBody"
+          );
+          MedicineTableBody.innerHTML = "";
 
-        // Fetch and populate filter options dynamically
-        fetch('/getMedicalUses')
+          data.medicines.forEach((medicine) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${medicine.name}</td>
+              <td>${medicine.Description}</td>
+              <td>${medicine.Picture}</td>
+              <td>${medicine.price}</td>
+              
+            `;
+            MedicineTableBody.appendChild(row);
+          });
+        })
+      
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+
+        fetch("/MedicalUses")
             .then(response => response.json())
             .then(data => {
-                const filterOptions = data.medicalUses;
-                filterDropdown.innerHTML = '<a href="#" data-filter="all">All</a>';
-                filterOptions.forEach(option => {
-                    const filterItem = document.createElement('a');
-                    filterItem.href = '#';
-                    filterItem.dataset.filter = option;
-                    filterItem.textContent = option;
-                    filterDropdown.appendChild(filterItem);
+                const medicinalUseFilter = document.getElementById("medicinalUseFilter");
+                data.medicalUses.forEach(medicalUse => {
+                    const option = document.createElement("option");
+                    option.value = medicalUse;
+                    option.textContent = medicalUse;
+                    medicinalUseFilter.appendChild(option);
                 });
             })
-            .catch(error => console.error('Error fetching filter options:', error));
+            .catch(error => console.error("Error fetching medical uses:", error));
 
-        // Event listener for filter options in the dropdown
-        filterDropdown.addEventListener('click', (event) => {
-            if (event.target.dataset.filter) {
-                const selectedFilter = event.target.dataset.filter;
-                fetchAndDisplayMedicines(selectedFilter);
-            }
-        });
-
-        // Event listener for the search button
-        searchButton.addEventListener('click', () => {
-            const searchQuery = searchInput.value.trim();
-            if (searchQuery) {
-                fetchAndDisplayMedicines(searchQuery);
-            } else {
-                fetchAndDisplayMedicines();
-            }
-        });
-
-        function fetchAndDisplayMedicines(filter = 'all') {
-            // Fetch medicines from the server based on filter
-            fetch(`/filterMedicine?medicalUse=${filter}`)
+        function filterMedicines() {
+            const selectedMedicalUse = document.getElementById("medicinalUseFilter").value;
+            fetch(`/ilterMedicine?medicalUse=${selectedMedicalUse}`)
                 .then(response => response.json())
-                .then(data => {
-                    // Clear existing medicine list
-                    medicineList.innerHTML = '';
-
-                    data.medicines.forEach(medicine => {
-                        const listItem = document.createElement('li');
-                        listItem.innerHTML = `
-                            <img src="${medicine.Picture}" alt="${medicine.name}">
-                            <h2>${medicine.name}</h2>
-                            <p>${medicine.Description}</p>
-                            <p>Price: $${medicine.price.toFixed(2)}</p>
-                        `;
-                        medicineList.appendChild(listItem);
-                    });
-                })
-                .catch(error => console.error('Error:', error));
+                .then(data => populateMedicineTable(data.medicines))
+                .catch(error => console.error("Error filtering medicines:", error));
         }
 
-        // Fetch and display medicines initially
-        fetchAndDisplayMedicines();
+        function searchMedicine() {
+        const searchQuery = document.getElementById("medicineSearch").value;
+        fetch(`/earchMedicine`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: searchQuery })
+        })
+        .then(response => response.json())
+        .then(data => populateMedicineTable(data))
+        .catch(error => console.error("Error searching for medicines:", error));}
+        
+           function populateMedicineTable(medicines) {
+            const MedicineTableBody = document.getElementById("MedicineTableBody");
+            MedicineTableBody.innerHTML = "";
+
+            medicines.forEach(medicine => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${medicine.name}</td>
+                    <td>${medicine.Description}</td>
+                    <td>${medicine.Picture}</td>
+                    <td>${medicine.price}</td>
+                `;
+                MedicineTableBody.appendChild(row);
+            });
+        }
+
+        // Initial population of the medicine table
+        filterMedicines();
     </script>
 </body>
 
 </html>
-
-
-
