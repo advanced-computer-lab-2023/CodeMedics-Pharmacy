@@ -29,7 +29,7 @@
 
     <!-- Filter by medicinal use dropdown -->
     <label for="medicinalUseFilter">Filter by Medicinal Use:</label>
-    <select id="medicinalUseFilter">
+    <select id="medicinalUseFilter", onchange="filterMedicines()">
         <option value="">All</option>
         <!-- Filter options will be dynamically populated using JavaScript -->
     </select>
@@ -91,6 +91,7 @@
             .catch(error => console.error("Error fetching medical uses:", error));
 
         function filterMedicines() {
+            console.log("reached inside Medicine");
             const selectedMedicalUse = document.getElementById("medicinalUseFilter").value;
             fetch(`/ilterMedicine?medicalUse=${selectedMedicalUse}`)
                 .then(response => response.json())
