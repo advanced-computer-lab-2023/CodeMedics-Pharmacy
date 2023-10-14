@@ -74,12 +74,16 @@ const editMedicine = async (req, res) => {
 
 const getMedicinesByMedicalUse = async (req, res) => {
   const { medicalUse } = req.query;
-
+  
   console.log(medicalUse);
 
   try {
-      const medicines = await medicineModel.find( {medicalUse} );
-        console.log(medicines);
+      var medicines = await medicineModel.find( {medicalUse} );
+      const allMeds = await medicineModel.find();
+      //console.log(allMeds);
+      if(medicalUse === ""){
+        medicines = allMeds;
+      }
       if (medicines.length === 0) {
           return res.status(404).json({ message: 'No medicines found with the specified medical use.' });
       }
