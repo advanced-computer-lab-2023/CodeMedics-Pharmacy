@@ -64,6 +64,8 @@ app.get("/admin", (req, res) => {
     res.sendFile(filePath);
 });
 
+
+
 app.get("/addMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "addMedicine.html");
     res.sendFile(filePath);
@@ -146,12 +148,11 @@ app.get("/viewPharmacistApplications", (req, res) => {
 });
 
 
+app.post("/edit", editMedicine);
 app.get("/editMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "editMedicine.html");
     res.sendFile(filePath);
 });
-
-
 // app.get("/viewPharmacistApplications", async (req, res) => {
 //     try {
 //         const pharmacistApplications = await viewPharmacistApplications();
