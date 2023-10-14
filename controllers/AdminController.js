@@ -33,6 +33,11 @@ const removePharmacist = async (req, res) => {
     }
     const {Username} = req.body;
         try {
+            const isFound = await pharmacistModel.find({Username: Username});
+            if(isFound.length == 0){
+                 return res.status(400).json("Username does not exist");
+            }
+
             await Promise.all([
                 pharmacistModel.deleteOne({Username: Username})
             ]);
@@ -42,7 +47,6 @@ const removePharmacist = async (req, res) => {
             console.error('Error deleting user:', error);
             return res.status(500).json({message: 'Error deleting user'});
         }
-        return res.status(404).json("User not found in database!");
 };
 
 const removePatient = async (req, res) => {
@@ -54,6 +58,10 @@ const removePatient = async (req, res) => {
     }
     const {Username} = req.body;
         try {
+            const isFound = await patientModel.find({Username: Username});
+            if(isFound.length == 0){
+                 return res.status(400).json("Username does not exist");
+            }
             await Promise.all([
                 patientModel.deleteOne({username: Username}),
             ]);

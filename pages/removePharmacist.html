@@ -35,11 +35,11 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data);
-                alert('Pharmacist removed successfully!');
+                alert(data);
             })
             .catch(error => {
                 console.error('Error:', error);
-                alert('Failed to remove pharmacist. Please try again.');
+                alert(error);
             });
         });
     </script>

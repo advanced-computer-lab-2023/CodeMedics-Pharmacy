@@ -83,17 +83,9 @@ fetch('/register', {
     },
     body: JSON.stringify(formData),
 })
-.then(response => {
-    if (response.ok) {
-        return response.json(); // Parse the JSON response for successful requests
-    } else {
-        throw new Error('Username/Email already exists. Please choose another one.'); // Handle non-2xx status codes as errors
-    }
-})
+.then(response => response.json()) 
 .then(data => {
-    // Handle the response from the server if needed
-    console.log(data);
-    // You can add code here to handle successful responses
+    alert(data)
 })
 .catch(error => {
     // Handle errors here
