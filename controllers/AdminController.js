@@ -58,7 +58,7 @@ const removePatient = async (req, res) => {
     }
     const {Username} = req.body;
         try {
-            const isFound = await patientModel.find({Username: Username});
+            const isFound = await patientModel.find({username: Username});
             if(isFound.length == 0){
                  return res.status(400).json("Username does not exist");
             }
