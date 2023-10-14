@@ -145,6 +145,13 @@ app.get("/viewPharmacistApplications", (req, res) => {
     res.sendFile(filePath);
 });
 
+
+app.get("/editMedicine", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "editMedicine.html");
+    res.sendFile(filePath);
+});
+
+
 // app.get("/viewPharmacistApplications", async (req, res) => {
 //     try {
 //         const pharmacistApplications = await viewPharmacistApplications();
@@ -178,6 +185,7 @@ app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
+app.get("/ditMedicine", editMedicine);
 app.get("/iewPatients", viewPatients);
 app.get("/iewPharmacists", viewPharmacists);
 app.get("/Medicines",viewMedicines);

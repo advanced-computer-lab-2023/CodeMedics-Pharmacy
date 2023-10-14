@@ -87,7 +87,7 @@ fetch('/register', {
     if (response.ok) {
         return response.json(); // Parse the JSON response for successful requests
     } else {
-        throw new Error('Network response was not ok.'); // Handle non-2xx status codes as errors
+        throw new Error('Username/Email already exists. Please choose another one.'); // Handle non-2xx status codes as errors
     }
 })
 .then(data => {
