@@ -22,9 +22,30 @@ app.listen(Port, () => {
     console.log("Server running at http://localhost:" + Port + "/");
 });
 
+const formData = require("express-form-data");
+const os = require("os");
+/**
+ * Options are the same as multiparty takes.
+ * But there is a new option "autoClean" to clean all files in "uploadDir" folder after the response.
+ * By default, it is "false".
+ */
+const options = {
+  uploadDir: os.tmpdir(),
+  autoClean: true
+};
+
+// parse data with connect-multiparty. 
+app.use(formData.parse(options));
+// delete from the request all empty files (size == 0)
+app.use(formData.format());
+// change the file objects to fs.ReadStream 
+app.use(formData.stream());
+// union the body and the files
+app.use(formData.union());
+
 // Import your routes here
 const path = require('path');
-const { registerPPatient, registerPharmacist, loginUser } = require('./controllers/GuestController');
+const { registerPPatient, registerPharmacist,upload ,  loginUser } = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
 const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');
@@ -168,9 +189,13 @@ app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
 app.use('/CreateAdmin', AdminRoutes);
 
-
+app.use('/uploads', express.static('uploads'));
 app.post("/register", registerPPatient);
-app.post("/Pharmregister",registerPharmacist);
+app.post("/Pharmregister",registerPharmacist, upload.fields([[
+    { name: 'IDDocument', maxCount: 1 },
+    { name: 'pharmacyDegree', maxCount: 1 },
+    { name: 'workingLicense', maxCount: 1 }
+  ]]));
 app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
