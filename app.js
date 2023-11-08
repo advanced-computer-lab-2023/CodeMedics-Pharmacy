@@ -2,8 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const dotenv = require('dotenv').config();
 const app = express();
-const Port = 3000;
+const Port = process.env.PORT || 3000;
 
 const MongoURI = process.env.MONGO_URI;
 
