@@ -107,7 +107,7 @@ const Page = () => {
                 &nbsp;
                 <Link
                   component={NextLink}
-                  href="/auth/register"
+                  href="/auth/pharmacistRegister"
                   underline="hover"
                   variant="subtitle2"
                 >

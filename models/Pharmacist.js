@@ -34,7 +34,7 @@ const pharmacistSchema = new Schema({
         type: String,
         required: [true, 'Please enter a degree']
     },
-      IDDocument: { type: String }, // Path or reference to the uploaded ID document
+    IDDocument: { type: String }, // Path or reference to the uploaded ID document
     pharmacyDegree: { type: String }, // Path or reference to the uploaded pharmacy degree
     workingLicense: { type: String } // Path or reference to the uploaded working license
 }, {timestamps: true});
