@@ -5,12 +5,14 @@ const bodyParser = require('body-parser');
 const app = express();
 const Port = 3000;
 
+const MongoURI = process.env.MONGO_URI;
+
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://rawanelashmawy:rawanelashmawy@infodb.srentmg.mongodb.net/ClinicPharmaDB')
+mongoose.connect(MongoURI)
     .then(() => {
         console.log("Connected to MongoDB");
     })
