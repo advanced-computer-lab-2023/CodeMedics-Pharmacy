@@ -10,8 +10,12 @@ const pharmacistReqSchema = new Schema({
     gender: { type: String, enum: ['male', 'female', 'other'], required: true },
     hourlyRate: { type: Number, required: true },
     affiliation: { type: String, required: true },
-    educationalBackground: { type: String, required: true }
-}, { timestamps: true });
+    educationalBackground: { type: String, required: true },
+    IDDocument: { type: String, required: true }, // Path or reference to the uploaded ID document
+    pharmacyDegree: { type: String, required: true }, // Path or reference to the uploaded pharmacy degree
+    workingLicense: { type: String, required: true } // Path or reference to the uploaded working license
+},
+{ timestamps: true });
 
 const pharmacistRequests = mongoose.model('pharmacistRequests', pharmacistReqSchema);
 
