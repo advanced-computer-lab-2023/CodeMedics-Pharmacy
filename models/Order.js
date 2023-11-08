@@ -15,9 +15,22 @@ const OrderSchema = new Schema({
         type: Boolean
     },
     items: {
-        type: [String]
+        type: [{
+            MedicineId: {
+                type: String
+            },
+            Quantity: {
+                type: Number
+            },
+            Price: {
+                type: Number
+            }
+        }]
+    }
+    , DeliveryAddress: {
+        type: String
     }
 }, {timestamps: true});
 
-const Order = mongoose.model('Doctor', OrderSchema, 'Doctors');
-module.exports = Doctor;
+const Order = mongoose.model('Order', OrderSchema, 'Order');
+module.exports = Order;
