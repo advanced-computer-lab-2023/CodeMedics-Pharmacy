@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Prescription = require('./Prescription');
+const Cart = require('./Cart');
 const Schema = mongoose.Schema;
 
 const patientSchema = new Schema({
@@ -75,6 +76,10 @@ const patientSchema = new Schema({
         default: 0,
         required: false
     },
+    Cart :{
+        type: [Cart.schema],
+        required: false
+    }
 }, {timestamps: true});
 
 const Patient = mongoose.model('Patient', patientSchema, 'Patients');
