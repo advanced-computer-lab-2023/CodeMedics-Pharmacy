@@ -44,9 +44,16 @@ const getPharmacits = async (req, res) => {
 const createPharmacist = async (req, res) => {
     const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree } = req.body;
     const existingUser = await adminModel.findOne({ Username }) || await pharmacistModel.findOne({ Username }) || await patientModel.findOne({ Username });
+    const existingEmail = await adminModel.findOne({ Email });
+
     if (existingUser) {
         return res.status(400).json({ message: 'Username already exists. Please choose another one.' });
     }
+
+    if (existingEmail) {
+        return res.status(400).json({ error: 'Email already in Use. Please Enter another one.' });
+    }
+
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(Password, salt);
