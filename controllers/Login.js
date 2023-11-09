@@ -23,7 +23,6 @@ const login = async (req, res) => {
         
         const user = user1 || user2 || user3;
 
-
         if (user) {
             const auth = await bcrypt.compare(password, user.Password);
             if (auth) {
