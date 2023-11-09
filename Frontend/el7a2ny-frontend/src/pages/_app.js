@@ -27,7 +27,7 @@ const App = (props) => {
     <CacheProvider value={emotionCache}>
       <Head>
         <title>
-          Devias Kit
+          El7a2ny Pharmacy
         </title>
         <meta
           name="viewport"
