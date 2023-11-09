@@ -85,20 +85,23 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                Devias Kit
+                El7a2ny Pharmacy
               </Box>
             </Typography>
             <Typography
               align="center"
-              sx={{ mb: 3 }}
+              sx={{ mb: 1 }}
               variant="subtitle1"
             >
-              A professional kit that comes with ready-to-use MUI components.
+              Delivering Wellness to Your Doorstep
             </Typography>
-            <img
-              alt=""
-              src="/assets/auth-illustration.svg"
-            />
+            <Box sx={{ paddingLeft:7, paddingTop:10, paddingBottom:15   }}>
+              <img 
+              alt="pharmacy" 
+              src="/assets/hygieia.png" 
+              style={{ width: '275px', height: '275px' }}
+              />
+            </Box>
           </Box>
         </Grid>
       </Grid>
