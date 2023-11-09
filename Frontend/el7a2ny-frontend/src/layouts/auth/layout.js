@@ -69,7 +69,7 @@ export const Layout = (props) => {
           }}
         >
           <Box sx={{ p: 3 }}>
-            <Typography
+            {/* <Typography
               align="center"
               color="inherit"
               sx={{
@@ -85,7 +85,7 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                Devias Kit
+                CodeMedics-Pharmacy
               </Box>
             </Typography>
             <Typography
@@ -93,11 +93,11 @@ export const Layout = (props) => {
               sx={{ mb: 3 }}
               variant="subtitle1"
             >
-              A professional kit that comes with ready-to-use MUI components.
-            </Typography>
+             Your Health, Our Care.
+            </Typography> */}
             <img
               alt=""
-              src="/assets/auth-illustration.svg"
+              src="/assets/Pharmacy-Logo.png"
             />
           </Box>
         </Grid>
