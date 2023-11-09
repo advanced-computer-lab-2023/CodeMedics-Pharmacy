@@ -87,7 +87,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register
+          Pharmacist Register
         </title>
       </Head>
       <Box
@@ -112,7 +112,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register As Pharmacist
+                Register as Pharmacist
               </Typography>
               <Typography
                 color="text.secondary"
