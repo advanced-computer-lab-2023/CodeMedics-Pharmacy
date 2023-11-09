@@ -57,7 +57,7 @@ const createPharmacist = async (req, res) => {
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json(newPharmacist);
     } catch (error) {
-        return res.status(500).json({ error: 'Failed to create a new admin.' });
+        return res.status(500).json({ message: 'Failed to create a new Pharmacist.' });
     }
 };
 

@@ -7,6 +7,7 @@ import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import axios from 'axios';
+//import { error } from 'console';
 
 const Page = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const Page = () => {
       HourlyRate: '',
       affiliation: '',
       Degree: '',
-      Submit: null
+        Submit: null
     },
     validationSchema: Yup.object({
       Name: Yup
@@ -65,11 +66,10 @@ const Page = () => {
         "affiliation": values.affiliation,
         "Degree": values.Degree };
           await axios.post('http://localhost:8000/createPharmacist' , body)
-            .then((res) => { 
-              if(res.status != 200){
-                console.log(res.status);
-                throw new Error(res.data.message);
-              }
+          .then((res) => { 
+            if(res.status != 200){
+              throw new Error(res.data.message); 
+            }
               return res['data'];
             })
             .then((data) => {
@@ -77,10 +77,9 @@ const Page = () => {
             });
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.response.data.message });
+        helpers.setErrors({ Submit: err.response.data.error});
         helpers.setSubmitting(false);
       }
-
     }
   });
 
