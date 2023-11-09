@@ -1,11 +1,11 @@
-const Patient = require('../models/Patient');
+const PharmacyPatient = require('../models/PharmacyPatient');
 const Cart = require('../models/Cart');
 const stripe = require("stripe")(process.env.SECRET_KEY);
 
 const updateMedicine = async(req, res) =>{
     const {patientId, medicineId, quantity} = req.body;
 
-    const patient = await Patient.findById(patientId);
+    const patient = await PharmacyPatient.findById(patientId);
     if(!patient){
         throw new Error("Patient not found");
     }

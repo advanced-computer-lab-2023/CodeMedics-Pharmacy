@@ -13,6 +13,30 @@ const pharmacyPatientSchema = new mongoose.Schema({
         fullName: { type: String, required: true },
         mobileNumber: { type: String, required: true },
         relation: { type: String, required: true }
+    },
+    HealthPackage:{
+        type: {
+            Name: String,
+            membership: String, // Free, Silver, Gold, Platinum
+            status: String, // Subscribed, Unsubscribed
+            Price: Number,
+            date: Date
+        },
+        default: {
+            membership: "Free",
+            status: "Not Subscribed",
+            date: Date.now()
+        },
+        required: false
+    },
+    Wallet:{
+        type: Number,
+        default: 0,
+        required: false
+    },
+    Cart :{
+        type: Cart.schema,
+        required: false
     }
 });
 
