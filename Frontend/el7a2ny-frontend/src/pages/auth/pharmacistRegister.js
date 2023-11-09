@@ -69,7 +69,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register | Devias Kit
+          Register
         </title>
       </Head>
       <Box
@@ -94,7 +94,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register
+                Register As Pharmacist
               </Typography>
               <Typography
                 color="text.secondary"

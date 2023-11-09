@@ -213,6 +213,7 @@ app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
+app.post("/login", loginUser);
 app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);

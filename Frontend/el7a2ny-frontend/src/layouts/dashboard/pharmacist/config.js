@@ -19,7 +19,7 @@ export const items = [
     )
   },
   {
-    title: 'Medicines',
+    title: 'Medicines ',
     path: '/pharmacist/medicines',
     icon: (
       <SvgIcon fontSize="small">
