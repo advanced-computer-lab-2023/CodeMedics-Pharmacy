@@ -6,60 +6,78 @@ import * as Yup from 'yup';
 import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import axios from 'axios';
+//import { error } from 'console';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const formik = useFormik({
     initialValues: {
-      name: '',
-      username: '',
-      password: '',
-      email: '',
-      dateOfBirth: '',
-      hourlyRate: '',
+      Name: '',
+      Username: '',
+      Password: '',
+      Email: '',
+      DateOfBirth: '',
+      HourlyRate: '',
       affiliation: '',
-      degree: '',
-      submit: null
+      Degree: '',
+        Submit: null
     },
     validationSchema: Yup.object({
-      name: Yup
+      Name: Yup
         .string()
         .max(255)
         .required('Name is required'),
-      username: Yup
+      Username: Yup
         .string()
         .max(255)
         .required('Username is required'),
-      password: Yup
+      Password: Yup
         .string()
         .max(255)
         .required('Password is required'),
-      email: Yup
+      Email: Yup
         .string()
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      dateOfBirth: Yup
+      DateOfBirth: Yup
         .date()
         .required('Date of birth is required'),
-      hourlyRate: Yup
+      HourlyRate: Yup
         .number()
         .required('Hourly rate is required'),
       affiliation: Yup
         .string()
         .required('Affiliation is required'),
-      degree: Yup
+      Degree: Yup
         .string()
         .required('Degree is required')  
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signUp(values.email, values.name, values.password);
-        router.push('/');
+        const body = {"Name": values.Name, 
+        "Username":values.Username , 
+        "Password": values.Password,
+        "Email": values.Email,
+        "DateOfBirth": values.DateOfBirth,
+        "HourlyRate": values.HourlyRate,
+        "affiliation": values.affiliation,
+        "Degree": values.Degree };
+          await axios.post('http://localhost:8000/createPharmacist' , body)
+          .then((res) => { 
+            if(res.status != 200){
+              throw new Error(res.data.message); 
+            }
+              return res['data'];
+            })
+            .then((data) => {
+              router.push('/auth/login');
+            });
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ Submit: err.response.data.error});
         helpers.setSubmitting(false);
       }
     }
@@ -69,7 +87,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Register
+          Pharmacist Register
         </title>
       </Head>
       <Box
@@ -94,7 +112,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register As Pharmacist
+                Register as Pharmacist
               </Typography>
               <Typography
                 color="text.secondary"
@@ -118,53 +136,53 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.name && formik.errors.name)}
+                  error={!!(formik.touched.Name && formik.errors.Name)}
                   fullWidth
-                  helperText={formik.touched.name && formik.errors.name}
+                  helperText={formik.touched.Name && formik.errors.Name}
                   label="Name"
-                  name="name"
+                  name="Name"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.name}
+                  value={formik.values.Name}
                 />
                 <TextField
-                  error={!!(formik.touched.username && formik.errors.username)}
+                  error={!!(formik.touched.Username && formik.errors.Username)}
                   fullWidth
-                  helperText={formik.touched.username && formik.errors.username}
+                  helperText={formik.touched.Username && formik.errors.Username}
                   label="Username"
-                  name="username"
+                  name="Username"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.username}
+                  value={formik.values.Username}
                 />
                 <TextField
-                  error={!!(formik.touched.password && formik.errors.password)}
+                  error={!!(formik.touched.Password && formik.errors.Password)}
                   fullWidth
-                  helperText={formik.touched.password && formik.errors.password}
+                  helperText={formik.touched.Password && formik.errors.Password}
                   label="Password"
-                  name="password"
+                  name="Password"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="password"
-                  value={formik.values.password}
+                  value={formik.values.Password}
                 />
                 <TextField
-                  error={!!(formik.touched.email && formik.errors.email)}
+                  error={!!(formik.touched.Email && formik.errors.Email)}
                   fullWidth
-                  helperText={formik.touched.email && formik.errors.email}
+                  helperText={formik.touched.Email && formik.errors.Email}
                   label="Email Address"
-                  name="email"
+                  name="Email"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="email"
-                  value={formik.values.email}
+                  value={formik.values.Email}
                 />
                 <TextField
-                  error={!!(formik.touched.dateOfBirth && formik.errors.dateOfBirth)}
+                  error={!!(formik.touched.DateOfBirth && formik.errors.DateOfBirth)}
                   fullWidth
-                  helperText={formik.touched.dateOfBirth && formik.errors.dateOfBirth}
+                  helperText={formik.touched.DateOfBirth && formik.errors.DateOfBirth}
                   label="Date of Birth"
-                  name="dateOfBirth"
+                  name="DateOfBirth"
                   onBlur={formik.handleBlur}
                   onChange={(event) => {
                   const value = event.target.value;
@@ -179,23 +197,23 @@ const Page = () => {
                     const formattedValue = `${yyyy}${mmdd}`;
 
                     // Update the formik value
-                    formik.setFieldValue("dateOfBirth", formattedValue);
+                    formik.setFieldValue("DateOfBirth", formattedValue);
                   }
                 }}
                   type="date"
-                  value={formik.values.dateOfBirth}
+                  value={formik.values.DateOfBirth}
                   InputLabelProps={{ shrink: true }}
                 />
                 <TextField
-                  error={!!(formik.touched.hourlyRate && formik.errors.hourlyRate)}
+                  error={!!(formik.touched.HourlyRate && formik.errors.HourlyRate)}
                   fullWidth
-                  helperText={formik.touched.hourlyRate && formik.errors.hourlyRate}
+                  helperText={formik.touched.HourlyRate && formik.errors.HourlyRate}
                   label="Hourly Rate (EGP)"
-                  name="hourlyRate"
+                  name="HourlyRate"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
                   type="number"
-                  value={formik.values.hourlyRate}
+                  value={formik.values.HourlyRate}
                 />
                 <TextField
                   error={!!(formik.touched.affiliation && formik.errors.affiliation)}
@@ -208,23 +226,23 @@ const Page = () => {
                   value={formik.values.affiliation}
                 />
                 <TextField
-                  error={!!(formik.touched.degree && formik.errors.degree)}
+                  error={!!(formik.touched.Degree && formik.errors.Degree)}
                   fullWidth
-                  helperText={formik.touched.degree && formik.errors.degree}
+                  helperText={formik.touched.Degree && formik.errors.Degree}
                   label="Degree"
-                  name="degree"
+                  name="Degree"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.degree}
+                  value={formik.values.Degree}
                 />
               </Stack>
-              {formik.errors.submit && (
+              {formik.errors.Submit && (
                 <Typography
                   color="error"
                   sx={{ mt: 3 }}
                   variant="body2"
                 >
-                  {formik.errors.submit}
+                  {formik.errors.Submit}
                 </Typography>
               )}
               <Button

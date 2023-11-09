@@ -12,12 +12,14 @@ import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 
 const now = new Date();
+const params = new URLSearchParams(window.location.search);
+    const userId = params.get('username');
+const Page = (req) => (
 
-const Page = () => (
   <>
     <Head>
       <title>
-        Overview | Devias Kit
+        Overview
       </title>
     </Head>
     <Box
@@ -115,7 +117,7 @@ const Page = () => (
                 {
                   id: '5ece2c077e39da27658aa8a9',
                   image: '/assets/products/product-1.png',
-                  name: 'Healthcare Erbology',
+                  name: userId,
                   updatedAt: subHours(now, 6).getTime()
                 },
                 {
