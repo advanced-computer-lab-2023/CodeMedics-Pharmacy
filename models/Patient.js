@@ -77,7 +77,7 @@ const patientSchema = new Schema({
         required: false
     },
     Cart :{
-        type: [Cart.schema],
+        type: Cart.schema,
         required: false
     }
 }, {timestamps: true});

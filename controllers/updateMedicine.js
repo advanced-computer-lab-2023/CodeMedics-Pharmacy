@@ -23,6 +23,7 @@ const updateMedicine = async(req, res) =>{
     }
     patient.Cart = patientCart;
     await patient.save();
+
 }
 
 module.exports = {updateMedicine};
