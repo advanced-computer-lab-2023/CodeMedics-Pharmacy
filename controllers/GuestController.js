@@ -4,6 +4,7 @@ const patientModel = require("../models/pharmacyPatient");
 const Administrator = require("../models/Administrator");
 const PharmRequest = require("../models/pharmacistRequests");
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const multer = require('multer');
 const path = require('path');
@@ -47,7 +48,9 @@ const registerPPatient = async (req, res) => {
             mobileNumber,
             emergencyContact
         } = req.body;
-        console.log(req.body)
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
         const existingUser = await patientModel.findOne({ username }) || await Pharmacist.findOne({ username }) || await Administrator.findOne({ username }) || await PharmRequest.findOne({ username });
         if (existingUser) {
@@ -61,7 +64,7 @@ const registerPPatient = async (req, res) => {
             username,
             name,
             email,
-            password,
+            hashedPassword,
             dob,
             gender,
             mobileNumber,
@@ -101,11 +104,14 @@ const registerPharmacist = (req, res) => {
                 return res.status(400).json({ error: 'No files uploaded' });
             }
 
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
             const newPharm = new PharmRequest({
                 username,
                 name,
                 email,
-                password,
+                hashedPassword,
                 dob,
                 gender,
                 hourlyRate,
