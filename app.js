@@ -2,7 +2,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const dotenv = require('dotenv').config();
 const app = express();
 const Port = process.env.PORT || 3000;
 
@@ -213,6 +212,7 @@ app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
+app.post("/login", loginUser);
 app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);

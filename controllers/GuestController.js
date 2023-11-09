@@ -22,13 +22,13 @@ const storage = multer.diskStorage({
 const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 * 5 } // Set a limit of 5MB per file
-  });
+});
 
 // patient Registration
 const registerPPatient = async (req, res) => {
     try {
         console.log("hello");
-      const {
+        const {
             username,
             name,
             email,
@@ -39,12 +39,12 @@ const registerPPatient = async (req, res) => {
             emergencyContact
         } = req.body;
         console.log(req.body)
-        
-    const existingUser = await patientModel.findOne({username}) || await Pharmacist.findOne({username}) || await Administrator.findOne({username}) || await PharmRequest.findOne({username});
+
+        const existingUser = await patientModel.findOne({ username }) || await Pharmacist.findOne({ username }) || await Administrator.findOne({ username }) || await PharmRequest.findOne({ username });
         if (existingUser) {
             return res.status(400).json('Username already exists. Please choose another one.');
         }
-    const existingUser2 = await patientModel.findOne({email}) || await Pharmacist.findOne({email}) || await Administrator.findOne({email}) || await PharmRequest.findOne({email}) ;
+        const existingUser2 = await patientModel.findOne({ email }) || await Pharmacist.findOne({ email }) || await Administrator.findOne({ email }) || await PharmRequest.findOne({ email });
         if (existingUser2) {
             return res.status(400).json('email already exists. Please choose another one.');
         }
@@ -116,26 +116,45 @@ const registerPharmacist = (req, res) => {
 };
 
 
-
 // User Login
 const loginUser = async (req, res) => {
-    const { username, password } = req.body;
-
+    const { username, email, password } = req.body;
     try {
-        const user = await PPatient.findOne({ username });
-
-        if (!user) {
-            return res.status(404).json({ message: 'No user found' });
+        var patient = null, pharmacist = null, admin = null;
+        if (username) {
+            patient = await PPatient.findOne({ username });
+            pharmacist = await Pharmacist.findOne({Username: username });
+            admin = await Administrator.findOne({Username: username });
+        } if (email) {
+            patient = await PPatient.findOne({ email });
+            pharmacist = await Pharmacist.findOne({Email: email });
+            admin = await Administrator.findOne({Email: email });
         }
-
-        if (user.password === password) {
-            res.status(200).json({ message: 'Login successful' });
-        } else {
-            res.status(401).json({ message: 'Wrong password' });
+        if (!patient && !pharmacist && !admin) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        if (patient) {
+            if (patient.password === password) {
+                return res.status(200).json({ Type: 'Patient', message: 'Login successful' , patient});
+            } else {
+                return res.status(401).json({ message: 'Wrong password' });
+            }
+        } else if (pharmacist) {
+            if (pharmacist.Password === password) {
+                return res.status(200).json({ Type: 'Pharmacist', message: 'Login successful' , pharmacist});
+            } else {
+                return res.status(401).json({ message: 'Wrong password' });
+            }
+        } else if (admin) {
+            if (admin.Password === password) {
+                return res.status(200).json({ Type: 'Admin', message: 'Login successful', admin});
+            } else {
+                return res.status(401).json({ message: 'Wrong password' });
+            }
         }
     } catch (error) {
-        res.status(500).json({ error: 'Error during login' });
+        return res.status(500).json({ error: 'Error during login' });
     }
 };
 
-module.exports = { registerPPatient,registerPharmacist, upload, loginUser };
+module.exports = { registerPPatient, registerPharmacist, upload, loginUser };

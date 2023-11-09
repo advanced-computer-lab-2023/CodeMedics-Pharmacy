@@ -2,26 +2,42 @@ const adminModel = require('../models/Administrator');
 const pharmacistModel = require('../models/Pharmacist');
 const patientModel = require('../models/pharmacyPatient');
 const {default: mongoose} = require('mongoose');
-const getUsername = require('../config/usernameGetter');
 const medicineModel = require('../models/Medicine');
 const pharmacistRequests = require('../models/pharmacistRequests');
 
 
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (username) => {
+    return jwt.sign({ username }, 'supersecret', {
+        expiresIn: maxAge
+    });
+};
+
 const createAdmin = async (req, res) => {
-    const { Username, Password } = req.body;
-    const existingUser = await adminModel.findOne({ Username }) || await pharmacistModel.findOne({ Username }) || await patientModel.findOne({ Username });
-
-    if (existingUser) {
-        return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
+    //create an admin in the database
+    //check req body
+    if (Object.keys(req.body).length === 0) {
+        return res.status(400).json({ message: 'Request body is empty' });
     }
+    const requiredVariables = ['Name', 'Username', 'Password', 'Email'];
 
-    try {
-        const newAdmin = new adminModel({ Username, Password });
-        await newAdmin.save();
-        return res.status(200).json(newAdmin);
-    } catch (error) {
-        return res.status(500).json({ error: 'Failed to create a new admin.' });
+    for (const variable of requiredVariables) {
+        console.log(req.body[variable]);
+        if (!req.body[variable] && (variable === 'Username' || variable === 'Password')) {
+            return res.status(400).json({ message: `Missing ${variable} in the request body` });
+        }
     }
+    // If all required variables are present, proceed with creating an admin
+    const { Name, Username, Password, Email } = req.body;
+    // Hash the password using bcrypt
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(Password, salt);
+
+    const newAdmin = new adminModel({ Name, Username, Password: hashedPassword, Email });
+    await newAdmin.save();
+    const token = createToken(Username);
+    res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+    return res.status(201).json("Admin created successfully!");
 };
 
 const removePharmacist = async (req, res) => {
