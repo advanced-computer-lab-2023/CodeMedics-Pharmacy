@@ -1,8 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const dotenv = require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
+require('dotenv').config();
 const app = express();
 const Port = process.env.PORT || 3000;
 
@@ -57,6 +57,8 @@ const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, search
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
 
+const {updateMedicine} = require('./controllers/updateMedicine');
+
 
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
@@ -73,6 +75,7 @@ app.get("/Pharmregister", (req, res) => {
     res.sendFile(filePath);
 });
 
+app.patch("/updateMedicine", updateMedicine);
 
 app.post("/edit", editMedicine);
 app.get("/editMedicine", (req, res) => {

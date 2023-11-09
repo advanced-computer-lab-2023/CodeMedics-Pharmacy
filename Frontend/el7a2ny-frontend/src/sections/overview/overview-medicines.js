@@ -43,7 +43,8 @@ export const OverviewLatestProducts = (props) => {
         gap={2}
       >
         {products.map((product, index) => {
-          const ago = formatDistanceToNow(product.updatedAt);
+          //const ago = formatDistanceToNow(product.updatedAt);
+          console.log(product);
 
           const handleAddToCart = () => {
             // Implement the Add to Cart logic here
@@ -71,14 +72,14 @@ export const OverviewLatestProducts = (props) => {
                 }}
               >
                 <ListItemAvatar>
-                  {product.image ? (
+                  {product.Picture ? (
                     <Box
                       component="img"
-                      src={product.image}
+                      src={product.Picture}
                       sx={{
-                        borderRadius: '50%',
-                        height: 120,
-                        width: 120,
+                        borderRadius: '70%',
+                        height: 130,
+                        width: 130,
                         objectFit: 'cover',
                         margin: '0 auto',
                       }}
@@ -97,10 +98,15 @@ export const OverviewLatestProducts = (props) => {
                 <ListItemText
                   primary={product.name}
                   primaryTypographyProps={{ variant: 'subtitle1' }}
-                  secondary={`Updated ${ago} ago`}
                   secondaryTypographyProps={{ variant: 'body2' }}
                 />
               </ListItem>
+              <ListItemText
+                secondary={product.price}
+                primaryTypographyProps={{variant: 'subtitle2'}}
+                secondaryTypographyProps={{variant: 'body2'}}
+                />
+
               <CardActions>
                 <Button
                   color="primary"

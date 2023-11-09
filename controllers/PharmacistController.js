@@ -52,7 +52,7 @@ const createPharmacist = async (req, res) => {
     try {
         const newPharmacist = new pharmacistModel({ Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree });
         await newPharmacist.save();
-        const token = createToken(req.body.Username);
+        const token = createToken(Username);
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json(newPharmacist);
     } catch (error) {
