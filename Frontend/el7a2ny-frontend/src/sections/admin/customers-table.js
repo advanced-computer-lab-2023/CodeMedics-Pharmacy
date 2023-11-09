@@ -19,8 +19,11 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
-
-
+import { useState } from 'react';
+import React from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { indigo } from '../../theme/colors';
 
 export const CustomersTable = (props) => {
   const {
@@ -39,7 +42,7 @@ export const CustomersTable = (props) => {
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  const [isOpen, setIsOpen] = useState(false);
   return (
     <Card>
       <Scrollbar>
@@ -139,50 +142,92 @@ export const CustomersTable = (props) => {
                       {customer.username}
                     </TableCell>
                     <TableCell>
-                      {customer.dob}
+                      {customer.dob.substring(0, customer.dob.indexOf('T'))}
                     </TableCell>
                     <TableCell>
                       {customer.password}
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        children ={(
-                          <SvgIcon fontSize="large" >
-                            <IdentificationIcon/>
-                          </SvgIcon>
-                        )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
+                          setIsOpen(true);
                         }}
                       >
-                      </IconButton >
+                        <SvgIcon fontSize="large">
+                          <IdentificationIcon/>
+                        </SvgIcon>
+                      </IconButton>
+                      {customer.emergencyContact.fullName}
+
+                      <Popup
+                        open={isOpen}
+                        closeOnDocumentClick
+                        onClose={() => setIsOpen(false)}
+                        overlayStyle={{ // Apply styles to the overlay
+                          backgroundColor: 'transparent', // Semi-transparent white background
+                          backdropFilter: isOpen ? 'blur(2px)' : 'none', // Apply a blur filter to the background when Popup is open
+                          transition: 'backdrop-filter 0.3s ease-out' // Add a smooth transition
+                        }}
+                        contentStyle={{ // Apply custom styles to the Popup content
+                          background: '#F5F7FF',
+                          width: '25%', // Set the width to 50% of the screen width
+                          height: '15vh',
+                          padding: '20px',
+                          borderRadius: '10px',
+                          border: '5px solid #ccc'
+                        }}
+                      >
+                        <Card><Scrollbar><Box
+                          sx={{ minWidth: 200 }}><Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>
+                                Name
+                              </TableCell>
+                              <TableCell>
+                                Mobile Number
+                              </TableCell>
+                              <TableCell>
+                                Relationship
+                              </TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell>
+                                {customer.emergencyContact.fullName}
+                              </TableCell>
+                              <TableCell>
+                                {customer.emergencyContact.mobileNumber}
+                              </TableCell>
+                              <TableCell>
+                                {customer.emergencyContact.relation}
+                              </TableCell>
+                            </TableRow>;
+                          </TableBody>
+                        </Table></Box></Scrollbar></Card>
+                      </Popup>
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        children ={(
-                          <SvgIcon fontSize="small">
-                            <Xmark />
-                          </SvgIcon>
-                        )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
                         }}
                       >
-                      </IconButton >
+                        <SvgIcon fontSize="small">
+                          <Xmark/>
+                        </SvgIcon>
+                      </IconButton>
                       <IconButton
-                        children ={(
-                          <SvgIcon fontSize="small">
-                            <PencilIcon />
-                          </SvgIcon>
-                        )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
                         }}
                       >
-                      </IconButton >
+                        <SvgIcon fontSize="small">
+                          <PencilIcon/>
+                        </SvgIcon>
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );
