@@ -31,7 +31,7 @@ const useCustomerIds = (customers) => {
   );
 };
 
-const Page = () => {
+const Page = (req) => {
   const [data, setData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);

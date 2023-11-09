@@ -96,11 +96,10 @@ const Page = () => {
               return res['data'];
             })
             .then((data) => {
-              console.log(data);
               if (data['Type'] === 'Patient') {
-                router.push('/user/medicines');
+                router.push(`/user/medicines?username=${data['patient']['Username']}`);
               } else if (data['Type'] === 'Pharmacist') {
-                router.push('/pharmacist');
+                router.push(`/pharmacist?username=${data['pharmacist']['Username']}`);
               } else if (data['Type'] === 'Admin') {
                 router.push('/');
               }

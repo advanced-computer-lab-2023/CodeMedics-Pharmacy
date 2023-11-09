@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/admin/layout';
 import { OverviewBudget } from 'src/sections/overview/overview-budget';
 import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
 import { OverviewLatestProducts } from 'src/sections/overview/overview-latest-products';
@@ -12,14 +12,12 @@ import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 
 const now = new Date();
-const params = new URLSearchParams(window.location.search);
-    const userId = params.get('username');
-const Page = (req) => (
 
+const Page = () => (
   <>
     <Head>
       <title>
-        Overview
+        Overview | Devias Kit
       </title>
     </Head>
     <Box
@@ -117,7 +115,7 @@ const Page = (req) => (
                 {
                   id: '5ece2c077e39da27658aa8a9',
                   image: '/assets/products/product-1.png',
-                  name: userId,
+                  name: 'Healthcare Erbology',
                   updatedAt: subHours(now, 6).getTime()
                 },
                 {
