@@ -128,6 +128,11 @@ const registerPharmacist = (req, res) => {
     });
 };
 
+const logout = async (req, res) => {
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.status(200).json({ message: "User logged out" });
+}
+
 
 // User Login
 const loginUser = async (req, res) => {
@@ -170,4 +175,4 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerPPatient, registerPharmacist, upload, loginUser };
+module.exports = { registerPPatient, registerPharmacist, upload, loginUser, logout };
