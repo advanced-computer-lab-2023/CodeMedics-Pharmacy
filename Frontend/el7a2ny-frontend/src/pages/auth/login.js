@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import axios from 'axios';
 import Head from 'next/head';
 import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -23,16 +24,17 @@ const Page = () => {
   const router = useRouter();
   const auth = useAuth();
   const [method, setMethod] = useState('email');
+
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123!',
+      email: '',
+      password: '',
       submit: null
     },
     validationSchema: Yup.object({
       email: Yup
         .string()
-        .email('Must be a valid email')
+        .email('Must be a valid email')  
         .max(255)
         .required('Email is required'),
       password: Yup
@@ -42,11 +44,70 @@ const Page = () => {
     }),
     onSubmit: async (values, helpers) => {
       try {
-        await auth.signIn(values.email, values.password);
-        router.push('/');
+          const body = {"email": values.email, "password": values.password};
+          await axios.post('http://localhost:8000/login' , body)
+            .then((res) => { 
+              console.log(res);
+              return res['data'];
+            })
+            .then((data) => {
+              console.log(data);
+              if (data['Type'] === 'Patient') {
+                router.push('/user/medicines');
+              } else if (data['Type'] === 'Pharmacist') {
+                router.push('/pharmacist');
+              } else if (data['Type'] === 'Admin') {
+                router.push('/');
+              }
+            });
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ submit: err.response.data.message });
+        helpers.setSubmitting(false);
+      }
+    }
+  });
+
+  const LoginWithUsername = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+      submit: null
+    },
+    validationSchema: Yup.object({
+      username: Yup
+        .string()
+        .max(255)
+        .required('Username is required'),
+      password: Yup
+        .string()
+        .max(255)
+        .required('Password is required')
+    }),
+    onSubmit: async (values, helpers) => {
+      try {
+        const body = {"username": values.username, "password": values.password};
+          await axios.post('http://localhost:8000/login' , body)
+            .then((res) => { 
+              if(res.status != 200){
+                console.log(res.status);
+                throw new Error(res.data.message);
+              }
+              return res['data'];
+            })
+            .then((data) => {
+              console.log(data);
+              if (data['Type'] === 'Patient') {
+                router.push('/user/medicines');
+              } else if (data['Type'] === 'Pharmacist') {
+                router.push('/pharmacist');
+              } else if (data['Type'] === 'Admin') {
+                router.push('/');
+              }
+            });
+      } catch (err) {
+        helpers.setStatus({ success: false });
+        helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
       }
     }
@@ -71,7 +132,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Login | Devias Kit
+          Login
         </title>
       </Head>
       <Box
@@ -103,15 +164,24 @@ const Page = () => {
                 color="text.secondary"
                 variant="body2"
               >
-                Don&apos;t have an account?
+                Don&apos;t have an account? Register as
                 &nbsp;
+                <Link
+                  component={NextLink}
+                  href="/auth/pharmacistRegister"
+                  underline="hover"
+                  variant="subtitle2"
+                >
+                  Pharmacist
+                </Link>
+                &nbsp; , &nbsp;
                 <Link
                   component={NextLink}
                   href="/auth/register"
                   underline="hover"
                   variant="subtitle2"
                 >
-                  Register
+                  Patient
                 </Link>
               </Typography>
             </Stack>
@@ -125,8 +195,8 @@ const Page = () => {
                 value="email"
               />
               <Tab
-                label="Phone Number"
-                value="phoneNumber"
+                label="Username"
+                value="Username"
               />
             </Tabs>
             {method === 'email' && (
@@ -158,9 +228,6 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText>
                 {formik.errors.submit && (
                   <Typography
                     color="error"
@@ -183,11 +250,11 @@ const Page = () => {
                   fullWidth
                   size="large"
                   sx={{ mt: 3 }}
-                  onClick={handleSkip}
+                  // onClick={handleSkip}
                 >
-                  Skip authentication
+                  Forgot Password?
                 </Button>
-                <Alert
+                {/* <Alert
                   color="primary"
                   severity="info"
                   sx={{ mt: 3 }}
@@ -195,21 +262,74 @@ const Page = () => {
                   <div>
                     You can use <b>demo@devias.io</b> and password <b>Password123!</b>
                   </div>
-                </Alert>
+                </Alert> */}
               </form>
             )}
-            {method === 'phoneNumber' && (
-              <div>
-                <Typography
-                  sx={{ mb: 1 }}
-                  variant="h6"
+            {method === 'Username' && (
+              <form
+                noValidate
+                onSubmit={LoginWithUsername.handleSubmit}
+              >
+                <Stack spacing={3}>
+                  <TextField
+                    error={!!(LoginWithUsername.touched.username && LoginWithUsername.errors.username)}
+                    fullWidth
+                    helperText={LoginWithUsername.touched.username && LoginWithUsername.errors.username}
+                    label="Username"
+                    name="username"
+                    onBlur={LoginWithUsername.handleBlur}
+                    onChange={LoginWithUsername.handleChange}
+                    type="username"
+                    value={LoginWithUsername.values.username}
+                  />
+                  <TextField
+                    error={!!(LoginWithUsername.touched.password && LoginWithUsername.errors.password)}
+                    fullWidth
+                    helperText={LoginWithUsername.touched.password && LoginWithUsername.errors.password}
+                    label="Password"
+                    name="password"
+                    onBlur={LoginWithUsername.handleBlur}
+                    onChange={LoginWithUsername.handleChange}
+                    type="password"
+                    value={LoginWithUsername.values.password}
+                  />
+                </Stack>
+                {LoginWithUsername.errors.submit && (
+                  <Typography
+                    color="error"
+                    sx={{ mt: 3 }}
+                    variant="body2"
+                  >
+                    {LoginWithUsername.errors.submit}
+                  </Typography>
+                )}
+                <Button
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  type="submit"
+                  variant="contained"
                 >
-                  Not available in the demo
-                </Typography>
-                <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the demo.
-                </Typography>
-              </div>
+                  Continue
+                </Button>
+                <Button
+                  fullWidth
+                  size="large"
+                  sx={{ mt: 3 }}
+                  // onClick={handleSkip}
+                >
+                  Forgot Password?
+                </Button>
+                {/* <Alert
+                  color="primary"
+                  severity="info"
+                  sx={{ mt: 3 }}
+                >
+                  <div>
+                    You can use <b>demo@devias.io</b> and password <b>Password123!</b>
+                  </div>
+                </Alert> */}
+              </form>
             )}
           </div>
         </Box>

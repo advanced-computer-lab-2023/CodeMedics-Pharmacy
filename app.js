@@ -1,16 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const app = express();
-const Port = 3000;
+const Port = process.env.PORT || 3000;
+
+const MongoURI = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
 
 // Connect to MongoDB
-mongoose.connect('mongodb+srv://rawanelashmawy:rawanelashmawy@infodb.srentmg.mongodb.net/ClinicPharmaDB')
+mongoose.connect(MongoURI)
     .then(() => {
         console.log("Connected to MongoDB");
     })
@@ -210,6 +213,7 @@ app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
+app.post("/login", loginUser);
 app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);

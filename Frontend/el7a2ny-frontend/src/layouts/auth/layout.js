@@ -90,7 +90,7 @@ export const Layout = (props) => {
             </Typography>
             <Typography
               align="center"
-              sx={{ mb: 3 }}
+              sx={{ mb: 1 }}
               variant="subtitle1"
             >
              Your Health, Our Care.

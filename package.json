@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/advanced-computer-lab-2023/CodeMedics-Pharmacy#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.2",
     "colors": "^1.4.0",
     "cookie": "^0.5.0",
@@ -26,7 +27,8 @@
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
     "express-form-data": "^2.0.22",
-    "mongoose": "^7.6.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^7.6.4",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
     "parser": "^0.1.4"
