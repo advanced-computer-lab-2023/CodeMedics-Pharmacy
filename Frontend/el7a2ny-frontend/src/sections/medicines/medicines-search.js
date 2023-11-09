@@ -4,7 +4,7 @@ import { Card, InputAdornment, OutlinedInput, SvgIcon } from '@mui/material';
 export const CustomersSearch = () => (
   <Card sx={{ p: 2 }}>
     <OutlinedInput
-      defaultValue="asd"
+      defaultValue=""
       fullWidth
       placeholder="Search Medicine"
       startAdornment={(

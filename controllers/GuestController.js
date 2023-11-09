@@ -64,16 +64,13 @@ const registerPPatient = async (req, res) => {
             username,
             name,
             email,
-            hashedPassword,
+            password: hashedPassword,
             dob,
             gender,
             mobileNumber,
             emergencyContact
         });
-
         await ppatient.save();
-        const token = createToken(username);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json("Patient created successfully");
     } catch (error) {
         return res.status(500).json({ error: 'Error creating user' });
@@ -111,7 +108,7 @@ const registerPharmacist = (req, res) => {
                 username,
                 name,
                 email,
-                hashedPassword,
+                password: hashedPassword,
                 dob,
                 gender,
                 hourlyRate,
@@ -124,8 +121,6 @@ const registerPharmacist = (req, res) => {
 
             // Save the new PharmRequest to the database
             await newPharm.save();
-            const token = createToken(req.body.Username);
-            res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
             res.status(201).json(newPharm); // Respond with the created PharmRequest details
         } catch (error) {
             console.error('Error processing request:', error);
@@ -147,32 +142,44 @@ const loginUser = async (req, res) => {
         var patient = null, pharmacist = null, admin = null;
         if (username) {
             patient = await PPatient.findOne({ username });
-            pharmacist = await Pharmacist.findOne({Username: username });
+            pharmacist = await PharmRequest.findOne({ username });
             admin = await Administrator.findOne({Username: username });
         } if (email) {
             patient = await PPatient.findOne({ email });
-            pharmacist = await Pharmacist.findOne({Email: email });
+            pharmacist = await PharmRequest.findOne({ email });
             admin = await Administrator.findOne({Email: email });
         }
         if (!patient && !pharmacist && !admin) {
             return res.status(404).json({ message: 'User not found' });
         }
         if (patient) {
-            if (patient.password === password) {
-                return res.status(200).json({ Type: 'Patient', message: 'Login successful' , patient});
-            } else {
+            const auth = await bcrypt.compare(password, patient.password);
+            if (auth) {
+                const token = createToken(patient.username);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                return res.status(200).json({ Type: 'Patient', message: 'Login successful' , patient , token});
+            }
+            else {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         } else if (pharmacist) {
-            if (pharmacist.Password === password) {
-                return res.status(200).json({ Type: 'Pharmacist', message: 'Login successful' , pharmacist});
-            } else {
+            const auth = await bcrypt.compare(password, pharmacist.Password);
+            if (auth) {
+                const token = createToken(pharmacist.Username);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                return res.status(200).json({ Type: 'Pharmacist', message: 'Login successful' , pharmacist , token});
+            }
+            else {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         } else if (admin) {
-            if (admin.Password === password) {
-                return res.status(200).json({ Type: 'Admin', message: 'Login successful', admin});
-            } else {
+            const auth = await bcrypt.compare(password, admin.Password);
+            if (auth) {
+                const token = createToken(admin.Username);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                return res.status(200).json({ Type: 'Admin', message: 'Login successful' , admin , token});
+            }
+            else {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         }

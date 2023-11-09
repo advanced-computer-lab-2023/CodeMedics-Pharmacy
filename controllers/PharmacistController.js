@@ -43,23 +43,18 @@ const getPharmacits = async (req, res) => {
 
 const createPharmacist = async (req, res) => {
     const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree } = req.body;
-
     const existingUser = await adminModel.findOne({ Username }) || await pharmacistModel.findOne({ Username }) || await patientModel.findOne({ Username });
-
     if (existingUser) {
-        return res.status(400).json({ error: 'Username already exists. Please choose another one.' });
+        return res.status(400).json({ message: 'Username already exists. Please choose another one.' });
     }
-
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(Password, salt);
-        const newPharmacist = new pharmacistModel({ Name, Username, hashedPassword, Email, DateOfBirth, HourlyRate, affiliation, Degree });
+        const newPharmacist = new pharmacistModel({ Name, Username, Password: hashedPassword, Email, DateOfBirth, HourlyRate, affiliation, Degree });
         await newPharmacist.save();
-        const token = createToken(Username);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-        return res.status(200).json(newPharmacist);
+        return res.status(200).json({newPharmacist});
     } catch (error) {
-        return res.status(500).json({ message: 'Failed to create a new Pharmacist.' });
+        return res.status(500).json({ error: 'Failed to create a new Pharmacist.' });
     }
 };
 
