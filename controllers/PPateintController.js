@@ -6,8 +6,6 @@ const getUsername = require('../config/usernameGetter');
 const medicineModel = require('../models/Medicine.js');
 const pharmacyPatientModel = require('../models/pharmacyPatient.js');
 
-
-
 const viewList = async (req, res) => {
     //get list of all medicine
     try {

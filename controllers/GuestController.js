@@ -3,6 +3,7 @@ const Pharmacist = require("../models/Pharmacist");
 const patientModel = require("../models/pharmacyPatient");
 const Administrator = require("../models/Administrator");
 const PharmRequest = require("../models/pharmacistRequests");
+const jwt = require('jsonwebtoken');
 
 const multer = require('multer');
 const path = require('path');
@@ -23,6 +24,14 @@ const upload = multer({
     storage: storage,
     limits: { fileSize: 1024 * 1024 * 5 } // Set a limit of 5MB per file
 });
+
+// create json web token
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (username) => {
+    return jwt.sign({ username }, 'supersecret', {
+        expiresIn: maxAge
+    });
+};
 
 // patient Registration
 const registerPPatient = async (req, res) => {
@@ -60,6 +69,8 @@ const registerPPatient = async (req, res) => {
         });
 
         await ppatient.save();
+        const token = createToken(username);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json("Patient created successfully");
     } catch (error) {
         return res.status(500).json({ error: 'Error creating user' });
@@ -107,6 +118,8 @@ const registerPharmacist = (req, res) => {
 
             // Save the new PharmRequest to the database
             await newPharm.save();
+            const token = createToken(req.body.Username);
+            res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
             res.status(201).json(newPharm); // Respond with the created PharmRequest details
         } catch (error) {
             console.error('Error processing request:', error);
@@ -114,6 +127,11 @@ const registerPharmacist = (req, res) => {
         }
     });
 };
+
+const logout = async (req, res) => {
+    res.cookie('jwt', '', { maxAge: 1 });
+    res.status(200).json({ message: "User logged out" });
+}
 
 
 // User Login
@@ -157,4 +175,4 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerPPatient, registerPharmacist, upload, loginUser };
+module.exports = { registerPPatient, registerPharmacist, upload, loginUser, logout };
