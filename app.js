@@ -8,6 +8,7 @@ const Port = 3000;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
+app.use('/uploads', express.static('uploads'));
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://rawanelashmawy:rawanelashmawy@infodb.srentmg.mongodb.net/ClinicPharmaDB')
@@ -24,11 +25,7 @@ app.listen(Port, () => {
 
 const formData = require("express-form-data");
 const os = require("os");
-/**
- * Options are the same as multiparty takes.
- * But there is a new option "autoClean" to clean all files in "uploadDir" folder after the response.
- * By default, it is "false".
- */
+
 const options = {
   uploadDir: os.tmpdir(),
   autoClean: true
@@ -48,11 +45,39 @@ const path = require('path');
 const { registerPPatient, registerPharmacist,upload ,  loginUser } = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
-const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');
+const GuestRoutes = require('./routes/GuestRoutes')
+const MedicineRoutes = require('./routes/MedicineRoutes')
+const PharmacistRoutes = require('./routes/PharmacistRoutes')
+const PPatientRoutes = require('./routes/PPateintRoutes')
+
+app.use('/admin', AdminRoutes);
+// app.use('/guest', GuestRoutes);
+// app.use('/medicine', MedicineRoutes);
+app.use('/pharmacist', PharmacistRoutes);
+app.use('/patient', PPatientRoutes);
+
+module.exports = app;
+
+
+
+
+
+
+
+
 const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); // Import MedicineController
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
+
+
+
+
+
+app.use('/register', AuthRoutes);
+app.use('/Pharmregister', AuthRoutes);
+
+app.put('/editMedicine',editMedicine);
 
 
 app.get("/", (req, res) => {
@@ -70,22 +95,35 @@ app.get("/Pharmregister", (req, res) => {
     res.sendFile(filePath);
 });
 
-
-
-
-app.use('/register', AuthRoutes);
-app.use('/Pharmregister', AuthRoutes);
-
-
-app.put('/editMedicine',editMedicine);
-
-
 app.get("/admin", (req, res) => {
     const filePath = path.join(__dirname, "pages", "admin.html");
     res.sendFile(filePath);
 });
+app.get("/CreateAdmin", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "CreateAdmin.html");
+    res.sendFile(filePath);
+});
+app.get("/removePharmacist", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "removePharmacist.html");
+    res.sendFile(filePath);
+});
+app.get("/removePatient", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "removePatient.html");
+    res.sendFile(filePath);
+});
+app.get("/viewPharmacists", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "ViewPharmacists.html");
+    res.sendFile(filePath);
+});
 
-
+app.get("/viewPatient", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "ViewPatient.html");
+    res.sendFile(filePath);
+});
+app.get("/viewPharmacistApplications", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
+    res.sendFile(filePath);
+});
 
 app.get("/addMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "addMedicine.html");
@@ -107,20 +145,14 @@ app.get("/medicine", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.get("/CreateAdmin", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "CreateAdmin.html");
-    res.sendFile(filePath);
-});
+
 
 app.get("/createPharmacist", (req, res) => {
     const filePath = path.join(__dirname, "pages", "createPharmacist.html");
     res.sendFile(filePath);
 });
 
-app.get("/viewPharmacists", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "ViewPharmacists.html");
-    res.sendFile(filePath);
-});
+
 
 app.get("/viewMedicinePharmacist", (req, res) => {
     const filePath = path.join(__dirname, "pages", "ViewMedicinePharmacist.html");
@@ -128,10 +160,11 @@ app.get("/viewMedicinePharmacist", (req, res) => {
 });
 
 
-app.get("/viewPatient", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "ViewPatient.html");
+app.get("/viewMedicines", (req, res) => {
+    const filePath = path.join(__dirname, "pages", "viewMedicines.html");
     res.sendFile(filePath);
 });
+
 
 app.get("/searchMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Medicine.html");
@@ -148,25 +181,14 @@ app.get("/getMedicinesByMedicalUse", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.get("/removePharmacist", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "removePharmacist.html");
-    res.sendFile(filePath);
-});
-app.get("/removePatient", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "removePatient.html");
-    res.sendFile(filePath);
-});
+
 // app.get("/viewPharmacistApplications", (req, res) => {
 //     console.log('Request to viewPharmacistApplications received');
 //     const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
 //     res.sendFile(filePath);
 // });
-app.get("/iewPharmacistApplications", viewPharmacistApplications);
 
-app.get("/viewPharmacistApplications", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "viewPharmacistApplications.html");
-    res.sendFile(filePath);
-});
+
 
 // app.get("/viewPharmacistApplications", async (req, res) => {
 //     try {
@@ -178,18 +200,13 @@ app.get("/viewPharmacistApplications", (req, res) => {
 //     }
 // });
 
-app.get("/viewMedicines", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "viewMedicines.html");
-    res.sendFile(filePath);
-});
 
 
+// app.use('/register', AuthRoutes);
+// app.use('/Pharmregister', AuthRoutes);
+//app.use('/createAdmin', AdminRoutes);
 
-app.use('/register', AuthRoutes);
-app.use('/Pharmregister', AuthRoutes);
-app.use('/CreateAdmin', AdminRoutes);
 
-app.use('/uploads', express.static('uploads'));
 app.post("/register", registerPPatient);
 app.post("/Pharmregister",registerPharmacist, upload.fields([[
     { name: 'IDDocument', maxCount: 1 },
@@ -198,22 +215,13 @@ app.post("/Pharmregister",registerPharmacist, upload.fields([[
   ]]));
 app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
-app.post("/CreateAdmin", createAdmin);
 app.post("/createPharmacist", createPharmacist);
-app.delete("/removePharmacist", removePharmacist);
-app.delete("/removePatient" , removePatient);
-//app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
-app.get("/iewPatients", viewPatients);
-app.get("/iewPharmacists", viewPharmacists);
+
 app.get("/Medicines",viewMedicines);
 app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
 app.post("/earchMedicine", searchMedicine);
 app.get("/MedicalUses", getMedicalUses);
 app.get("/ilterMedicine", getMedicinesByMedicalUse);
 
-// Define your /addUser route here to handle the POST request
-// app.post("/register", registerPPatient);
-// app.post("/Pharmregister",registerPharmacist);
-// app.post("/addMedicine", addMedicine);
