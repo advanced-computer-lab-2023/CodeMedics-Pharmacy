@@ -41,6 +41,7 @@ const getPharmacits = async (req, res) => {
 };
 
 const createPharmacist = async (req, res) => {
+    console.log(req.body);
     const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree } = req.body;
 
     const existingUser = await adminModel.findOne({ Username }) || await pharmacistModel.findOne({ Username }) || await patientModel.findOne({ Username });
