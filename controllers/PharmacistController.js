@@ -2,8 +2,17 @@ const adminModel = require('../models/Administrator.js');
 const pharmacistModel = require('../models/Pharmacist.js');
 const patientModel = require('../models/pharmacyPatient.js');
 const {default: mongoose} = require('mongoose');
-const getUsername = require('../config/usernameGetter');
+const getUsername = require('../config/infoGetter.js');
 const medicineModel = require('../models/Medicine.js');
+const jwt = require('jsonwebtoken');
+
+// create json web token
+const maxAge = 3 * 24 * 60 * 60;
+const createToken = (username) => {
+    return jwt.sign({ username }, 'supersecret', {
+        expiresIn: maxAge
+    });
+};
 
 
 // const viewMedicines = async (req, res) => {
@@ -43,6 +52,8 @@ const createPharmacist = async (req, res) => {
     try {
         const newPharmacist = new pharmacistModel({ Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree });
         await newPharmacist.save();
+        const token = createToken(req.body.Username);
+        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json(newPharmacist);
     } catch (error) {
         return res.status(500).json({ error: 'Failed to create a new admin.' });
