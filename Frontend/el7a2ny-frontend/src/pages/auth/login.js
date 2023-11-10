@@ -182,7 +182,7 @@ const Page = () => {
                 &nbsp; , &nbsp;
                 <Link
                   component={NextLink}
-                  href="/auth/register"
+                  href="/auth/patientRegister"
                   underline="hover"
                   variant="subtitle2"
                 >
