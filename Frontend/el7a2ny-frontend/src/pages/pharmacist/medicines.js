@@ -61,6 +61,10 @@ const Page = () => {
       });
   }, []);
 
+  useEffect(() => {
+    handleData();
+  }, [searchData , filteredData]);
+
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -77,8 +81,9 @@ const Page = () => {
   );
 
   const handleData = () => {
+    console.log("searchData" , searchData);
+    console.log("filteredData" , filteredData);
     let temp = [];
-    setData([]);
     for(let i = 0 ; i < allData.length ; i++){
       let ok = false , ok2 = false;
       for(let j = 0; j< searchData.length ; j++){
@@ -107,17 +112,21 @@ const Page = () => {
     else{
       setSearchData(allData.filter((medicine) => medicine.name.toLowerCase().includes(str.toLowerCase())));
     }
-    handleData();
   }
 
-  const handleFilter = (str) => {
+  const handleFilter  = (str)  => {
     if(str === "None"){
       setFilteredData(allData);
     }
     else{
-      setFilteredData(allData.filter((medicine) => medicine.medicalUse.toLowerCase() === (str.toLowerCase())));
+      let tmp = [];
+      for(let i = 0 ; i < allData.length ; i++){
+        if(allData[i].medicalUse === (str)){
+          tmp.push(allData[i]);
+        }
+      }
+      setFilteredData(tmp);
     }
-    handleData();
   }
 
   return (
