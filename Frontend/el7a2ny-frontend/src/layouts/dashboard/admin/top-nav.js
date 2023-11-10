@@ -16,7 +16,7 @@ import {
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
-import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
+
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
 
@@ -85,11 +85,17 @@ export const TopNav = (props) => {
                 </SvgIcon>
               </IconButton>
             </Tooltip>
-            <Tooltip title="Shopping Cart">
+            <Tooltip title="Notifications">
               <IconButton>
+                <Badge
+                  badgeContent={4}
+                  color="success"
+                  variant="dot"
+                >
                   <SvgIcon fontSize="small">
-                    <ShoppingBagIcon />
+                    <BellIcon />
                   </SvgIcon>
+                </Badge>
               </IconButton>
             </Tooltip>
             <Avatar

@@ -14,18 +14,22 @@ const Page = () => {
   const auth = useAuth();
   const formik = useFormik({
     initialValues: {
-      Name: '',
+      FirstName: '',
+      LastName: '',
       Username: '',
       Password: '',
       Email: '',
+      NationalID: '',
       DateOfBirth: '',
-      HourlyRate: '',
-      affiliation: '',
-      Degree: '',
-        Submit: null
+      Number: '',
+      Gender: ''
     },
     validationSchema: Yup.object({
-      Name: Yup
+      FirstName: Yup
+        .string()
+        .max(255)
+        .required('Name is required'),
+      LastName: Yup
         .string()
         .max(255)
         .required('Name is required'),
@@ -42,30 +46,34 @@ const Page = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
+      NationalID: Yup
+      .string()
+      .max(255)
+      .required('National ID is required'),
       DateOfBirth: Yup
         .date()
         .required('Date of birth is required'),
-      HourlyRate: Yup
-        .number()
-        .required('Hourly rate is required'),
-      affiliation: Yup
-        .string()
-        .required('Affiliation is required'),
-      Degree: Yup
-        .string()
-        .required('Degree is required')  
+      Number: Yup
+      .string()
+      .max(255)
+      .required('Phone number is required'),
+      Gender: Yup
+      .string()
+      .max(255)
+      .required('Gender is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const body = {"Name": values.Name, 
+        const body = {"FirstName": values.FirstName,
+        "LastName": values.LastName, 
         "Username":values.Username , 
         "Password": values.Password,
         "Email": values.Email,
+        "NationalID": values.NationalID,
         "DateOfBirth": values.DateOfBirth,
-        "HourlyRate": values.HourlyRate,
-        "affiliation": values.affiliation,
-        "Degree": values.Degree };
-          await axios.post('http://localhost:8000/createPharmacist' , body)
+        "Number": values.Number,
+        "Gender": values.Gender };
+          await axios.post('http://localhost:8000/addUser' , body)
           .then((res) => { 
             if(res.status != 200){
               throw new Error(res.data.message); 
@@ -87,7 +95,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Pharmacist Register
+          Patient Register
         </title>
       </Head>
       <Box
@@ -112,7 +120,7 @@ const Page = () => {
               sx={{ mb: 3 }}
             >
               <Typography variant="h4">
-                Register as Pharmacist
+                Register as Patient
               </Typography>
               <Typography
                 color="text.secondary"
@@ -136,14 +144,24 @@ const Page = () => {
             >
               <Stack spacing={3}>
                 <TextField
-                  error={!!(formik.touched.Name && formik.errors.Name)}
+                  error={!!(formik.touched.FirstName && formik.errors.FirstName)}
                   fullWidth
-                  helperText={formik.touched.Name && formik.errors.Name}
-                  label="Name"
-                  name="Name"
+                  helperText={formik.touched.FirstName && formik.errors.FirstName}
+                  label="FirstName"
+                  name="FirstName"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.Name}
+                  value={formik.values.FirstName}
+                />
+                <TextField
+                  error={!!(formik.touched.LastName && formik.errors.LastName)}
+                  fullWidth
+                  helperText={formik.touched.LastName && formik.errors.LastName}
+                  label="LastName"
+                  name="LastName"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.LastName}
                 />
                 <TextField
                   error={!!(formik.touched.Username && formik.errors.Username)}
@@ -178,6 +196,16 @@ const Page = () => {
                   value={formik.values.Email}
                 />
                 <TextField
+                  error={!!(formik.touched.NationalID && formik.errors.NationalID)}
+                  fullWidth
+                  helperText={formik.touched.NationalID && formik.errors.NationalID}
+                  label="National ID"
+                  name="NationalID"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.NationalID}
+                />
+                <TextField
                   error={!!(formik.touched.DateOfBirth && formik.errors.DateOfBirth)}
                   fullWidth
                   helperText={formik.touched.DateOfBirth && formik.errors.DateOfBirth}
@@ -205,35 +233,24 @@ const Page = () => {
                   InputLabelProps={{ shrink: true }}
                 />
                 <TextField
-                  error={!!(formik.touched.HourlyRate && formik.errors.HourlyRate)}
+                  error={!!(formik.touched.Number && formik.errors.Number)}
                   fullWidth
-                  helperText={formik.touched.HourlyRate && formik.errors.HourlyRate}
-                  label="Hourly Rate (EGP)"
-                  name="HourlyRate"
+                  helperText={formik.touched.Number && formik.errors.Number}
+                  label="Mobile Number"
+                  name="Number"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  type="number"
-                  value={formik.values.HourlyRate}
+                  value={formik.values.Number}
                 />
                 <TextField
-                  error={!!(formik.touched.affiliation && formik.errors.affiliation)}
+                  error={!!(formik.touched.Gender && formik.errors.Gender)}
                   fullWidth
-                  helperText={formik.touched.affiliation && formik.errors.affiliation}
-                  label="Affiliation"
-                  name="affiliation"
+                  helperText={formik.touched.Gender && formik.errors.Gender}
+                  label="Gender"
+                  name="Gender"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.affiliation}
-                />
-                <TextField
-                  error={!!(formik.touched.Degree && formik.errors.Degree)}
-                  fullWidth
-                  helperText={formik.touched.Degree && formik.errors.Degree}
-                  label="Degree"
-                  name="Degree"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.Degree}
+                  value={formik.values.Gender}
                 />
               </Stack>
               {formik.errors.Submit && (

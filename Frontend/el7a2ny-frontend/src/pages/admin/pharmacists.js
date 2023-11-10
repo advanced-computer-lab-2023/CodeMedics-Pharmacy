@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState, useEffect } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
@@ -6,9 +6,9 @@ import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
-import { MedicinesTable } from 'src/sections/pharmacist/medicines/medicines-table';
-import { CustomersSearch } from 'src/sections/pharmacist/medicines/medicines-search';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/admin/layout';
+import { PharmacistsTable } from 'src/sections/admin/Pharmacists/PharmacistsTable';
+import { PharmacistsSearch } from 'src/sections/admin/Pharmacists/PharmacistsSearch';
 import { applyPagination } from 'src/utils/apply-pagination';
 
 const now = new Date();
@@ -33,32 +33,25 @@ const useCustomerIds = (customers) => {
 
 const Page = () => {
   const [data, setData] = useState([]);
-  const [allData , setAllData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const customers = useCustomers(data, page, rowsPerPage);
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
 
-  console.log('here --> ');
-  console.log(customers);
-
-
   useEffect(() => {
-    fetch('http://localhost:8000/Medicines')
+    fetch('http://localhost:8000/iewPharmacists')
       .then((res) => {
-        if(res.statusCode == 401)
-           throw new Error('Error while fetching data'); 
+        if (res.statusCode == 401) {
+          throw new Error('Error while fetching data');
+        }
         return res.json();
       })
       .then((data) => {
-        setData(data['medicines']);
-        setAllData(data['medicines']);
-        console.log(data);
+        setData(data['pharmacists']);
       })
       .catch((err) => {});
   }, []);
-
 
   const handlePageChange = useCallback(
     (event, value) => {
@@ -74,15 +67,11 @@ const Page = () => {
     []
   );
 
-  const handleSearch = (str) => {
-    setData(allData.filter((medicine) => medicine.name.toLowerCase().includes(str.toLowerCase())));
-  }
-
   return (
     <>
       <Head>
         <title>
-          Medicines
+          Pharmacists
         </title>
       </Head>
       <Box
@@ -101,20 +90,40 @@ const Page = () => {
             >
               <Stack spacing={1}>
                 <Typography variant="h4">
-                  Medicines
+                  Customers
                 </Typography>
                 <Stack
                   alignItems="center"
                   direction="row"
                   spacing={1}
                 >
+                  <Button
+                    color="inherit"
+                    startIcon={(
+                      <SvgIcon fontSize="small">
+                        <ArrowUpOnSquareIcon/>
+                      </SvgIcon>
+                    )}
+                  >
+                    Import
+                  </Button>
+                  <Button
+                    color="inherit"
+                    startIcon={(
+                      <SvgIcon fontSize="small">
+                        <ArrowDownOnSquareIcon/>
+                      </SvgIcon>
+                    )}
+                  >
+                    Export
+                  </Button>
                 </Stack>
               </Stack>
               <div>
                 <Button
                   startIcon={(
                     <SvgIcon fontSize="small">
-                      <PlusIcon />
+                      <PlusIcon/>
                     </SvgIcon>
                   )}
                   variant="contained"
@@ -123,8 +132,8 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch data={data} handleSearch={handleSearch}/>
-            { <MedicinesTable
+            <PharmacistsSearch/>
+            <PharmacistsTable
               count={data.length}
               items={customers}
               onDeselectAll={customersSelection.handleDeselectAll}
@@ -136,7 +145,7 @@ const Page = () => {
               page={page}
               rowsPerPage={rowsPerPage}
               selected={customersSelection.selected}
-            />}
+            />
           </Stack>
         </Container>
       </Box>

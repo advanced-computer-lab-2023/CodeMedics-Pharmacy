@@ -4,9 +4,13 @@ const patientModel = require("../models/pharmacyPatient");
 const Administrator = require("../models/Administrator");
 const PharmRequest = require("../models/pharmacistRequests");
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const multer = require('multer');
 const path = require('path');
+
+//The one with shopping cart
+const anotherPatientModel = require('../models/Patient');
 
 
 const storage = multer.diskStorage({
@@ -38,39 +42,40 @@ const registerPPatient = async (req, res) => {
     try {
         console.log("hello");
         const {
-            username,
-            name,
-            email,
-            password,
-            dob,
-            gender,
-            mobileNumber,
-            emergencyContact
+            FirstName,
+            LastName,
+            Username,
+            Password,
+            Email,
+            NationalID,
+            DateOfBirth,
+            Number,
+            Gender
         } = req.body;
-        console.log(req.body)
+        
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(Password, salt);
 
-        const existingUser = await patientModel.findOne({ username }) || await Pharmacist.findOne({ username }) || await Administrator.findOne({ username }) || await PharmRequest.findOne({ username });
+        const existingUser = await anotherPatientModel.findOne({ Username }) || await Pharmacist.findOne({ Username }) || await Administrator.findOne({ Username }) || await PharmRequest.findOne({ Username });
         if (existingUser) {
             return res.status(400).json('Username already exists. Please choose another one.');
         }
-        const existingUser2 = await patientModel.findOne({ email }) || await Pharmacist.findOne({ email }) || await Administrator.findOne({ email }) || await PharmRequest.findOne({ email });
+        const existingUser2 = await anotherPatientModel.findOne({ Email }) || await Pharmacist.findOne({ Email }) || await Administrator.findOne({ Email }) || await PharmRequest.findOne({ Email });
         if (existingUser2) {
             return res.status(400).json('email already exists. Please choose another one.');
         }
-        const ppatient = new PPatient({
-            username,
-            name,
-            email,
-            password,
-            dob,
-            gender,
-            mobileNumber,
-            emergencyContact
+        const ppatient = new anotherPatientModel({
+            FirstName,
+            LastName,
+            Username,
+            Password: hashedPassword,
+            Email,
+            NationalID,
+            DateOfBirth,
+            Number,
+            Gender
         });
-
         await ppatient.save();
-        const token = createToken(username);
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
         return res.status(200).json("Patient created successfully");
     } catch (error) {
         return res.status(500).json({ error: 'Error creating user' });
@@ -101,11 +106,14 @@ const registerPharmacist = (req, res) => {
                 return res.status(400).json({ error: 'No files uploaded' });
             }
 
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
             const newPharm = new PharmRequest({
                 username,
                 name,
                 email,
-                password,
+                password: hashedPassword,
                 dob,
                 gender,
                 hourlyRate,
@@ -118,8 +126,6 @@ const registerPharmacist = (req, res) => {
 
             // Save the new PharmRequest to the database
             await newPharm.save();
-            const token = createToken(req.body.Username);
-            res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
             res.status(201).json(newPharm); // Respond with the created PharmRequest details
         } catch (error) {
             console.error('Error processing request:', error);
@@ -140,38 +146,50 @@ const loginUser = async (req, res) => {
     try {
         var patient = null, pharmacist = null, admin = null;
         if (username) {
-            patient = await PPatient.findOne({ username });
-            pharmacist = await Pharmacist.findOne({Username: username });
+            patient = await anotherPatientModel.findOne({ Username: username });
+            pharmacist = await PharmRequest.findOne({ username });
             admin = await Administrator.findOne({Username: username });
         } if (email) {
-            patient = await PPatient.findOne({ email });
-            pharmacist = await Pharmacist.findOne({Email: email });
+            patient = await anotherPatientModel.findOne({ email });
+            pharmacist = await PharmRequest.findOne({ email });
             admin = await Administrator.findOne({Email: email });
         }
         if (!patient && !pharmacist && !admin) {
             return res.status(404).json({ message: 'User not found' });
         }
         if (patient) {
-            if (patient.password === password) {
-                return res.status(200).json({ Type: 'Patient', message: 'Login successful' , patient});
-            } else {
+            const auth = await bcrypt.compare(password, patient.Password);
+            if (auth) {
+                const token = createToken(patient.Username);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                return res.status(200).json({ Type: 'Patient', message: 'Login successful' , patient , token});
+            }
+            else {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         } else if (pharmacist) {
-            if (pharmacist.Password === password) {
-                return res.status(200).json({ Type: 'Pharmacist', message: 'Login successful' , pharmacist});
-            } else {
+            const auth = await bcrypt.compare(password, pharmacist.password);
+            if (auth) {
+                const token = createToken(pharmacist.username);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                return res.status(200).json({ Type: 'Pharmacist', message: 'Login successful' , pharmacist , token});
+            }
+            else {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         } else if (admin) {
-            if (admin.Password === password) {
-                return res.status(200).json({ Type: 'Admin', message: 'Login successful', admin});
-            } else {
+            const auth = await bcrypt.compare(password, admin.Password);
+            if (auth) {
+                const token = createToken(admin.Username);
+                res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+                return res.status(200).json({ Type: 'Admin', message: 'Login successful' , admin , token});
+            }
+            else {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         }
     } catch (error) {
-        return res.status(500).json({ error: 'Error during login' });
+        return res.status(500).json({ message: error.message });
     }
 };
 

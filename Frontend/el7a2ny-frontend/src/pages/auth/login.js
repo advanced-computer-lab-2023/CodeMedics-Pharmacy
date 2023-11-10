@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Cookies from 'js-cookie';
 import {
   Alert,
   Box,
@@ -23,7 +24,7 @@ import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('email');
+  const [method, setMethod] = useState('Username');
 
   const formik = useFormik({
     initialValues: {
@@ -51,13 +52,15 @@ const Page = () => {
               return res['data'];
             })
             .then((data) => {
-              console.log(data);
               if (data['Type'] === 'Patient') {
-                router.push('/user/medicines');
+                Cookies.set('username', data['patient']['username']);
+                router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
-                router.push('/pharmacist');
+                Cookies.set('username', data['pharmacist']['username']);
+                router.push(`/pharmacist`);
               } else if (data['Type'] === 'Admin') {
-                router.push('/');
+                Cookies.set('username', data['admin']['username']);
+                router.push(`/admin`);
               }
             });
       } catch (err) {
@@ -95,14 +98,16 @@ const Page = () => {
               }
               return res['data'];
             })
-            .then((data) => {
-              console.log(data);
+            .then((data) => {              
               if (data['Type'] === 'Patient') {
-                router.push('/user/medicines');
+                Cookies.set('username', data['patient']['Username']);
+                router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
-                router.push('/pharmacist');
+                Cookies.set('username', data['pharmacist']['username']);
+                router.push(`/pharmacist`);
               } else if (data['Type'] === 'Admin') {
-                router.push('/');
+                Cookies.set('username', data['admin']['username']);
+                router.push(`/admin`);
               }
             });
       } catch (err) {
@@ -177,7 +182,7 @@ const Page = () => {
                 &nbsp; , &nbsp;
                 <Link
                   component={NextLink}
-                  href="/auth/register"
+                  href="/auth/patientRegister"
                   underline="hover"
                   variant="subtitle2"
                 >
@@ -191,12 +196,12 @@ const Page = () => {
               value={method}
             >
               <Tab
-                label="Email"
-                value="email"
-              />
-              <Tab
                 label="Username"
                 value="Username"
+              />
+              <Tab
+                label="Email"
+                value="email"
               />
             </Tabs>
             {method === 'email' && (

@@ -69,7 +69,7 @@ export const Layout = (props) => {
           }}
         >
           <Box sx={{ p: 3 }}>
-            <Typography
+            {/* <Typography
               align="center"
               color="inherit"
               sx={{
@@ -85,7 +85,7 @@ export const Layout = (props) => {
                 sx={{ color: '#15B79E' }}
                 target="_blank"
               >
-                El7a2ny Pharmacy
+                CodeMedics-Pharmacy
               </Box>
             </Typography>
             <Typography
@@ -93,15 +93,12 @@ export const Layout = (props) => {
               sx={{ mb: 1 }}
               variant="subtitle1"
             >
-              Delivering Wellness to Your Doorstep
-            </Typography>
-            <Box sx={{ paddingLeft:7, paddingTop:10, paddingBottom:15   }}>
-              <img 
-              alt="pharmacy" 
-              src="/assets/hygieia.png" 
-              style={{ width: '275px', height: '275px' }}
-              />
-            </Box>
+             Your Health, Our Care.
+            </Typography> */}
+            <img
+              alt=""
+              src="/assets/Pharmacy-Logo.png"
+            />
           </Box>
         </Grid>
       </Grid>
