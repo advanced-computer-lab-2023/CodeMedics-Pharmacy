@@ -13,8 +13,7 @@ import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 import Cookies from 'js-cookie';
 
 const now = new Date();
-const params = new URLSearchParams(window.location.search);
-const username = params.get('username');
+
 const Page = (req) => (
 
   <>

@@ -52,13 +52,15 @@ const Page = () => {
               return res['data'];
             })
             .then((data) => {
-              console.log(data);
               if (data['Type'] === 'Patient') {
-                router.push('/user/medicines');
+                Cookies.set('username', data['patient']['username']);
+                router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
-                router.push('/pharmacist');
+                Cookies.set('username', data['pharmacist']['username']);
+                router.push(`/pharmacist`);
               } else if (data['Type'] === 'Admin') {
-                router.push('/');
+                Cookies.set('username', data['admin']['username']);
+                router.push(`/admin`);
               }
             });
       } catch (err) {
