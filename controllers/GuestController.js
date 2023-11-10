@@ -9,6 +9,9 @@ const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const path = require('path');
 
+//The one with shopping cart
+const anotherPatientModel = require('../models/Patient');
+
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -39,36 +42,38 @@ const registerPPatient = async (req, res) => {
     try {
         console.log("hello");
         const {
-            username,
-            name,
-            email,
-            password,
-            dob,
-            gender,
-            mobileNumber,
-            emergencyContact
+            FirstName,
+            LastName,
+            Username,
+            Password,
+            Email,
+            NationalID,
+            DateOfBirth,
+            Number,
+            Gender
         } = req.body;
         
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(Password, salt);
 
-        const existingUser = await patientModel.findOne({ username }) || await Pharmacist.findOne({ username }) || await Administrator.findOne({ username }) || await PharmRequest.findOne({ username });
+        const existingUser = await anotherPatientModel.findOne({ Username }) || await Pharmacist.findOne({ Username }) || await Administrator.findOne({ Username }) || await PharmRequest.findOne({ Username });
         if (existingUser) {
             return res.status(400).json('Username already exists. Please choose another one.');
         }
-        const existingUser2 = await patientModel.findOne({ email }) || await Pharmacist.findOne({ email }) || await Administrator.findOne({ email }) || await PharmRequest.findOne({ email });
+        const existingUser2 = await anotherPatientModel.findOne({ Email }) || await Pharmacist.findOne({ Email }) || await Administrator.findOne({ Email }) || await PharmRequest.findOne({ Email });
         if (existingUser2) {
             return res.status(400).json('email already exists. Please choose another one.');
         }
-        const ppatient = new PPatient({
-            username,
-            name,
-            email,
-            password: hashedPassword,
-            dob,
-            gender,
-            mobileNumber,
-            emergencyContact
+        const ppatient = new anotherPatientModel({
+            FirstName,
+            LastName,
+            Username,
+            Password: hashedPassword,
+            Email,
+            NationalID,
+            DateOfBirth,
+            Number,
+            Gender
         });
         await ppatient.save();
         return res.status(200).json("Patient created successfully");
@@ -141,11 +146,11 @@ const loginUser = async (req, res) => {
     try {
         var patient = null, pharmacist = null, admin = null;
         if (username) {
-            patient = await PPatient.findOne({ username });
+            patient = await anotherPatientModel.findOne({ Username: username });
             pharmacist = await PharmRequest.findOne({ username });
             admin = await Administrator.findOne({Username: username });
         } if (email) {
-            patient = await PPatient.findOne({ email });
+            patient = await anotherPatientModel.findOne({ email });
             pharmacist = await PharmRequest.findOne({ email });
             admin = await Administrator.findOne({Email: email });
         }
@@ -153,9 +158,9 @@ const loginUser = async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         if (patient) {
-            const auth = await bcrypt.compare(password, patient.password);
+            const auth = await bcrypt.compare(password, patient.Password);
             if (auth) {
-                const token = createToken(patient.username);
+                const token = createToken(patient.Username);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
                 return res.status(200).json({ Type: 'Patient', message: 'Login successful' , patient , token});
             }

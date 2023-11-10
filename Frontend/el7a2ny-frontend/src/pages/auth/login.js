@@ -100,7 +100,7 @@ const Page = () => {
             })
             .then((data) => {              
               if (data['Type'] === 'Patient') {
-                Cookies.set('username', data['patient']['username']);
+                Cookies.set('username', data['patient']['Username']);
                 router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
                 Cookies.set('username', data['pharmacist']['username']);

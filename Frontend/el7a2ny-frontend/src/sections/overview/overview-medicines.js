@@ -3,6 +3,7 @@ import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
 import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon';
+import Cookies from 'js-cookie';
 import {
   Button,
   Card,
@@ -26,9 +27,10 @@ import {
 export const OverviewLatestProducts = (props) => {
   const { products = [], sx } = props;
 
-  // Create a map to store selected quantities for each product
   const [selectedQuantities, setSelectedQuantities] = useState({});
 
+  const username = Cookies.get("username");
+console.log(username);
   const handleQuantityChange = (event, productId) => {
     const updatedQuantities = { ...selectedQuantities };
     updatedQuantities[productId] = event.target.value;
@@ -43,12 +45,28 @@ export const OverviewLatestProducts = (props) => {
         gap={2}
       >
         {products.map((product, index) => {
-          //const ago = formatDistanceToNow(product.updatedAt);
-          console.log(product);
 
-          const handleAddToCart = () => {
-            // Implement the Add to Cart logic here
-          };
+        const handleAddToCart = (product) => {
+            const quantity = selectedQuantities[product.id];
+
+            fetch(`/updateMedicine${username, product.id, quantity}`, {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                productID: product.id,
+                quantity,
+                }),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                console.log('Product added to cart:', data);
+                })
+                .catch((error) => {
+                console.error('Error adding product to cart:', error);
+                });
+        };
 
           return (
             <Card
