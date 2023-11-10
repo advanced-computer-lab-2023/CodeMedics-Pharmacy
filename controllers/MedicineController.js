@@ -56,11 +56,11 @@ const addMedicine = async (req, res) => {
             // Save the new medicine to the database
             await newMedicine.save();
 
-            res.status(201).json(newMedicine);
+            res.status(200).json(newMedicine);
         }
     } catch (error) {
         console.error(error); // Log the actual error to the console
-        res.status(500).json({ error: 'Error adding medicine' });
+        res.status(500).json({ message: error.message });
     }
 };
 
@@ -168,7 +168,7 @@ const Medicine = require('../models/Medicine');
 
 const viewMedicines = async (req, res) => {
     try {
-        const medicines = await Medicine.find({}, 'name price Description Picture');
+        const medicines = await Medicine.find();
 
         if (!medicines || medicines.length === 0) {
             return res.status(404).json({ message: 'No medicines found.' });

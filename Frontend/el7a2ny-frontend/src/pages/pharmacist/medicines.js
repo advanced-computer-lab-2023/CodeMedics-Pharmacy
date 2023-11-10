@@ -1,8 +1,5 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
-import { subDays, subHours } from 'date-fns';
-import ArrowDownOnSquareIcon from '@heroicons/react/24/solid/ArrowDownOnSquareIcon';
-import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpOnSquareIcon';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
@@ -10,6 +7,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layo
 import { MedicinesTable } from 'src/sections/pharmacist/medicines/medicines-table';
 import { CustomersSearch } from 'src/sections/pharmacist/medicines/medicines-search';
 import { applyPagination } from 'src/utils/apply-pagination';
+import { useRouter } from 'next/navigation';
 
 const now = new Date();
 
@@ -30,7 +28,6 @@ const useCustomerIds = (customers) => {
     [customers]
   );
 };
-
 const Page = () => {
   const [data, setData] = useState([]);
   const [allData , setAllData] = useState([]);
@@ -39,9 +36,7 @@ const Page = () => {
   const customers = useCustomers(data, page, rowsPerPage);
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
-
-  console.log('here --> ');
-  console.log(customers);
+  const router = useRouter();
 
 
   useEffect(() => {
@@ -54,9 +49,10 @@ const Page = () => {
       .then((data) => {
         setData(data['medicines']);
         setAllData(data['medicines']);
-        console.log(data);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
 
@@ -118,8 +114,9 @@ const Page = () => {
                     </SvgIcon>
                   )}
                   variant="contained"
+                  onClick={() => router.push('/pharmacist/addMedicine')}
                 >
-                  Add
+                  Add Medicine
                 </Button>
               </div>
             </Stack>
