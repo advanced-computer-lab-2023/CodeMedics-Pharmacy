@@ -7,8 +7,8 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/admin/layout';
-import { CustomersTable } from 'src/sections/admin/customers-table';
-import { CustomersSearch } from 'src/sections/admin/customers-search';
+import { PatientTable } from 'src/sections/admin/Patients/Patient-Table';
+import { PatientsSearch } from 'src/sections/admin/Patients/patients-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
 const axios = require('axios');
@@ -18,7 +18,6 @@ const now = new Date();
 const useCustomers = (data, page, rowsPerPage) => {
   return useMemo(
     () => {
-      console.log(data);
       return applyPagination(data, page, rowsPerPage);
     },
     [data, page, rowsPerPage]
@@ -42,8 +41,6 @@ const Page = () => {
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
 
-  console.log('here --> ');
-  console.log(customers);
 
   useEffect(() => {
     fetch('http://localhost:8000/iewPatients')
@@ -55,7 +52,6 @@ const Page = () => {
       })
       .then((data) => {
         setData(data['patients']);
-        console.log(data);
       })
       .catch((err) => {});
   }, []);
@@ -139,19 +135,14 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch/>
-            <CustomersTable
+            <PatientsSearch/>
+            <PatientTable
               count={data.length}
               items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
             />
           </Stack>
         </Container>

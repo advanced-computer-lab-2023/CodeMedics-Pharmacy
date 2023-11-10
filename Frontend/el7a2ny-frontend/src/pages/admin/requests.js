@@ -7,8 +7,8 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/admin/layout';
-import { PharmacistsTable } from 'src/sections/admin/Pharmacists/PharmacistsTable';
-import { PharmacistsSearch } from 'src/sections/admin/Pharmacists/PharmacistsSearch';
+import { RequestTable } from 'src/sections/admin/Requests/Request-Table';
+import { RequestSearch } from 'src/sections/admin/Requests/Request-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
 const now = new Date();
@@ -40,7 +40,7 @@ const Page = () => {
   const customersSelection = useSelection(customersIds);
 
   useEffect(() => {
-    fetch('http://localhost:8000/iewPharmacists')
+    fetch('http://localhost:8000/iewPharmacistApplications')
       .then((res) => {
         if (res.statusCode == 401) {
           throw new Error('Error while fetching data');
@@ -48,7 +48,7 @@ const Page = () => {
         return res.json();
       })
       .then((data) => {
-        setData(data['pharmacists']);
+        setData(data['pharmacistApplications']);
       })
       .catch((err) => {});
   }, []);
@@ -71,7 +71,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Pharmacists
+          Pharmacists Applications
         </title>
       </Head>
       <Box
@@ -132,8 +132,8 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <PharmacistsSearch/>
-            <PharmacistsTable
+            <RequestSearch/>
+            <RequestTable
               count={data.length}
               items={customers}
               onDeselectAll={customersSelection.handleDeselectAll}

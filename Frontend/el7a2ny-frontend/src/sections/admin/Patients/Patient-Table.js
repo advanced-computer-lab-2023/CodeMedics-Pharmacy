@@ -23,26 +23,21 @@ import { useState } from 'react';
 import React from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { indigo } from '../../theme/colors';
+import { indigo } from '../../../theme/colors';
+import { PatientPopup } from '../Popup-generic';
 
-export const CustomersTable = (props) => {
+export const PatientTable = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenEmergencyContact, setIsOpenEmergencyContact] = useState(false);
+  const [isOpenDelete, setOpenDelete] = useState(false);
   return (
     <Card>
       <Scrollbar>
@@ -50,23 +45,10 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        onSelectAll?.();
-                      } else {
-                        onDeselectAll?.();
-                      }
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   Name
                 </TableCell>
-                <TableCell>
+                <TableCell >
                   Email
                 </TableCell>
                 <TableCell>
@@ -94,27 +76,12 @@ export const CustomersTable = (props) => {
             </TableHead>
             <TableBody>
               {items.map((customer) => {
-                const isSelected = selected.includes(customer.id);
                 //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
+                const relation = customer.emergencyContact.relation;
+                const fullName = customer.emergencyContact.fullName;
+                const mobileNumber = customer.emergencyContact.mobileNumber;
                 return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            onSelectOne?.(customer.id);
-                          } else {
-                            onDeselectOne?.(customer.id);
-                          }
-                        }}
-                      />
-                    </TableCell>
+                  <TableRow hover key={customer.id}>
                     <TableCell>
                       <Stack
                         alignItems="center"
@@ -151,7 +118,7 @@ export const CustomersTable = (props) => {
                       <IconButton
                         color="primary"
                         onClick={() => {
-                          setIsOpen(true);
+                          setIsOpenEmergencyContact(true);
                         }}
                       >
                         <SvgIcon fontSize="large">
@@ -159,55 +126,18 @@ export const CustomersTable = (props) => {
                         </SvgIcon>
                       </IconButton>
                       {customer.emergencyContact.fullName}
+                      <PatientPopup
+                        items={
+                          {
+                            fullName: fullName,
+                            mobileNumber: mobileNumber,
+                            relation: relation
+                          }
+                        }
+                        width={'25%'} height={'15vh'}
+                        isOpenEmergencyContact={isOpenEmergencyContact}
+                        setIsOpenEmergencyContact={setIsOpenEmergencyContact}></PatientPopup>
 
-                      <Popup
-                        open={isOpen}
-                        closeOnDocumentClick
-                        onClose={() => setIsOpen(false)}
-                        overlayStyle={{ // Apply styles to the overlay
-                          backgroundColor: 'transparent', // Semi-transparent white background
-                          backdropFilter: isOpen ? 'blur(2px)' : 'none', // Apply a blur filter to the background when Popup is open
-                          transition: 'backdrop-filter 0.3s ease-out' // Add a smooth transition
-                        }}
-                        contentStyle={{ // Apply custom styles to the Popup content
-                          background: '#F5F7FF',
-                          width: '25%', // Set the width to 50% of the screen width
-                          height: '15vh',
-                          padding: '20px',
-                          borderRadius: '10px',
-                          border: '5px solid #ccc'
-                        }}
-                      >
-                        <Card><Scrollbar><Box
-                          sx={{ minWidth: 200 }}><Table>
-                          <TableHead>
-                            <TableRow>
-                              <TableCell>
-                                Name
-                              </TableCell>
-                              <TableCell>
-                                Mobile Number
-                              </TableCell>
-                              <TableCell>
-                                Relationship
-                              </TableCell>
-                            </TableRow>
-                          </TableHead>
-                          <TableBody>
-                            <TableRow>
-                              <TableCell>
-                                {customer.emergencyContact.fullName}
-                              </TableCell>
-                              <TableCell>
-                                {customer.emergencyContact.mobileNumber}
-                              </TableCell>
-                              <TableCell>
-                                {customer.emergencyContact.relation}
-                              </TableCell>
-                            </TableRow>;
-                          </TableBody>
-                        </Table></Box></Scrollbar></Card>
-                      </Popup>
                     </TableCell>
                     <TableCell>
                       <IconButton
@@ -249,16 +179,11 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+PatientTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
 };
