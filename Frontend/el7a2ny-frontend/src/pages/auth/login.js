@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import Cookies from 'js-cookie';
 import {
   Alert,
   Box,
@@ -23,7 +24,7 @@ import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [method, setMethod] = useState('email');
+  const [method, setMethod] = useState('Username');
 
   const formik = useFormik({
     initialValues: {
@@ -95,13 +96,16 @@ const Page = () => {
               }
               return res['data'];
             })
-            .then((data) => {
+            .then((data) => {              
               if (data['Type'] === 'Patient') {
-                router.push(`/user/medicines?username=${data['patient']['Username']}`);
+                Cookies.set('username', data['patient']['username']);
+                router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
-                router.push(`/pharmacist?username=${data['pharmacist']['Username']}`);
+                Cookies.set('username', data['pharmacist']['username']);
+                router.push(`/pharmacist`);
               } else if (data['Type'] === 'Admin') {
-                router.push('/');
+                Cookies.set('username', data['admin']['username']);
+                router.push(`/admin`);
               }
             });
       } catch (err) {
@@ -190,12 +194,12 @@ const Page = () => {
               value={method}
             >
               <Tab
-                label="Email"
-                value="email"
-              />
-              <Tab
                 label="Username"
                 value="Username"
+              />
+              <Tab
+                label="Email"
+                value="email"
               />
             </Tabs>
             {method === 'email' && (

@@ -163,9 +163,9 @@ const loginUser = async (req, res) => {
                 return res.status(401).json({ message: 'Wrong password' });
             }
         } else if (pharmacist) {
-            const auth = await bcrypt.compare(password, pharmacist.Password);
+            const auth = await bcrypt.compare(password, pharmacist.password);
             if (auth) {
-                const token = createToken(pharmacist.Username);
+                const token = createToken(pharmacist.username);
                 res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
                 return res.status(200).json({ Type: 'Pharmacist', message: 'Login successful' , pharmacist , token});
             }
@@ -184,7 +184,7 @@ const loginUser = async (req, res) => {
             }
         }
     } catch (error) {
-        return res.status(500).json({ error: 'Error during login' });
+        return res.status(500).json({ message: error.message });
     }
 };
 
