@@ -19,6 +19,15 @@ export const items = [
     )
   },
   {
+    title: 'My Cart',
+    path: '/user/my-cart',
+    icon: (
+      <SvgIcon fontSize="small">
+        <ShoppingBagIcon />
+      </SvgIcon>
+    )
+  },
+  {
     title: 'My Orders',
     path: '/user/orders',
     icon: (

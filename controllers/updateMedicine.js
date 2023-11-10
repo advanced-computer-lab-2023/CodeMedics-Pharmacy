@@ -25,10 +25,34 @@ const updateMedicine = async(req, res) =>{
     if(!found){
         patientCart.items.push({MedicineId: productID, Quantity: quantity});
     }
-    
+
     patient.Cart = patientCart;
     await patient.save();
 
 }
 
-module.exports = {updateMedicine};
+const getCart = async(req, res) => {
+    try{
+        const username = req.query.username;
+        const patient = await Patient.findOne({Username: username});
+        const patientCart = patient.Cart.items;
+        var medicineArray = [];
+        for(let i = 0; i<patientCart.length; i++){
+            let cur = patientCart[i];
+            let cnt = cur.Quantity;
+            let id = cur.MedicineId;
+            let picture = cur.picture;
+            let med = await Medicine.findOne({_id: id});
+            let medicineName = med.name;
+            let price = med.price;
+            medicineArray.push({"medicineName": medicineName, "quantity": cnt, "price": price, "medicineID": id, "picture": picture});
+        }
+        console.log(medicineArray);
+        return res.status(200).json(medicineArray);
+    }catch(err){
+        return res.status(400).json(err);
+    }
+    
+}
+
+module.exports = {updateMedicine, getCart};

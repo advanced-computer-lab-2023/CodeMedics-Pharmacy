@@ -57,7 +57,8 @@ export const OverviewLatestProducts = (props) => {
                 console.log(productID);
                 if (quantity) {
                   addToCartApiCall(username, productID, quantity);
-                }
+                }else addToCartApiCall(username, productID, 1);
+
               };
             
               const addToCartApiCall = (username, productId, quantity) => {
@@ -144,7 +145,7 @@ export const OverviewLatestProducts = (props) => {
                   color="primary"
                   variant="contained"
                   size="small"
-                  onClick={handleAddToCart(product._id)}
+                  onClick={() => {handleAddToCart(product._id)}} //
                 >
                   Add to Cart
                 </Button>
