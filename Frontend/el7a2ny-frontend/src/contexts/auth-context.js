@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
+import Cookies from 'js-cookie';
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -152,6 +153,7 @@ export const AuthProvider = (props) => {
   };
 
   const signOut = () => {
+    Cookies.remove('username');
     dispatch({
       type: HANDLERS.SIGN_OUT
     });

@@ -18,6 +18,12 @@
   },
   "homepage": "https://github.com/advanced-computer-lab-2023/CodeMedics-Pharmacy#readme",
   "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@fontsource/roboto": "^5.0.8",
+    "@mui/icons-material": "^5.14.16",
+    "@mui/material": "^5.14.17",
+    "@mui/styled-engine-sc": "^6.0.0-alpha.5",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.20.2",
@@ -33,7 +39,9 @@
     "mongoose": "^7.6.4",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.0.1",
     "parser": "^0.1.4",
-    "stripe": "^14.3.0"
+    "stripe": "^14.3.0",
+    "styled-components": "^6.1.1"
   }
 }

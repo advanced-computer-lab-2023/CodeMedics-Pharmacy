@@ -36,8 +36,8 @@ export const items = [
     )
   },
   {
-    title: 'Companies',
-    path: '/admin/companies',
+    title: 'Requests',
+    path: '/admin/requests',
     icon: (
       <SvgIcon fontSize="small">
         <ShoppingBagIcon />
@@ -64,7 +64,7 @@ export const items = [
   },
   {
     title: 'New Admin',
-    path: '/admin/Register',
+    path: '/admin/register',
     icon: (
       <SvgIcon fontSize="small">
         <UserPlusIcon />

@@ -1,11 +1,11 @@
-const Patient = require('../../CodeMedics-Pharmacy/models/Patient');
+const PharmacyPatient = require('../../CodeMedics-Pharmacy/models/PharmacyPatient');
 const Order = require('../../CodeMedics-Pharmacy/models/Order');
 const stripe = require("stripe")(process.env.SECRET_KEY);
 
 const payOrder = async(req, res) =>{
     const {patientId, total, deliveryAddress, paymentMethod, items} = req.body;
     
-    const patient = await Patient.findById(patientId);
+    const patient = await PharmacyPatient.findById(patientId);
     if(!patient){
         res.status.json({message : "Patient not found"});
     }
