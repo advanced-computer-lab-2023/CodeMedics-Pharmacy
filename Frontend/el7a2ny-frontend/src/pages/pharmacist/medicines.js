@@ -7,8 +7,8 @@ import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
 import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
-import { MedicinesTable } from 'src/sections/medicines/medicines-table';
-import { CustomersSearch } from 'src/sections/medicines/medicines-search';
+import { MedicinesTable } from 'src/sections/pharmacist/medicines/medicines-table';
+import { CustomersSearch } from 'src/sections/pharmacist/medicines/medicines-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 
 const now = new Date();
@@ -31,8 +31,9 @@ const useCustomerIds = (customers) => {
   );
 };
 
-const Page = (req) => {
+const Page = () => {
   const [data, setData] = useState([]);
+  const [allData , setAllData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const customers = useCustomers(data, page, rowsPerPage);
@@ -51,7 +52,8 @@ const Page = (req) => {
         return res.json();
       })
       .then((data) => {
-        setData(data['medicines'])
+        setData(data['medicines']);
+        setAllData(data['medicines']);
         console.log(data);
       })
       .catch((err) => {});
@@ -71,6 +73,10 @@ const Page = (req) => {
     },
     []
   );
+
+  const handleSearch = (str) => {
+    setData(allData.filter((medicine) => medicine.name.toLowerCase().includes(str.toLowerCase())));
+  }
 
   return (
     <>
@@ -117,8 +123,8 @@ const Page = (req) => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch />
-            {data.length > 0 && <MedicinesTable
+            <CustomersSearch data={data} handleSearch={handleSearch}/>
+            { <MedicinesTable
               count={data.length}
               items={customers}
               onDeselectAll={customersSelection.handleDeselectAll}
