@@ -34,6 +34,7 @@ const updateMedicine = async(req, res) =>{
 const getCart = async(req, res) => {
     try{
         const username = req.query.username;
+        console.log(username);
         const patient = await PharmacyPatient.findOne({Username: username});
         const patientCart = patient.Cart.items;
         var medicineArray = [];

@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpTrayIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
+import AdjustmentsVerticalIcon from '@heroicons/react/24/solid/AdjustmentsVerticalIcon';
 import { format } from 'date-fns';
 import {
   Avatar,
@@ -18,7 +19,10 @@ import {
   TableRow,
   IconButton,
   Tooltip,
-  Typography
+  Typography,
+ 
+  TextField,
+  MenuItem 
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
@@ -41,7 +45,10 @@ export const MedicinesTable = (props) => {
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-  const router = useRouter();
+  const router = useRouter()
+
+  
+
   return (
     <Card>
       <Scrollbar>
@@ -67,6 +74,9 @@ export const MedicinesTable = (props) => {
                 </TableCell>
                 <TableCell>
                   Price
+                </TableCell>
+                <TableCell>
+                  Medical Use
                 </TableCell>
                 <TableCell>
                   Description
@@ -117,10 +127,13 @@ export const MedicinesTable = (props) => {
                       {medicine.price}
                     </TableCell>
                     <TableCell>
+                      {medicine.medicalUse}
+                    </TableCell>
+                    <TableCell>
                       {medicine.Description}
                     </TableCell>
                     <TableCell>
-                    <Tooltip title="Upload Photo">
+                    {/* <Tooltip title="Upload Photo">
                       <IconButton 
                         children ={(
                           <SvgIcon fontSize="small">
@@ -132,7 +145,7 @@ export const MedicinesTable = (props) => {
                         }}
                       >
                       </IconButton>
-                    </Tooltip>
+                    </Tooltip> */}
                     <Tooltip title="Edit Medicine">
                       <IconButton 
                         children ={(

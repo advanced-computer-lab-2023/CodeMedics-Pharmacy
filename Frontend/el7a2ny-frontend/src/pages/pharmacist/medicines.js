@@ -1,13 +1,15 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography,TextField } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import { MedicinesTable } from 'src/sections/pharmacist/medicines/medicines-table';
 import { CustomersSearch } from 'src/sections/pharmacist/medicines/medicines-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useRouter } from 'next/navigation';
+import { set } from 'nprogress';
+import { bool } from 'prop-types';
 
 const now = new Date();
 
@@ -30,6 +32,8 @@ const useCustomerIds = (customers) => {
 };
 const Page = () => {
   const [data, setData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
+  const [filteredData , setFilteredData] = useState([]);
   const [allData , setAllData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -49,6 +53,8 @@ const Page = () => {
       .then((data) => {
         setData(data['medicines']);
         setAllData(data['medicines']);
+        setSearchData(data['medicines']);
+        setFilteredData(data['medicines']);
       })
       .catch((err) => {
         console.log(err);
@@ -70,8 +76,48 @@ const Page = () => {
     []
   );
 
+  const handleData = () => {
+    let temp = [];
+    setData([]);
+    for(let i = 0 ; i < allData.length ; i++){
+      let ok = false , ok2 = false;
+      for(let j = 0; j< searchData.length ; j++){
+        if(allData[i]._id === searchData[j]._id){
+          ok = true;
+          break;
+        }
+      }
+      for(let j = 0; j< filteredData.length ; j++){
+        if(allData[i]._id === filteredData[j]._id){
+          ok2 = true;
+          break;
+        }
+      }
+      if(ok && ok2){
+        temp.push(allData[i]);
+      }
+    }
+    setData(temp);
+  }
+
   const handleSearch = (str) => {
-    setData(allData.filter((medicine) => medicine.name.toLowerCase().includes(str.toLowerCase())));
+    if(str === ""){
+      setSearchData(allData);
+    }
+    else{
+      setSearchData(allData.filter((medicine) => medicine.name.toLowerCase().includes(str.toLowerCase())));
+    }
+    handleData();
+  }
+
+  const handleFilter = (str) => {
+    if(str === "None"){
+      setFilteredData(allData);
+    }
+    else{
+      setFilteredData(allData.filter((medicine) => medicine.medicalUse.toLowerCase() === (str.toLowerCase())));
+    }
+    handleData();
   }
 
   return (
@@ -120,7 +166,7 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch data={data} handleSearch={handleSearch}/>
+            <CustomersSearch data={data} handleSearch={handleSearch} handleFilter={handleFilter}/>
             { <MedicinesTable
               count={data.length}
               items={customers}

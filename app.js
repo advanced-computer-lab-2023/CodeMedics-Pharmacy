@@ -57,7 +57,7 @@ const {addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, search
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
 
-const {updateMedicine} = require('./controllers/updateMedicine');
+const {updateMedicine , getCart} = require('./controllers/updateMedicine');
 
 
 app.get("/", (req, res) => {
@@ -215,6 +215,7 @@ app.post("/Pharmregister",registerPharmacist, upload.fields([[
 app.post("/addMedicine", addMedicine);
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
+app.get("/getCart" , getCart);
 app.post("/createPharmacist", createPharmacist);
 app.post("/login", loginUser);
 app.delete("/removePharmacist", removePharmacist);

@@ -11,9 +11,12 @@ import axios from 'axios';
 
 const Page = ({}) => {
     const router = useRouter();
+
+    // useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('data');
     const medicine = JSON.parse(decodeURIComponent(encodedData));
+    console.log(medicine);
     const formik = useFormik({
         initialValues: {
             name: medicine['name'],
