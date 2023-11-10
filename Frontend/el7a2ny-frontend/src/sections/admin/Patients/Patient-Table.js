@@ -19,27 +19,25 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+import { useState } from 'react';
+import React from 'react';
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import { indigo } from '../../../theme/colors';
+import { PatientPopup } from '../Popup-generic';
 
-
-
-export const CustomersTable = (props) => {
+export const PatientTable = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => {},
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  const [isOpenEmergencyContact, setIsOpenEmergencyContact] = useState(false);
+  const [isOpenDelete, setOpenDelete] = useState(false);
   return (
     <Card>
       <Scrollbar>
@@ -47,23 +45,10 @@ export const CustomersTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        onSelectAll?.();
-                      } else {
-                        onDeselectAll?.();
-                      }
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
+                <TableCell align="center">
                   Name
                 </TableCell>
-                <TableCell>
+                <TableCell >
                   Email
                 </TableCell>
                 <TableCell>
@@ -91,27 +76,12 @@ export const CustomersTable = (props) => {
             </TableHead>
             <TableBody>
               {items.map((customer) => {
-                const isSelected = selected.includes(customer.id);
                 //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
+                const relation = customer.emergencyContact.relation;
+                const fullName = customer.emergencyContact.fullName;
+                const mobileNumber = customer.emergencyContact.mobileNumber;
                 return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            onSelectOne?.(customer.id);
-                          } else {
-                            onDeselectOne?.(customer.id);
-                          }
-                        }}
-                      />
-                    </TableCell>
+                  <TableRow hover key={customer.id}>
                     <TableCell>
                       <Stack
                         alignItems="center"
@@ -139,50 +109,55 @@ export const CustomersTable = (props) => {
                       {customer.username}
                     </TableCell>
                     <TableCell>
-                      {customer.dob}
+                      {customer.dob.substring(0, customer.dob.indexOf('T'))}
                     </TableCell>
                     <TableCell>
                       {customer.password}
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        children ={(
-                          <SvgIcon fontSize="large" >
-                            <IdentificationIcon/>
-                          </SvgIcon>
-                        )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
+                          setIsOpenEmergencyContact(true);
                         }}
                       >
-                      </IconButton >
+                        <SvgIcon fontSize="large">
+                          <IdentificationIcon/>
+                        </SvgIcon>
+                      </IconButton>
+                      {customer.emergencyContact.fullName}
+                      <PatientPopup
+                        items={
+                          {
+                            fullName: fullName,
+                            mobileNumber: mobileNumber,
+                            relation: relation
+                          }
+                        }
+                        width={'25%'} height={'15vh'}
+                        isOpenEmergencyContact={isOpenEmergencyContact}
+                        setIsOpenEmergencyContact={setIsOpenEmergencyContact}></PatientPopup>
+
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        children ={(
-                          <SvgIcon fontSize="small">
-                            <Xmark />
-                          </SvgIcon>
-                        )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
                         }}
                       >
-                      </IconButton >
+                        <SvgIcon fontSize="small">
+                          <Xmark/>
+                        </SvgIcon>
+                      </IconButton>
                       <IconButton
-                        children ={(
-                          <SvgIcon fontSize="small">
-                            <PencilIcon />
-                          </SvgIcon>
-                        )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
                         }}
                       >
-                      </IconButton >
+                        <SvgIcon fontSize="small">
+                          <PencilIcon/>
+                        </SvgIcon>
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 );
@@ -204,16 +179,11 @@ export const CustomersTable = (props) => {
   );
 };
 
-CustomersTable.propTypes = {
+PatientTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
-  onDeselectAll: PropTypes.func,
-  onDeselectOne: PropTypes.func,
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
-  onSelectAll: PropTypes.func,
-  onSelectOne: PropTypes.func,
   page: PropTypes.number,
   rowsPerPage: PropTypes.number,
-  selected: PropTypes.array
 };

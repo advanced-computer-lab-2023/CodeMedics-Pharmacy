@@ -17,10 +17,12 @@ import {
   SvgIcon,
   TableRow,
   IconButton,
+  Tooltip,
   Typography
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
+import { useRouter } from 'next/navigation';
 
 export const MedicinesTable = (props) => {
   const {
@@ -39,7 +41,7 @@ export const MedicinesTable = (props) => {
 
   const selectedSome = (selected.length > 0) && (selected.length < items.length);
   const selectedAll = (items.length > 0) && (selected.length === items.length);
-
+  const router = useRouter();
   return (
     <Card>
       <Scrollbar>
@@ -118,6 +120,7 @@ export const MedicinesTable = (props) => {
                       {medicine.Description}
                     </TableCell>
                     <TableCell>
+                    <Tooltip title="Upload Photo">
                       <IconButton 
                         children ={(
                           <SvgIcon fontSize="small">
@@ -126,10 +129,11 @@ export const MedicinesTable = (props) => {
                         )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
                         }}
                       >
-                      </IconButton >
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Edit Medicine">
                       <IconButton 
                         children ={(
                           <SvgIcon fontSize="small">
@@ -138,10 +142,12 @@ export const MedicinesTable = (props) => {
                         )}
                         color="primary"
                         onClick={() => {
-                          console.log('hi');
+                          const encodedData = encodeURIComponent(JSON.stringify(medicine));
+                          router.push(`/pharmacist/editMedicine?data=${encodedData}`);
                         }}
                       >
                       </IconButton >
+                      </Tooltip>
                     </TableCell>
                   </TableRow>
                 );

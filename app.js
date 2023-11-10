@@ -222,7 +222,7 @@ app.delete("/removePatient" , removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
-app.get("/ditMedicine", editMedicine);
+app.patch("/ditMedicine", editMedicine);
 app.get("/iewPatients", viewPatients);
 app.get("/iewPharmacists", viewPharmacists);
 app.get("/Medicines",viewMedicines);
