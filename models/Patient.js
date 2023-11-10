@@ -45,8 +45,12 @@ const patientSchema = new Schema({
         required: false
     },
     EmergencyContacts: {
-        type: {String, String},
-        required: false
+        type: {
+            EmergencyContactName: {type: String, required: true},
+            EmergencyContactNumber: {type: String, required: true},
+            EmergencyContactRelation: {type: String, required: true}
+        } ,
+        required: true
     },
     FamilyMembers: {
         type: [Schema.Types.ObjectId],

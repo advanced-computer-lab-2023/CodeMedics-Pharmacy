@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import IdentificationIcon from '@heroicons/react/24/solid/IdentificationIcon';
 import Xmark from '@heroicons/react/24/solid/XMarkIcon';
-import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
+import Check from '@heroicons/react/24/solid/CheckIcon';
 import {
   Avatar,
   Box,
@@ -24,7 +24,7 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { indigo } from '../../../theme/colors';
-import { PatientPopup } from '../Popup-generic';
+import { PatientEmergencyPopup } from '../Patients/PatientEmergency-Popup';
 
 export const RequestTable = (props) => {
   const {
@@ -45,7 +45,7 @@ export const RequestTable = (props) => {
   const selectedAll = (items.length > 0) && (selected.length === items.length);
   const [isOpenEmergencyContact, setIsOpenEmergencyContact] = useState(false);
   return (
-    <Card>
+    <Card >
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
@@ -133,11 +133,11 @@ export const RequestTable = (props) => {
                     </TableCell>
                     <TableCell>
                       <IconButton
-                        color="primary"
+                        color="#B42318"
                         onClick={() => {
                         }}
                       >
-                        <SvgIcon fontSize="small">
+                        <SvgIcon fontSize="medium">
                           <Xmark/>
                         </SvgIcon>
                       </IconButton>
@@ -146,8 +146,8 @@ export const RequestTable = (props) => {
                         onClick={() => {
                         }}
                       >
-                        <SvgIcon fontSize="small">
-                          <PencilIcon/>
+                        <SvgIcon fontSize="medium">
+                          <Check/>
                         </SvgIcon>
                       </IconButton>
                     </TableCell>

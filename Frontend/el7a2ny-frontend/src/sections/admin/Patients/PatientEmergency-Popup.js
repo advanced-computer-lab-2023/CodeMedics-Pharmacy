@@ -13,20 +13,19 @@ import React, { useState } from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
-export const PatientPopup = (props) => {
+export const PatientEmergencyPopup = (props) => {
   const {
     width = '25%',
     height = '15vh',
     items = {},
     isOpenEmergencyContact = false, // Set a default value here
-    setIsOpenEmergencyContact
+    onClose
   } = props;
-  console.log(items);
   return (
     <Popup
       open={isOpenEmergencyContact}
       closeOnDocumentClick
-      onClose={() => setIsOpenEmergencyContact(false)}
+      onClose={onClose}
       overlayStyle={{ // Apply styles to the overlay
         backgroundColor: 'transparent', // Semi-transparent white background
         backdropFilter: isOpenEmergencyContact ? 'blur(2px)' : 'none', // Apply a blur filter to the background when Popup is open
@@ -76,8 +75,10 @@ export const PatientPopup = (props) => {
   );
 };
 
-PatientPopup.propTypes = {
+PatientEmergencyPopup.propTypes = {
   items: PropTypes.object,
   width: PropTypes.string,
-  height: PropTypes.string
+  height: PropTypes.string,
+  isOpenEmergencyContact: PropTypes.bool,
+  setIsOpenEmergencyContact: PropTypes.func
 };

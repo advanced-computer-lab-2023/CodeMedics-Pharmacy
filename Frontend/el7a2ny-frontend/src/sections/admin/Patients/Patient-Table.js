@@ -24,7 +24,8 @@ import React from 'react';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import { indigo } from '../../../theme/colors';
-import { PatientPopup } from '../Popup-generic';
+import { PatientEmergencyPopup } from './PatientEmergency-Popup';
+import { PatientDeletePopup } from './Patient-DeletePopup';
 
 export const PatientTable = (props) => {
   const {
@@ -33,11 +34,11 @@ export const PatientTable = (props) => {
     onPageChange = () => {},
     onRowsPerPageChange,
     page = 0,
-    rowsPerPage = 0,
+    rowsPerPage = 0
   } = props;
 
-  const [isOpenEmergencyContact, setIsOpenEmergencyContact] = useState(false);
-  const [isOpenDelete, setOpenDelete] = useState(false);
+  const [activeEmergencyContactId, setActiveEmergencyContactId] = useState(null);
+  const [isOpenDelete, setOpenDelete] = useState(null);
   return (
     <Card>
       <Scrollbar>
@@ -48,7 +49,7 @@ export const PatientTable = (props) => {
                 <TableCell align="center">
                   Name
                 </TableCell>
-                <TableCell >
+                <TableCell>
                   Email
                 </TableCell>
                 <TableCell>
@@ -64,7 +65,7 @@ export const PatientTable = (props) => {
                   Date of Birth
                 </TableCell>
                 <TableCell>
-                  Password
+                  Wallet
                 </TableCell>
                 <TableCell>
                   Emergency Contact
@@ -77,9 +78,10 @@ export const PatientTable = (props) => {
             <TableBody>
               {items.map((customer) => {
                 //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-                const relation = customer.emergencyContact.relation;
-                const fullName = customer.emergencyContact.fullName;
-                const mobileNumber = customer.emergencyContact.mobileNumber;
+                const Name = customer.FirstName + ' ' + customer.LastName;
+                const relation = customer.EmergencyContacts.EmergencyContactRelation;
+                const fullName = customer.EmergencyContacts.EmergencyContactName;
+                const mobileNumber = customer.EmergencyContacts.EmergencyContactNumber;
                 return (
                   <TableRow hover key={customer.id}>
                     <TableCell>
@@ -89,44 +91,44 @@ export const PatientTable = (props) => {
                         spacing={2}
                       >
                         <Avatar src={customer.avatar}>
-                          {getInitials(customer.name)}
+                          {getInitials(customer.Name)}
                         </Avatar>
                         <Typography variant="subtitle2">
-                          {customer.name}
+                          {Name}
                         </Typography>
                       </Stack>
                     </TableCell>
                     <TableCell>
-                      {customer.email}
+                      {customer.Email}
                     </TableCell>
                     <TableCell>
-                      {customer.gender}
+                      {customer.Gender}
                     </TableCell>
                     <TableCell>
-                      {customer.mobileNumber}
+                      {customer.Number}
                     </TableCell>
                     <TableCell>
-                      {customer.username}
+                      {customer.Username}
                     </TableCell>
                     <TableCell>
-                      {customer.dob.substring(0, customer.dob.indexOf('T'))}
+                      {customer.DateOfBirth}
                     </TableCell>
                     <TableCell>
-                      {customer.password}
+                      {customer.Wallet}
                     </TableCell>
                     <TableCell>
                       <IconButton
                         color="primary"
                         onClick={() => {
-                          setIsOpenEmergencyContact(true);
+                          setActiveEmergencyContactId(customer.Username);
                         }}
                       >
                         <SvgIcon fontSize="large">
                           <IdentificationIcon/>
                         </SvgIcon>
                       </IconButton>
-                      {customer.emergencyContact.fullName}
-                      <PatientPopup
+                      {fullName}
+                      <PatientEmergencyPopup
                         items={
                           {
                             fullName: fullName,
@@ -135,14 +137,15 @@ export const PatientTable = (props) => {
                           }
                         }
                         width={'25%'} height={'15vh'}
-                        isOpenEmergencyContact={isOpenEmergencyContact}
-                        setIsOpenEmergencyContact={setIsOpenEmergencyContact}></PatientPopup>
+                        isOpenEmergencyContact={activeEmergencyContactId === customer.Username}
+                        onClose={() => setActiveEmergencyContactId(null)}/>
 
                     </TableCell>
                     <TableCell>
                       <IconButton
                         color="primary"
                         onClick={() => {
+                          setOpenDelete(customer.Username);
                         }}
                       >
                         <SvgIcon fontSize="small">
@@ -151,13 +154,15 @@ export const PatientTable = (props) => {
                       </IconButton>
                       <IconButton
                         color="primary"
-                        onClick={() => {
-                        }}
                       >
                         <SvgIcon fontSize="small">
                           <PencilIcon/>
                         </SvgIcon>
                       </IconButton>
+                      <PatientDeletePopup width={'25%'} height={'15vh'}
+                                          isOpenDelete={isOpenDelete === customer.Username}
+                                          items={customer.Username} onClose={() => setOpenDelete(null)}
+                                          username={customer.Username}/>
                     </TableCell>
                   </TableRow>
                 );
@@ -185,5 +190,5 @@ PatientTable.propTypes = {
   onPageChange: PropTypes.func,
   onRowsPerPageChange: PropTypes.func,
   page: PropTypes.number,
-  rowsPerPage: PropTypes.number,
+  rowsPerPage: PropTypes.number
 };
