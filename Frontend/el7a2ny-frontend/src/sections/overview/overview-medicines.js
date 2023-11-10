@@ -37,38 +37,7 @@ export const OverviewLatestProducts = (props) => {
     setSelectedQuantities(updatedQuantities);
   };
 
-  const handleAddToCart = (productID) => {
-    const quantity = selectedQuantities[productID];
-    
-    console.log("in CART");
-    console.log(quantity);
-    console.log(productID);
-    if (quantity) {
-      addToCartApiCall(username, productID, quantity);
-    }
-  };
-
-  const addToCartApiCall = (username, productId, quantity) => {
-    fetch(`http://localhost:8000/updateMedicine`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        Username: username,
-        productID: productId,
-        quantity,
-      }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Product added to cart:', data);
-      })
-      .catch((error) => {
-        console.error('Error adding product to cart:', error);
-      });
-  };
-
+ 
   return (
     <CardContent>
       <Box
@@ -79,6 +48,39 @@ export const OverviewLatestProducts = (props) => {
         {products.map((product, index) => {
 
             console.log(product);
+
+            const handleAddToCart = (productID) => {
+                const quantity = selectedQuantities[productID];
+                
+                console.log("in CART");
+                console.log(quantity);
+                console.log(productID);
+                if (quantity) {
+                  addToCartApiCall(username, productID, quantity);
+                }
+              };
+            
+              const addToCartApiCall = (username, productId, quantity) => {
+                fetch(`http://localhost:8000/updateMedicine`, {
+                  method: 'PATCH',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({
+                    Username: username,
+                    productID: productId,
+                    quantity,
+                  }),
+                })
+                  .then((response) => response.json())
+                  .then((data) => {
+                    console.log('Product added to cart:', data);
+                  })
+                  .catch((error) => {
+                    console.error('Error adding product to cart:', error);
+                  });
+              };
+            
 
           return (
             <Card
