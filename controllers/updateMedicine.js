@@ -1,4 +1,4 @@
-const PharmacyPatient = require('../models/PharmacyPatient');
+const PharmacyPatient = require('../models/Patient');
 const Cart = require('../models/Cart');
 const stripe = require("stripe")(process.env.SECRET_KEY);
 const Medicine = require('../models/Medicine');
@@ -34,7 +34,7 @@ const updateMedicine = async(req, res) =>{
 const getCart = async(req, res) => {
     try{
         const username = req.query.username;
-        const patient = await Patient.findOne({Username: username});
+        const patient = await PharmacyPatient.findOne({Username: username});
         const patientCart = patient.Cart.items;
         var medicineArray = [];
         for(let i = 0; i<patientCart.length; i++){
