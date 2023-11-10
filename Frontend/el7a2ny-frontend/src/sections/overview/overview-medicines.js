@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
@@ -30,11 +30,43 @@ export const OverviewLatestProducts = (props) => {
   const [selectedQuantities, setSelectedQuantities] = useState({});
 
   const username = Cookies.get("username");
-console.log(username);
+  console.log(username);
   const handleQuantityChange = (event, productId) => {
     const updatedQuantities = { ...selectedQuantities };
     updatedQuantities[productId] = event.target.value;
     setSelectedQuantities(updatedQuantities);
+  };
+
+  const handleAddToCart = (productID) => {
+    const quantity = selectedQuantities[productID];
+    
+    console.log("in CART");
+    console.log(quantity);
+    console.log(productID);
+    if (quantity) {
+      addToCartApiCall(username, productID, quantity);
+    }
+  };
+
+  const addToCartApiCall = (username, productId, quantity) => {
+    fetch(`http://localhost:8000/updateMedicine`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        Username: username,
+        productID: productId,
+        quantity,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log('Product added to cart:', data);
+      })
+      .catch((error) => {
+        console.error('Error adding product to cart:', error);
+      });
   };
 
   return (
@@ -46,31 +78,11 @@ console.log(username);
       >
         {products.map((product, index) => {
 
-        const handleAddToCart = (product) => {
-            const quantity = selectedQuantities[product.id];
-
-            fetch(`/updateMedicine${username, product.id, quantity}`, {
-                method: 'POST',
-                headers: {
-                'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                productID: product.id,
-                quantity,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                console.log('Product added to cart:', data);
-                })
-                .catch((error) => {
-                console.error('Error adding product to cart:', error);
-                });
-        };
+            console.log(product);
 
           return (
             <Card
-              key={product.id}
+              key={product._id}
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -130,18 +142,18 @@ console.log(username);
                   color="primary"
                   variant="contained"
                   size="small"
-                  onClick={handleAddToCart}
+                  onClick={handleAddToCart(product._id)}
                 >
                   Add to Cart
                 </Button>
                 <Box sx={{ marginRight: 8 }} /> {/* Add space between the select and the button */}
                 <FormControl variant="outlined" size="small" sx={{ minWidth: 80 }}>
-                  <InputLabel id={`quantity-label-${product.id}`}>Quantity</InputLabel>
+                  <InputLabel id={`quantity-label-${product._id}`}>Quantity</InputLabel>
                   <Select
-                    labelId={`quantity-label-${product.id}`}
-                    id={`quantity-${product.id}`}
-                    value={selectedQuantities[product.id] || 1}
-                    onChange={(event) => handleQuantityChange(event, product.id)}
+                    labelId={`quantity-label-${product._id}`}
+                    id={`quantity-${product._id}`}
+                    value={selectedQuantities[product._id] || 1}
+                    onChange={(event) => handleQuantityChange(event, product._id)}
                   >
                     <MenuItem value={1}>1</MenuItem>
                     <MenuItem value={2}>2</MenuItem>
