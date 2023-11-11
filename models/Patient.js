@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Prescription = require('./Prescription');
 const Cart = require('./Cart');
 const Schema = mongoose.Schema;
-
+const Order = require('./Order');
 const patientSchema = new Schema({
     FirstName: {
         type: String,
@@ -82,6 +82,10 @@ const patientSchema = new Schema({
     },
     Cart :{
         type: Cart.schema,
+        required: false
+    }
+    , Orders: {
+        type: [Order.schema],
         required: false
     }
 }, {timestamps: true});
