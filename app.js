@@ -214,7 +214,7 @@ app.get("/viewMedicines", (req, res) => {
     res.sendFile(filePath);
 });
 
-
+//
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
 app.use('/CreateAdmin', AdminRoutes);
