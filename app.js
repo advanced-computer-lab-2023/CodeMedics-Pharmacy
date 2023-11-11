@@ -26,7 +26,6 @@ app.listen(Port, () => {
     console.log("Server running at http://localhost:" + Port + "/");
 });
 
-const formData = require("express-form-data");
 const os = require("os");
 /**
  * Options are the same as multiparty takes.
@@ -38,37 +37,24 @@ const options = {
     autoClean: true
 };
 
-// parse data with connect-multiparty. 
-app.use(formData.parse(options));
-// delete from the request all empty files (size == 0)
-app.use(formData.format());
-// change the file objects to fs.ReadStream 
-app.use(formData.stream());
-// union the body and the files
-app.use(formData.union());
+// // parse data with connect-multiparty. 
+// app.use(formData.parse(options));
+// // delete from the request all empty files (size == 0)
+// app.use(formData.format());
+// // change the file objects to fs.ReadStream 
+// app.use(formData.stream());
+// // union the body and the files
+// app.use(formData.union());
 
 // Import your routes here
 const path = require('path');
-const {registerPPatient, registerPharmacist, upload, loginUser} = require('./controllers/GuestController');
+const upload = require('./config/multerConfig');
+const { registerPPatient, registerPharmacist ,  loginUser } = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
-const {
-    createAdmin,
-    removePharmacist,
-    removePatient,
-    viewPharmacistApplications,
-    viewPharmacists,
-    viewPatients
-} = require('./controllers/AdminController');
-const {
-    addMedicine,
-    editMedicine,
-    viewMedicines,
-    viewMedicinesPharmacist,
-    searchMedicine,
-    getMedicinesByMedicalUse,
-    getMedicalUses
-} = require('./controllers/MedicineController'); // Import MedicineController
+const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');
+const {multerMiddleware, addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); 
+
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
@@ -86,10 +72,10 @@ app.get("/register", (req, res) => {
     res.sendFile(filePath);
 });
 
-app.get("/Pharmregister", (req, res) => {
-    const filePath = path.join(__dirname, "pages", "PharmRegister.html");
-    res.sendFile(filePath);
-});
+// app.get("/Pharmregister", (req, res) => {
+//     const filePath = path.join(__dirname, "pages", "PharmRegister.html");
+//     res.sendFile(filePath);
+// });
 
 app.patch("/updateMedicine", updateMedicine);
 
@@ -100,7 +86,7 @@ app.get("/editMedicine", (req, res) => {
 });
 
 app.use('/register', AuthRoutes);
-app.use('/Pharmregister', AuthRoutes);
+//app.use('/Pharmregister', AuthRoutes);
 
 
 app.put('/editMedicine', editMedicine);
@@ -216,17 +202,21 @@ app.get("/viewMedicines", (req, res) => {
 
 
 app.use('/register', AuthRoutes);
-app.use('/Pharmregister', AuthRoutes);
+// app.use('/Pharmregister', AuthRoutes);
 app.use('/CreateAdmin', AdminRoutes);
 
 app.use('/uploads', express.static('uploads'));
 app.post("/register", registerPPatient);
-app.post("/Pharmregister", registerPharmacist, upload.fields([[
-    {name: 'IDDocument', maxCount: 1},
-    {name: 'pharmacyDegree', maxCount: 1},
-    {name: 'workingLicense', maxCount: 1}
-]]));
-app.post("/addMedicine", addMedicine);
+
+app.post('/Pharmregister', upload.fields([
+    { name: 'IDDocument', maxCount: 1 },
+    { name: 'pharmacyDegree', maxCount: 1 },
+    { name: 'workingLicense', maxCount: 1 }
+  ]), registerPharmacist);
+
+
+app.post('/addMedicine',multerMiddleware, addMedicine);
+
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
 app.get("/getCart", getCart);
