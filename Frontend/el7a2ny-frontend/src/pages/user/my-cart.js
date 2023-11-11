@@ -29,7 +29,6 @@ const Page = () => {
         try {
             axios.get(`http://localhost:8000/getCart?username=${username}`, {})
                 .then((res) => {
-                    
                     return res['data'];
                 })
                 .then((data) => {
@@ -63,6 +62,7 @@ const Page = () => {
                             lg={15}
                         >
                             <OverviewLatestOrders
+                        
                                 orders={cart}
                                 sx={{ height: '100%' }}
                             />
