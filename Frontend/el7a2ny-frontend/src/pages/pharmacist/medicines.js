@@ -102,28 +102,7 @@ const Page = () => {
   );
 
   const handleData = () => {
-    console.log("searchData" , searchData);
-    console.log("filteredData" , filteredData);
-    let temp = [];
-    for(let i = 0 ; i < allData.length ; i++){
-      let ok = false , ok2 = false;
-      for(let j = 0; j< searchData.length ; j++){
-        if(allData[i]._id === searchData[j]._id){
-          ok = true;
-          break;
-        }
-      }
-      for(let j = 0; j< filteredData.length ; j++){
-        if(allData[i]._id === filteredData[j]._id){
-          ok2 = true;
-          break;
-        }
-      }
-      if(ok && ok2){
-        temp.push(allData[i]);
-      }
-    }
-    setData(temp);
+    setData(allData.filter((medicine) => filteredData.includes(medicine) && searchData.includes(medicine)));
   }
 
   const handleSearch = (str) => {
@@ -140,13 +119,7 @@ const Page = () => {
       setFilteredData(allData);
     }
     else{
-      let tmp = [];
-      for(let i = 0 ; i < allData.length ; i++){
-        if(allData[i].medicalUse === (str)){
-          tmp.push(allData[i]);
-        }
-      }
-      setFilteredData(tmp);
+      setFilteredData(allData.filter((medicine) => medicine.medicalUse === (str)));
     }
   }
 

@@ -140,6 +140,7 @@ const Page = ({}) => {
                     <TextField
                     error = {!!(formik.touched.name && formik.errors.name)}
                     fullWidth
+                    disabled
                     helperText={formik.touched.name && formik.errors.name}
                     label="Name"
                     name="name"

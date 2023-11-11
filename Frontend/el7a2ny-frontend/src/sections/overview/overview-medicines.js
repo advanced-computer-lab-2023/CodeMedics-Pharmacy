@@ -30,7 +30,7 @@ export const OverviewLatestProducts = (props) => {
   const [selectedQuantities, setSelectedQuantities] = useState({});
 
   const username = Cookies.get("username");
-  console.log(username);
+  // console.log(username);
   const handleQuantityChange = (event, productId) => {
     const updatedQuantities = { ...selectedQuantities };
     updatedQuantities[productId] = event.target.value;
@@ -47,7 +47,7 @@ export const OverviewLatestProducts = (props) => {
       >
         {products.map((product, index) => {
 
-            console.log(product);
+            // console.log(product);
 
             const handleAddToCart = (productID) => {
                 const quantity = selectedQuantities[productID];
