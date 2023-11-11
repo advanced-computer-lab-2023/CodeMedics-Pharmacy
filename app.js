@@ -217,7 +217,7 @@ app.post('/Pharmregister', upload.fields([
   ]), registerPharmacist);
 
 
-// app.post('/addMedicine',multerMiddleware, addMedicine);
+app.post('/addMedicine',multerMiddleware, addMedicine);
 
 
 app.post("/addUser", registerPPatient);

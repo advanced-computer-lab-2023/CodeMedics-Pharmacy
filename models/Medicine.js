@@ -10,10 +10,6 @@ const medicineSchema = new Schema({
         type: String,
         required: [true, 'Please enter the medicine description'],
     },
-    Picture : {
-        type: String,
-        required: [true, 'Please enter the medicine picture']
-    },
     activeIngredients: {
         type: [String],
         required: [true, 'Please enter the active ingredients'],
@@ -36,6 +32,9 @@ const medicineSchema = new Schema({
         type: Number,
         required: [true, 'Please enter the available quantity'],
      
+    },Picture : {
+        type: String,
+        required: [true, 'Please enter the medicine picture']
     },
     
 }, { timestamps: true });
