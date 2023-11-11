@@ -6,26 +6,45 @@ import * as Yup from 'yup';
 import { Box, Button, Container, Stack, SvgIcon, Typography , TextField } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useState } from 'react';
 
 
 
 const Page = ({}) => {
-    const router = useRouter();
-
-    // useEffect(() => {
+  const router = useRouter();
+  const [auth , setAuth] = useState(false);
+  useEffect(() => {
+    if(!Cookies.get('token')) 
+      router.replace('/auth/login');
+    else{
+        axios.post('http://localhost:8000/auth',{
+          "token": Cookies.get('token'),
+          "type": 'pharmacist'
+        }).then((res) => {
+          return res;
+        })
+        .then((data) => {
+          setAuth(true);
+        })
+        .catch((err) => {
+          router.replace('/pharmacist/404');
+        });
+    }
+    },[]);
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('data');
-    const medicine = JSON.parse(decodeURIComponent(encodedData));
-    console.log(medicine);
+    const medicine = JSON.parse(decodeURIComponent(encodedData)) || {"activeIngredients":["asd"]};
+
     const formik = useFormik({
         initialValues: {
-            name: medicine['name'],
-            price: medicine['price'],
-            availableQuantity: medicine['availableQuantity'],
-            description: medicine['Description'],
-            activeIngredient: medicine['activeIngredients'][0],
-            medicalUse: medicine['medicalUse'],
-            picture: medicine['Picture'],
+            name: medicine['name']??'',
+            price: medicine['price']??0,
+            availableQuantity: medicine['availableQuantity']??'',
+            description: medicine['Description']??'',
+            activeIngredient: medicine['activeIngredients'][0]??'',
+            medicalUse: medicine['medicalUse']??'',
+            picture: medicine['Picture']??'',
             submit: null
         },
         validationSchema: Yup.object({
@@ -88,7 +107,7 @@ const Page = ({}) => {
       });
   
 
-  return (
+  return (auth &&
     <>
       <Head>
         <title>

@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import { subDays, subHours } from 'date-fns';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
@@ -11,11 +12,36 @@ import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-cus
 import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 const now = new Date();
 
-const Page = (req) => (
+const Page = () => {
+  const router = useRouter();
+  const [auth , setAuth] = useState(false);
 
+  useEffect(() => {
+  if(!Cookies.get('token')) 
+    router.replace('/auth/login');
+  else{
+      axios.post('http://localhost:8000/auth',{
+        "token": Cookies.get('token'),
+        "type": 'pharmacist'
+      }).then((res) => {
+        return res;
+      })
+      .then((data) => {
+        setAuth(true);
+      })
+      .catch((err) => {
+        router.replace('/pharmacist/404');
+      });
+  }
+  },[]);
+
+
+  return( auth && 
   <>
     <Head>
       <title>
@@ -223,7 +249,7 @@ const Page = (req) => (
       </Container>
     </Box>
   </>
-);
+);}
 
 Page.getLayout = (page) => (
   <DashboardLayout>

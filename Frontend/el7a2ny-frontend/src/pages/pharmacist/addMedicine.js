@@ -1,15 +1,37 @@
 import Head from 'next/head';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { Box, Button, Container, Stack, SvgIcon, Typography , TextField } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography , TextField ,CardContent,Card} from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import axios from 'axios';
 
 
 
 const Page = () => {
-    const router = useRouter();
+  const router = useRouter();
+  const [auth , setAuth] = useState(false);
+
+  useEffect(() => {
+    if(!Cookies.get('token')) 
+      router.replace('/auth/login');
+    else{
+        axios.post('http://localhost:8000/auth',{
+          "token": Cookies.get('token'),
+          "type": 'pharmacist'
+        }).then((res) => {
+          return res;
+        })
+        .then((data) => {
+          setAuth(true);
+        })
+        .catch((err) => {
+          router.replace('/pharmacist/404');
+        });
+    }
+    },[]);
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -81,7 +103,7 @@ const Page = () => {
       });
   
 
-  return (
+  return (auth &&
     <>
       <Head>
         <title>
@@ -109,6 +131,8 @@ const Page = () => {
               noValidate
               onSubmit={formik.handleSubmit}
             >
+              <Card>
+                <CardContent>
               <Stack spacing={3} >
                 <Stack spacing={3} direction="row">
                     <TextField
@@ -202,8 +226,10 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Add
+                Submit
               </Button>
+              </CardContent>
+              </Card>
             </form>
             </Stack>
           </Stack>

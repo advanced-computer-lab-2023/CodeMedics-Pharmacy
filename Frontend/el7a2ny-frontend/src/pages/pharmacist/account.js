@@ -3,8 +3,35 @@ import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from '@mui/
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import { AccountProfile } from 'src/sections/account/account-profile';
 import { AccountProfileDetails } from 'src/sections/account/account-profile-details';
+import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 
-const Page = () => (
+const Page = () => {
+  const router = useRouter();
+  const [auth , setAuth] = useState(false);
+
+  useEffect(() => {
+    if(!Cookies.get('token')) 
+      router.replace('/auth/login');
+    else{
+        axios.post('http://localhost:8000/auth',{
+          "token": Cookies.get('token'),
+          "type": 'pharmacist'
+        }).then((res) => {
+          return res;
+        })
+        .then((data) => {
+          setAuth(true);
+        })
+        .catch((err) => {
+          router.replace('/pharmacist/404');
+        });
+    }
+    },[]);
+  return(auth &&
   <>
     <Head>
       <title>
@@ -50,7 +77,7 @@ const Page = () => (
       </Container>
     </Box>
   </>
-);
+);}
 
 Page.getLayout = (page) => (
   <DashboardLayout>

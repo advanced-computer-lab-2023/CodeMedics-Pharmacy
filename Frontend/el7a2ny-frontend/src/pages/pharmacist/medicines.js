@@ -8,12 +8,14 @@ import { MedicinesTable } from 'src/sections/pharmacist/medicines/medicines-tabl
 import { CustomersSearch } from 'src/sections/pharmacist/medicines/medicines-search';
 import { applyPagination } from 'src/utils/apply-pagination';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import { set } from 'nprogress';
 import { bool } from 'prop-types';
 
 const now = new Date();
 
-const useCustomers = (data, page, rowsPerPage) => {
+const useMedicines = (data, page, rowsPerPage) => {
   return useMemo(
     () => {
       return applyPagination(data, page, rowsPerPage);
@@ -22,7 +24,7 @@ const useCustomers = (data, page, rowsPerPage) => {
   );
 };
 
-const useCustomerIds = (customers) => {
+const useMedicineIds = (customers) => {
   return useMemo(
     () => {
       return customers.map((customer) => customer.id);
@@ -37,11 +39,30 @@ const Page = () => {
   const [allData , setAllData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const customers = useCustomers(data, page, rowsPerPage);
-  const customersIds = useCustomerIds(customers);
+  const customers = useMedicines(data, page, rowsPerPage);
+  const customersIds = useMedicineIds(customers);
   const customersSelection = useSelection(customersIds);
   const router = useRouter();
+  const [auth , setAuth] = useState(false);
 
+  useEffect(() => {
+    if(!Cookies.get('token')) 
+      router.replace('/auth/login');
+    else{
+        axios.post('http://localhost:8000/auth',{
+          "token": Cookies.get('token'),
+          "type": 'pharmacist'
+        }).then((res) => {
+          return res;
+        })
+        .then((data) => {
+          setAuth(true);
+        })
+        .catch((err) => {
+          router.replace('/pharmacist/404');
+        });
+    }
+    },[]);
 
   useEffect(() => {
     fetch('http://localhost:8000/Medicines')
@@ -129,7 +150,7 @@ const Page = () => {
     }
   }
 
-  return (
+  return ( auth &&
     <>
       <Head>
         <title>

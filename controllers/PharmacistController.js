@@ -16,6 +16,8 @@ const createToken = (username) => {
 };
 
 
+
+
 // const viewMedicines = async (req, res) => {
 //     try {
 //         const medicines = await medicineModel.find();

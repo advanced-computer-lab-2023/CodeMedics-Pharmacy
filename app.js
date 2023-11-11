@@ -218,6 +218,7 @@ app.get("/viewMedicines", (req, res) => {
 app.use('/register', AuthRoutes);
 app.use('/Pharmregister', AuthRoutes);
 app.use('/CreateAdmin', AdminRoutes);
+app.use('/auth' , AuthRoutes);
 
 app.use('/uploads', express.static('uploads'));
 app.post("/register", registerPPatient);

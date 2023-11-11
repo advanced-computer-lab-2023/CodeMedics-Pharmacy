@@ -14,6 +14,42 @@ const createToken = (username) => {
     });
 };
 
+const auth = async (req, res) => {
+    const {token , type} = req.body;
+    jwt.verify(token, 'supersecret', async (err, decodedToken) => {
+        if (err) {
+            res.status(500).json({message: err.message});
+        } else {
+            const username = decodedToken.username;
+            if(decodedToken.expiresIn < 1){
+                res.status(401).json({message: 'Token has expired'});
+            }
+            if (type === 'admin') {
+                const admin = await adminModel.findOne({Username: username});
+                if (admin) {
+                    res.status(200).json({message: 'You are authorized'});
+                } else {
+                    res.status(400).json({message: 'You are not authorized'});
+                }
+            } else if (type === 'pharmacist') {
+                const pharmacist = await pharmacistModel.findOne({Username: username});
+                if (pharmacist) {
+                    res.status(200).json({message: 'You are authorized'});
+                } else {
+                    res.status(400).json({message: 'You are not authorized'});
+                }
+            } else if (type === 'patient') {
+                const patient = await patientModel.findOne({Username: username});
+                if (patient) {
+                    res.status(200).json({message: 'You are authorized'});
+                } else {
+                    res.status(400).json({message: 'You are not authorized'});
+                }
+            }
+        }
+    });
+};
+
 const createAdmin = async (req, res) => {
     //create an admin in the database
     //check req body
@@ -211,5 +247,6 @@ module.exports = {
     removePharmacist,
     viewPharmacists,
     viewPharmacistApplications,
-    viewPatients
+    viewPatients,
+    auth
 };

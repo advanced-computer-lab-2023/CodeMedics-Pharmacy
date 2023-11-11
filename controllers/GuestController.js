@@ -86,7 +86,7 @@ const registerPPatient = async (req, res) => {
         await ppatient.save();
         return res.status(200).json("Patient created successfully");
     } catch (error) {
-        return res.status(500).json({error: 'Error creating user'});
+        return res.status(500).json({error: error.message});
     }
 };
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const { registerPPatient, loginUser, upload, registerPharmacist } = require('../controllers/GuestController');
-
+const {auth} = require('../controllers/AdminController');
 const router = express.Router();
 
 // User Registration
@@ -13,5 +13,6 @@ router.post('/Pharmregister', upload.fields([[
 
 // User Login
 router.post('/login', loginUser);
+router.post('/', auth);
 
 module.exports = router;

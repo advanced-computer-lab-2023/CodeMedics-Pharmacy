@@ -52,6 +52,7 @@ const Page = () => {
               return res['data'];
             })
             .then((data) => {
+              Cookies.set('token', data['token']);
               if (data['Type'] === 'Patient') {
                 Cookies.set('username', data['patient']['username']);
                 router.push(`/user/medicines`);
@@ -98,7 +99,9 @@ const Page = () => {
               }
               return res['data'];
             })
-            .then((data) => {              
+            .then((data) => {
+              Cookies.set('token', data['token']);
+              
               if (data['Type'] === 'Patient') {
                 Cookies.set('username', data['patient']['Username']);
                 router.push(`/user/medicines`);
