@@ -49,7 +49,7 @@ app.use(formData.union());
 
 // Import your routes here
 const path = require('path');
-const {registerPPatient, registerPharmacist, upload, loginUser} = require('./controllers/GuestController');
+const {registerPPatient, registerPharmacist, upload, loginUser, changePassword} = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
 const {
@@ -92,6 +92,7 @@ app.get("/Pharmregister", (req, res) => {
 });
 
 app.patch("/updateMedicine", updateMedicine);
+app.patch("/changePassword", changePassword);
 
 app.post("/edit", editMedicine);
 app.get("/editMedicine", (req, res) => {

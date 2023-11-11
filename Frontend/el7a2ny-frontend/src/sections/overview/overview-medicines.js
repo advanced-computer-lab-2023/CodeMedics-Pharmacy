@@ -113,7 +113,7 @@ export const OverviewLatestProducts = (props) => {
                         borderRadius: '70%',
                         height: 130,
                         width: 130,
-                        objectFit: 'cover',
+                        objectFit: 'contain',
                         margin: '0 auto',
                       }}
                     />

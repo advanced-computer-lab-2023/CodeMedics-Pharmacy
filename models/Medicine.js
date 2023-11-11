@@ -32,6 +32,10 @@ const medicineSchema = new Schema({
     
         default :0,
     },
+    otc:{
+        type: Boolean,
+        default: true
+    },
     availableQuantity: {
         type: Number,
         required: [true, 'Please enter the available quantity'],

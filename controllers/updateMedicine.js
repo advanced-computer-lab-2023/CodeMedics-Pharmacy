@@ -15,21 +15,31 @@ const updateMedicine = async(req, res) =>{
         patientCart = new Cart();
     }
     let found = false;
-    for(let i = 0; i < patientCart.items.length; i++){
-        if(patientCart.items[i].MedicineId == productID){
-            found = true;
-            patientCart.items[i].Quantity += quantity;
-            if(patientCart.items[i].Quantity <= 0)patientCart.items.splice(i, 1);
+    const medicine = Medicine.findOne({_id: productID});
+    const prescriptions = patient.Prescriptions;
+    const foundInPrescription = false;
+    for(let i = 0; i<prescriptions.length; i++){
+        const p = prescriptions[i];
+        if(p.Drug === medicine.name){
+            foundInPrescription = true;
             break;
         }
     }
-    if(!found){
-        patientCart.items.push({MedicineId: productID, Quantity: quantity});
+    if(medicine.otc || foundInPrescription){
+        for(let i = 0; i < patientCart.items.length; i++){
+            if(patientCart.items[i].MedicineId == productID){
+                found = true;
+                patientCart.items[i].Quantity += quantity;
+                if(patientCart.items[i].Quantity <= 0)patientCart.items.splice(i, 1);
+                break;
+            }
+        }
+        if(!found){
+            patientCart.items.push({MedicineId: productID, Quantity: quantity});
+        }
+        patient.Cart = patientCart;
+        await patient.save();
     }
-
-    patient.Cart = patientCart;
-    await patient.save();
-
 }
 
 const getCart = async(req, res) => {

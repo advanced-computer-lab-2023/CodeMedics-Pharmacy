@@ -210,4 +210,21 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = {registerPPatient, registerPharmacist, upload, loginUser, logout};
+const changePassword = async (req, res) => {
+    try{
+        const {username, newPassword} = req.body;
+        console.log("HERE IN CHANGEPASSWORD");
+        const patient = await anotherPatientModel.findOne({Username: username});
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        patient.Password = hashedPassword;
+        await patient.save();
+        return res.status(200).json("Changed Password Successfully");
+
+    } catch(error){
+        console.log(error)
+        return res.status(500).json(error);
+    }
+};
+
+module.exports = {registerPPatient, registerPharmacist, upload, loginUser, logout, changePassword};

@@ -1,8 +1,11 @@
 import Head from 'next/head';
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
-import { AccountProfile } from 'src/sections/pharmacist/account/account-profile';
-import { AccountProfileDetails } from 'src/sections/pharmacist/account/account-profile-details';
+import { AccountProfile } from 'src/sections/patient/account-profile';
+import { AccountProfileDetails } from 'src/sections/patient/account-profile-details';
+import Cookies from 'js-cookie';
+
+const username = Cookies.get('username');
 
 const Page = () => (
   <>
