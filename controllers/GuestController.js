@@ -5,29 +5,10 @@ const Administrator = require("../models/Administrator");
 const PharmRequest = require("../models/pharmacistRequests");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-
-const multer = require('multer');
-const path = require('path');
-
+const upload = require('../config/multerConfig');
 //The one with shopping cart
 const anotherPatientModel = require('../models/Patient');
 
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/'); // Destination directory for storing uploaded files
-    },
-    filename: function (req, file, cb) {
-        let ext = path.extname(file.originalname)
-        cb(null, Date.now() + ext) // Set the filename of the uploaded file
-    }
-});
-
-
-const upload = multer({
-    storage: storage,
-    limits: { fileSize: 1024 * 1024 * 5 } // Set a limit of 5MB per file
-});
 
 // create json web token
 const maxAge = 3 * 24 * 60 * 60;
@@ -82,56 +63,54 @@ const registerPPatient = async (req, res) => {
     }
 };
 
-const registerPharmacist = (req, res) => {
-    // Set up the multer middleware before this function
-    // Use upload.fields middleware to handle file uploads for 'IDDocument', 'pharmacyDegree', 'workingLicense'
 
-    // Handle the file upload and registration
-    upload.fields([
-        { name: 'IDDocument', maxCount: 1 },
-        { name: 'pharmacyDegree', maxCount: 1 },
-        { name: 'workingLicense', maxCount: 1 }
-    ])(req, res, async (err) => {
-        if (err) {
-            console.error('File upload failed:', err);
-            return res.status(500).json({ error: 'File upload failed', detailedError: err.message });
+const registerPharmacist = async (req, res) => {
+    try {
+        // Process the registration and uploaded files
+        const { username, name, email, password, dob, gender, hourlyRate, affiliation, educationalBackground } = req.body;
+
+        // Check for uploaded files
+        if (!req.files || Object.keys(req.files).length !== 3) {
+            return res.status(400).json({ message: 'Please upload ID Document, Medical Degree, and Medical License' });
         }
 
-        try {
-            // Process the registration and uploaded files
-            const { username, name, email, password, dob, gender, hourlyRate, affiliation, educationalBackground } = req.body;
+        const { IDDocument, pharmacyDegree, workingLicense } = req.files;
 
-            // Check if files are present
-            if (!req.files) {
-                return res.status(400).json({ error: 'No files uploaded' });
-            }
-
-            const salt = await bcrypt.genSalt(10);
-            const hashedPassword = await bcrypt.hash(password, salt);
-
-            const newPharm = new PharmRequest({
-                username,
-                name,
-                email,
-                password: hashedPassword,
-                dob,
-                gender,
-                hourlyRate,
-                affiliation,
-                educationalBackground,
-                IDDocument: req.files['IDDocument'][0].path,
-                pharmacyDegree: req.files['pharmacyDegree'][0].path,
-                workingLicense: req.files['workingLicense'][0].path
-            });
-
-            // Save the new PharmRequest to the database
-            await newPharm.save();
-            res.status(201).json(newPharm); // Respond with the created PharmRequest details
-        } catch (error) {
-            console.error('Error processing request:', error);
-            res.status(500).json({ error: 'Error processing request', detailedError: error.message });
+        // Ensure that exactly one file is uploaded for each field
+        if (!IDDocument || !pharmacyDegree || !workingLicense) {
+            return res.status(400).json({ message: 'Please upload one file for each of the following: ID Document, Medical Degree, Medical License' });
         }
-    });
+
+        // Handle file uploads (files are available in req.files)
+        const idDocumentFile = IDDocument[0].filename;
+        const pharmacyDegreeFile = pharmacyDegree[0].filename;
+        const workingLicenseFile = workingLicense[0].filename;
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        const newPharm = new PharmRequest({
+            username,
+            name,
+            email,
+            password: hashedPassword,
+            dob,
+            gender,
+            hourlyRate,
+            affiliation,
+            educationalBackground,
+            IDDocument: idDocumentFile,
+            pharmacyDegree: pharmacyDegreeFile,
+            workingLicense: workingLicenseFile,
+        });
+
+        // Save the new PharmRequest to the database
+        await newPharm.save();
+        res.status(201).json(newPharm); // Respond with the created PharmRequest details
+    } catch (error) {
+        console.error('Error processing request:', error);
+        res.status(500).json({ error: 'Error processing request', detailedError: error.message });
+    }
 };
 
 const logout = async (req, res) => {
@@ -193,4 +172,4 @@ const loginUser = async (req, res) => {
     }
 };
 
-module.exports = { registerPPatient, registerPharmacist, upload, loginUser, logout };
+module.exports = { registerPPatient, registerPharmacist, loginUser, logout };

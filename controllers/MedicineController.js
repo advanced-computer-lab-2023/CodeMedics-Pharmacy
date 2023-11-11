@@ -27,11 +27,14 @@
 //         res.status(500).json({ error: 'Error adding medicine' });
 //     }
 // };
-
-
+const upload = require('../config/multerConfig');
+const multerMiddleware = upload.single('Picture');
 const addMedicine = async (req, res) => {
     try {
-        const { name, Description, Picture, activeIngredients, price, medicalUse, availableQuantity } = req.body;
+        const { name, Description, activeIngredients, price, medicalUse, availableQuantity } = req.body;
+        if (!req.file) {
+            return res.status(400).json({ message: 'Please upload Medicine Picture' });
+        }
 
         // Check if the medicine already exists in the database
         const existingMedicine = await medicineModel.findOne({ name });
@@ -46,14 +49,14 @@ const addMedicine = async (req, res) => {
             const newMedicine = new medicineModel({
                 name,
                 Description,
-                Picture,
                 activeIngredients,
                 price,
                 medicalUse,
-                availableQuantity: availableQuantity, // Set the available quantity to the specified quantity
+                availableQuantity: availableQuantity, 
+                Picture : req.file.filename
             });
 
-            // Save the new medicine to the database
+
             await newMedicine.save();
 
             res.status(200).json(newMedicine);
@@ -200,7 +203,7 @@ const viewMedicinesPharmacist = async (req, res) => {
 
 
 
-  module.exports = { addMedicine,editMedicine, viewMedicines,viewMedicinesPharmacist,getMedicinesByMedicalUse,searchMedicine, getMedicalUses };
+  module.exports = { multerMiddleware, addMedicine,editMedicine, viewMedicines,viewMedicinesPharmacist,getMedicinesByMedicalUse,searchMedicine, getMedicalUses };
   
 
 
