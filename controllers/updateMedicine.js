@@ -19,6 +19,7 @@ const updateMedicine = async(req, res) =>{
         if(patientCart.items[i].MedicineId == productID){
             found = true;
             patientCart.items[i].Quantity += quantity;
+            if(patientCart.items[i].Quantity <= 0)patientCart.items.splice(i, 1);
             break;
         }
     }
@@ -36,6 +37,7 @@ const getCart = async(req, res) => {
         const username = req.query.username;
         console.log(username);
         const patient = await PharmacyPatient.findOne({Username: username});
+        if(!patient.Cart) return res.status(200).json([]);
         const patientCart = patient.Cart.items;
         var medicineArray = [];
         for(let i = 0; i<patientCart.length; i++){
@@ -51,6 +53,7 @@ const getCart = async(req, res) => {
         console.log(medicineArray);
         return res.status(200).json(medicineArray);
     }catch(err){
+        console.log(err)
         return res.status(400).json(err);
     }
     
