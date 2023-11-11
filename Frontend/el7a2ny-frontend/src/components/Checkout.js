@@ -20,7 +20,7 @@ function Copyright() {
     <Typography variant="body2" color="text.secondary" align="center">
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        Your Website
+        Code-m
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -54,6 +54,7 @@ export default function Checkout() {
     setActiveStep(activeStep - 1);
   };
 
+
   return (
     <React.Fragment>
       <CssBaseline />
@@ -68,7 +69,7 @@ export default function Checkout() {
       >
         <Toolbar>
           <Typography variant="h6" color="inherit" noWrap>
-            Company name
+            Code-Medics Pharmacy
           </Typography>
         </Toolbar>
       </AppBar>
