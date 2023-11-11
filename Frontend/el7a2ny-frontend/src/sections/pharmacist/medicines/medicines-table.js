@@ -115,7 +115,7 @@ export const MedicinesTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={medicine.avatar}>
+                        <Avatar src={medicine.Picture}>
                           {getInitials(medicine.name)}
                         </Avatar>
                         <Typography variant="subtitle2">

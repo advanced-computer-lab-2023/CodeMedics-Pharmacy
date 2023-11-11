@@ -15,6 +15,6 @@ router.post('/Pharmregister', upload.fields([
 
 // User Login
 router.post('/login', loginUser);
-// router.post('/', auth);
+router.post('/', auth);
 
 module.exports = router;

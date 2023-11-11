@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { Box, Container, Unstable_Grid2 as Grid, Stack, Typography } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
 import { OverviewLatestProducts } from 'src/sections/overview/overview-medicines';
-import { CustomersSearch } from 'src/sections/user/medicines-search';
+import { CustomersSearch } from 'src/sections/user/medicines/medicines-search';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 

@@ -39,7 +39,7 @@ export const items = [
   },
   {
     title: 'Check Out',
-    path: '/user/orders',
+    path: '/user/checkout',
     icon: (
       <SvgIcon fontSize="small">
         <CurrencyDollarIcon />
