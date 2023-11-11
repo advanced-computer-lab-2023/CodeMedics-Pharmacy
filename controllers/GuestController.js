@@ -194,4 +194,4 @@ const changePassword = async (req, res) => {
     }
 };
 
-module.exports = {registerPPatient, registerPharmacist, upload, loginUser, logout, changePassword};
+module.exports = {registerPPatient, registerPharmacist, loginUser, logout, changePassword};

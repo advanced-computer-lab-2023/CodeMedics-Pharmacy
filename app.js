@@ -4,7 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const app = express();
-const Port = process.env.PORT || 3000;
+const Port = process.env.PORT || 8000;
 //const DeleteModelRecords = require('./config/DeleteAllRecords');
 
 const MongoURI = process.env.MONGO_URI;
@@ -50,7 +50,7 @@ const options = {
 const path = require('path');
 
 const upload = require('./config/multerConfig');
-const {registerPPatient, registerPharmacist, upload, loginUser, changePassword} = require('./controllers/GuestController');
+const {registerPPatient, registerPharmacist, loginUser, changePassword} = require('./controllers/GuestController');
 
 const AdminRoutes = require('./routes/AdminRoutes')
 const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');

@@ -40,6 +40,8 @@ export const SettingsPassword = () => {
         return;
       }
 
+
+
       try {
         const response = await fetch('http://localhost:8000/changePassword', {
           method: 'PATCH',
