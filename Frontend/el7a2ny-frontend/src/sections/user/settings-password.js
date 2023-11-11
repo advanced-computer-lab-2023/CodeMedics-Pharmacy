@@ -9,64 +9,12 @@ import {
   Stack,
   TextField
 } from '@mui/material';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
-import axios from 'axios';
+
 import Cookies from 'js-cookie';
 
 const username = Cookies.get('username');
 
 export const SettingsPassword = () => {
-  const formik = useFormik({
-    initialValues: {
-      password: '',
-      confirmPassword: '',
-      submit: null
-    },
-    validationSchema: Yup.object({
-      password: Yup
-        .string()
-        .max(255)
-        .required('Password is required'),
-        confirmPassword: Yup
-        .string()
-        .max(255)
-        .required('Confirmation Password is required')
-        .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    }),
-    onSubmit: async (values, helpers) => {
-      if (values.password !== values.confirm) {
-        
-      }else{
-        try {
-            const body = {"email": values.email, "password": values.password};
-            await axios.post('http://localhost:8000/login' , body)
-              .then((res) => { 
-                console.log(res);
-                return res['data'];
-              })
-              .then((data) => {
-                Cookies.set('token', data['token']);
-                if (data['Type'] === 'Patient') {
-                  Cookies.set('username', data['patient']['username']);
-                  router.push(`/user/medicines`);
-                } else if (data['Type'] === 'Pharmacist') {
-                  Cookies.set('username', data['pharmacist']['username']);
-                  router.push(`/pharmacist`);
-                } else if (data['Type'] === 'Admin') {
-                  Cookies.set('username', data['admin']['username']);
-                  router.push(`/admin`);
-                }
-              });
-        } catch (err) {
-          helpers.setStatus({ success: false });
-          helpers.setErrors({ submit: err.response.data.message });
-          helpers.setSubmitting(false);
-        }
-      }
-    }
-  });
-
   const [values, setValues] = useState({
     password: '',
     confirm: ''
@@ -85,10 +33,18 @@ export const SettingsPassword = () => {
   const handleSubmit = useCallback(
     async (event) => {
       event.preventDefault();
+
+      // Check if password and confirm match
       if (values.password !== values.confirm) {
         console.error('Passwords do not match');
         return;
       }
+
+      if(values.password.length === 0){
+        console.error("No Password was provided");
+        return; 
+      }
+
       try {
         const response = await fetch('http://localhost:8000/changePassword', {
           method: 'PATCH',
@@ -100,8 +56,10 @@ export const SettingsPassword = () => {
             newPassword: values.password,
           }),
         });
+
         if (response.ok) {
           console.log('Password updated successfully');
+          // Optionally, you can perform additional actions after a successful update
         } else {
           console.error('Failed to update password');
         }
