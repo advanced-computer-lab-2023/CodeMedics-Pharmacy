@@ -1,14 +1,31 @@
 import { useEffect, useState } from 'react';
+import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
+import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
+import EllipsisVerticalIcon from '@heroicons/react/24/solid/EllipsisVerticalIcon';
+import Cookies from 'js-cookie';
+import axios from 'axios';
 import {
   Button,
   Card,
   CardActions,
   CardContent,
   Divider,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  SvgIcon,
+  Box,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
   Typography,
+  CardMedia
+
 } from '@mui/material';
-import Cookies from 'js-cookie';
 
 const username = Cookies.get('username');
 
@@ -25,7 +42,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
       .catch((error) => {
         console.error('Error fetching updated cart:', error);
       });
-  }, []); 
+  }, [cart]); 
 
   const handleIncrement = (productID) => {
     const quantity = 1;
@@ -77,6 +94,16 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
             alignItems: 'center',
           }}
         >
+          <CardMedia
+            component="img"
+            height="140"
+            image={product.picture || 'placeholder_image_url'} // Use a placeholder image URL if the actual image is not available
+            alt={product.medicineName}
+            style={{
+              objectFit: 'contain', // Ensure the image covers the entire container
+              marginBottom: '8px', // Add some spacing between image and content
+            }}
+          />
           <CardContent>
             <Typography variant="h6">{product.medicineName}</Typography>
             <Typography variant="body2">Quantity: {product.quantity}</Typography>
@@ -105,6 +132,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
       ))}
       <Divider />
 
+      {/* Proceed to Checkout Button */}
       <Button
         variant="contained"
         color="primary"
