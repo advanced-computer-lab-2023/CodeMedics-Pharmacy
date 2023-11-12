@@ -1,6 +1,4 @@
 import PropTypes from 'prop-types';
-import { format } from 'date-fns';
-import IdentificationIcon from '@heroicons/react/24/solid/IdentificationIcon';
 import Xmark from '@heroicons/react/24/solid/XMarkIcon';
 import Check from '@heroicons/react/24/solid/CheckIcon';
 import {
@@ -18,13 +16,10 @@ import {
   Typography
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
-import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
 import React from 'react';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { indigo } from '../../../theme/colors';
-import { PatientEmergencyPopup } from '../Patients/PatientEmergency-Popup';
+import { Row } from './Request-row';
 
 export const RequestTable = (props) => {
   const {
@@ -41,117 +36,33 @@ export const RequestTable = (props) => {
     selected = []
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
-  const [isOpenEmergencyContact, setIsOpenEmergencyContact] = useState(false);
   return (
-    <Card >
+    <Card>
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="center">
+                <TableCell>
+                </TableCell>
+                <TableCell >
                   Name
                 </TableCell>
                 <TableCell>
                   Username
                 </TableCell>
                 <TableCell>
-                  Email
-                </TableCell>
-                <TableCell>
-                  Password
-                </TableCell>
-                <TableCell>
                   Gender
                 </TableCell>
                 <TableCell>
-                  HourlyRate
-                </TableCell>
-                <TableCell>
-                  affiliation
-                </TableCell>
-                <TableCell>
-                  Date of Birth
-                </TableCell>
-                <TableCell>
-                  educationalBackground
-                </TableCell>
-                <TableCell>
-                  Actions
+                  Requested at
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
-                const isSelected = selected.includes(customer.id);
-                //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
+              {items.map((request) => {
                 return (
-                  <TableRow
-                    hover
-                    key={customer.id}
-                    selected={isSelected}
-                  >
-                    <TableCell>
-                      <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
-                      >
-                        <Avatar src={customer.avatar}>
-                          {getInitials(customer.Name)}
-                        </Avatar>
-                        <Typography variant="subtitle2">
-                          {customer.name}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      {customer.username}
-                    </TableCell>
-                    <TableCell>
-                      {customer.email}
-                    </TableCell>
-                    <TableCell>
-                      {customer.password}
-                    </TableCell>
-                    <TableCell>
-                      {customer.gender}
-                    </TableCell>
-                    <TableCell>
-                      {customer.hourlyRate}
-                    </TableCell>
-                    <TableCell>
-                      {customer.affiliation}
-                    </TableCell>
-                    <TableCell>
-                      {customer.dob.substring(0, customer.dob.indexOf('T'))}
-                    </TableCell>
-                    <TableCell>
-                      {customer.educationalBackground}
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        color="#B42318"
-                        onClick={() => {
-                        }}
-                      >
-                        <SvgIcon fontSize="medium">
-                          <Xmark/>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton
-                        color="primary"
-                        onClick={() => {
-                        }}
-                      >
-                        <SvgIcon fontSize="medium">
-                          <Check/>
-                        </SvgIcon>
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
+                  <Row key={request.id} row={request}/>
                 );
               })}
             </TableBody>
@@ -170,6 +81,26 @@ export const RequestTable = (props) => {
     </Card>
   );
 };
+// <TableCell>
+//   <IconButton
+//     color="#B42318"
+//     onClick={() => {
+//     }}
+//   >
+//     <SvgIcon fontSize="medium">
+//       <Xmark/>
+//     </SvgIcon>
+//   </IconButton>
+//   <IconButton
+//     color="primary"
+//     onClick={() => {
+//     }}
+//   >
+//     <SvgIcon fontSize="medium">
+//       <Check/>
+//     </SvgIcon>
+//   </IconButton>
+// </TableCell>
 
 RequestTable.propTypes = {
   count: PropTypes.number,

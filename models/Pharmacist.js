@@ -19,7 +19,7 @@ const pharmacistSchema = new Schema({
         required: [true, 'Please enter an email']
     },
     DateOfBirth: {
-        type: Date,
+        type: String,
         required: [true, 'Please enter a Date of Birth']
     },
     HourlyRate: {
@@ -34,10 +34,16 @@ const pharmacistSchema = new Schema({
         type: String,
         required: [true, 'Please enter a degree']
     },
-    IDDocument: { type: String }, // Path or reference to the uploaded ID document
-    pharmacyDegree: { type: String }, // Path or reference to the uploaded pharmacy degree
-    workingLicense: { type: String } // Path or reference to the uploaded working license
+    IDDocument: {type: String}, // Path or reference to the uploaded ID document
+    pharmacyDegree: {type: String}, // Path or reference to the uploaded pharmacy degree
+    workingLicense: {type: String},// Path or reference to the uploaded working license
+    Status: {
+        type: String,
+        enum: ['Approved', 'Pending', 'Rejected'],
+        default: 'Pending',
+        required: false,
+    }
 }, {timestamps: true});
 
-const Pharmacist = mongoose.model('Pharmacist', pharmacistSchema , 'Pharmacists');
+const Pharmacist = mongoose.model('Pharmacist', pharmacistSchema, 'Pharmacists');
 module.exports = Pharmacist;

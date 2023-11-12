@@ -1,5 +1,5 @@
 const adminModel = require('../models/Administrator.js');
-const pharmacistModel = require('../models/pharmacistRequests.js');
+const pharmacistModel = require('../models/Pharmacist.js');
 const patientModel = require('../models/pharmacyPatient.js');
 const {default: mongoose} = require('mongoose');
 const getUsername = require('../config/infoGetter.js');
@@ -47,7 +47,7 @@ const createPharmacist = async (req, res) => {
     const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree } = req.body;
     const existingUser = await adminModel.findOne({ Username }) || await pharmacistModel.findOne({ username: Username }) || await patientModel.findOne({ username: Username });
     const existingEmail = await adminModel.findOne({ Email }) || await pharmacistModel.findOne({ email: Email }) || await patientModel.findOne({ email: Email });
-
+    console.log(Password);
     if (existingUser) {
         return res.status(400).json({ message: 'Username already exists. Please choose another one.' });
     }
@@ -59,7 +59,7 @@ const createPharmacist = async (req, res) => {
     try {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(Password, salt);
-        const newPharmacist = new pharmacistModel({ name: Name, username: Username, password: hashedPassword, email: Email, dob: DateOfBirth, hourlyRate: HourlyRate, affiliation, educationalBackground: Degree });
+        const newPharmacist = new pharmacistModel({ Name: Name, Username: Username, Password: hashedPassword, Email: Email, DateOfBirth: DateOfBirth, HourlyRate: HourlyRate, affiliation:affiliation, Degree: Degree });
         await newPharmacist.save();
         return res.status(200).json({newPharmacist});
     } catch (error) {
