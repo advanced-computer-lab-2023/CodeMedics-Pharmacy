@@ -15,13 +15,13 @@ const createToken = (username) => {
 };
 
 const auth = async (req, res) => {
-    const {token , type} = req.body;
+    const {token, type} = req.body;
     jwt.verify(token, 'supersecret', async (err, decodedToken) => {
         if (err) {
             res.status(500).json({message: err.message});
         } else {
             const username = decodedToken.username;
-            if(decodedToken.expiresIn < 1){
+            if (decodedToken.expiresIn < 1) {
                 res.status(401).json({message: 'Token has expired'});
             }
             if (type === 'admin') {
@@ -68,7 +68,7 @@ const createAdmin = async (req, res) => {
     // Hash the password using bcrypt
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(Password, salt);
-    const existingAdmin = await adminModel.findOne({ Username });
+    const existingAdmin = await adminModel.findOne({Username});
     if (!existingAdmin) {
         const newAdmin = new adminModel({Username, Password: hashedPassword,});
         await newAdmin.save();
@@ -83,7 +83,7 @@ const removePharmacist = async (req, res) => {
     if (Object.keys(req.body).length === 0) {
         return res.status(400).json({message: 'Request body is empty'});
     }
-    if (!req.body['Username']) {
+    if (!req.body['Username'] || req.body['Username'] === '') {
         return res.status(400).json({message: 'Missing Username in the request body'});
     }
     const {Username} = req.body;
@@ -103,7 +103,6 @@ const removePharmacist = async (req, res) => {
         return res.status(500).json({message: 'Error deleting user'});
     }
 };
-
 const removePatient = async (req, res) => {
     if (Object.keys(req.body).length === 0) {
         return res.status(400).json({message: 'Request body is empty'});
@@ -112,7 +111,7 @@ const removePatient = async (req, res) => {
         return res.status(400).json({message: 'Missing Username in the request body'});
     }
     const {Username} = req.body;
-    console.log(Username);
+
     try {
         const isFound = await patientModel.find({Username: Username});
         if (isFound.length == 0) {
