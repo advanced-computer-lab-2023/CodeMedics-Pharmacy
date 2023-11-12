@@ -5,7 +5,7 @@ const Page = () => {
   return (
     <div
       style={{
-        backgroundImage: `url("/assets/Welcomee.png")`,
+        backgroundImage: `url("/assets/Welcome5.png")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center center',
         backgroundRepeat: 'no-repeat',
@@ -14,7 +14,7 @@ const Page = () => {
         flexDirection: 'row', // Adjusted to row layout
         justifyContent: 'center', // Center horizontally
         alignItems: 'flex-end', // Align to the bottom
-        paddingBottom: '7rem', // Add padding to create space from the bottom
+        paddingBottom: '12rem', // Add padding to create space from the bottom
       }}
     >
       <Button
