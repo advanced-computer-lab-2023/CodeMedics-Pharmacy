@@ -74,7 +74,7 @@ export const PharmacistsTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
+              {items.map((customer, index) => {
                 const isSelected = selected.includes(customer.id);
                 //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
                 return (
@@ -89,7 +89,7 @@ export const PharmacistsTable = (props) => {
                         direction="row"
                         spacing={2}
                       >
-                        <Avatar src={customer.avatar}>
+                        <Avatar src={`/assets/avatars/${index}.png`}>
                           {getInitials(customer.Name)}
                         </Avatar>
                         <Typography variant="subtitle2">
@@ -136,9 +136,10 @@ export const PharmacistsTable = (props) => {
                         </SvgIcon>
                       </IconButton>
                       <PharmacistDeletePopup width={'25%'} height={'15vh'}
-                                          isOpenDelete={isOpenDelete === customer.Username}
-                                          items={customer.Name} onClose={() => setOpenDelete(null)}
-                                          username={customer.Username}/>
+                                             isOpenDelete={isOpenDelete === customer.Username}
+                                             items={customer.Name}
+                                             onClose={() => setOpenDelete(null)}
+                                             username={customer.Username}/>
                     </TableCell>
                   </TableRow>
                 );

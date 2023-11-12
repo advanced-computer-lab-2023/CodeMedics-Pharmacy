@@ -60,9 +60,9 @@ export const PatientTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((customer) => {
+              {items.map((patient) => {
                 return (
-                  <Row key={customer._id} row={customer}/>
+                  <Row key={patient._id} row={patient}/>
                 );
               })}
             </TableBody>

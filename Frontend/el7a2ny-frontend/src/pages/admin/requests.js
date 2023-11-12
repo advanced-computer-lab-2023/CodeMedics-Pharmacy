@@ -48,7 +48,9 @@ const Page = () => {
         return res.json();
       })
       .then((data) => {
-        setData(data['pharmacistApplications']);
+        if (data['pharmacistApplications']) {
+          setData(data['pharmacistApplications']);
+        }
       })
       .catch((err) => {});
   }, []);
