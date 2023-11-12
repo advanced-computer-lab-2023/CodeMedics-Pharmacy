@@ -75,9 +75,8 @@ export const MedicinesTable = (props) => {
             </TableHead>
             <TableBody>
               {items.map((medicine) => {
-                const [moreInfo , setMoreInfo] = useState(false);
                 return (
-                  <Row key={medicine._id} row={medicine} />
+                  <Row key={medicine._id} row={medicine}/>
                 );
               })}
             </TableBody>

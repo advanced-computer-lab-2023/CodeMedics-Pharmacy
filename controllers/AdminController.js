@@ -56,7 +56,7 @@ const createAdmin = async (req, res) => {
     if (Object.keys(req.body).length === 0) {
         return res.status(400).json({message: 'Request body is empty'});
     }
-    const requiredVariables = ['Name', 'Username', 'Password', 'Email'];
+    const requiredVariables = ['Username', 'Password'];
 
     for (const variable of requiredVariables) {
         if (!req.body[variable] && (variable === 'Username' || variable === 'Password')) {
@@ -64,13 +64,13 @@ const createAdmin = async (req, res) => {
         }
     }
     // If all required variables are present, proceed with creating an admin
-    const {Name, Username, Password, Email} = req.body;
+    const { Username, Password} = req.body;
     // Hash the password using bcrypt
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(Password, salt);
     const existingAdmin = await adminModel.findOne({ Username });
     if (!existingAdmin) {
-        const newAdmin = new adminModel({Name, Username, Password: hashedPassword, Email});
+        const newAdmin = new adminModel({Username, Password: hashedPassword,});
         await newAdmin.save();
         const token = createToken(Username);
         res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});

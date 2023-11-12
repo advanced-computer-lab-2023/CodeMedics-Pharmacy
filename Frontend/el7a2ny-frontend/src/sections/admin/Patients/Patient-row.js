@@ -33,13 +33,13 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 export const  Row = (props) => {
-    const { row: medicine } = props;
+    const { row: patient } = props;
     const [open, setOpen] = useState(false);
     const router = useRouter();
     return (
       <Fragment>
         <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        <TableCell padding="checkbox">
+        <TableCell padding="normal">
           <IconButton 
               children ={(
                 <SvgIcon>
@@ -55,19 +55,22 @@ export const  Row = (props) => {
           </TableCell>
           <TableCell>
             <Typography variant="h7" >
-              {medicine.name}
+              {patient.FirstName} {patient.LastName}
             </Typography>
           </TableCell>
           <TableCell>
-            {medicine.price}
+            {patient.Username}
           </TableCell>
           <TableCell>
-            {medicine.medicalUse}
+            {patient.Email}
           </TableCell>
           <TableCell>
-            {medicine.Description}
+            {patient.Gender}
           </TableCell>
           <TableCell>
+            {patient.Number}
+          </TableCell>
+          {/* <TableCell>
             <Tooltip title="Edit Medicine">
               <IconButton 
                 children ={(
@@ -77,116 +80,110 @@ export const  Row = (props) => {
                 )}
                 color="primary"
                 onClick={() => {
-                  const encodedData = encodeURIComponent(JSON.stringify(medicine));
-                  router.push(`/pharmacist/editMedicine?data=${encodedData}`);
+                  // const encodedData = encodeURIComponent(JSON.stringify(patient));
+                  // router.push(`/pharmacist/editMedicine?data=${encodedData}`);
                 }}
               >
               </IconButton >
               </Tooltip>
-            </TableCell>
+            </TableCell> */}
         </TableRow>
         <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
             <Collapse in={open} timeout="auto" unmountOnExit>
               <Box sx={{ margin: 1 }}>
                 <Typography variant="h6" gutterBottom component="div">
-                    Medicne Details
+                    Patient Details
                 </Typography>
                 <Stack direction="row" spacing={10} sx={{mt: 3,}}>
                     <Avatar 
-                        src={medicine.Picture} 
+                        src='/assets/avatars/1.png' 
                         sx={{
                             width: 120 , 
                             height:120 , 
-                            borderRadius: '10%',
+                            borderRadius: '100%',
                         }}
                     >
-                        {getInitials(medicine.name)}
+                        {getInitials(patient.name)}
                     </Avatar>
                     <Stack spacing={2}>
+                    <Stack spacing={2} direction="row">
                     <TextField
                         // error = {!!(formik.touched.name && formik.errors.name)}
                         fullWidth
                         // helperText={formik.touched.name && formik.errors.name}
-                        label="Name"
+                        label="National ID"
                         name="name"
                         // onBlur={formik.handleBlur}
                         // onChange={formik.handleChange}
-                        value={medicine.name}
+                        value={patient.NationalID}
                     />
                     <TextField
                         // error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
                         fullWidth
                         // helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
-                        label="Active Ingredient"
+                        label="Date of Birth"
                         name="activeIngredient"
                         // onBlur={formik.handleBlur}
                         // onChange={formik.handleChange}
-                        value={medicine.activeIngredients[0]}
+                        value={patient.DateOfBirth}
+                        type="date"
                         />
                     </Stack>
-                    <Stack spacing={2}>
+                    <Stack spacing={2} direction="row">
+                      <Typography variant="h6" sx={{mt:2 ,width:800}}>
+                        Emergency Contact
+                      </Typography>
                     <TextField
                         // error = {!!(formik.touched.price && formik.errors.price)}
                         fullWidth
                         // helperText={formik.touched.price && formik.errors.price}
-                        label="Price"
+                        label="Name"
                         name="price"
                         // onBlur={formik.handleBlur}
                         // onChange={formik.handleChange}
-                        value={medicine.price}
+                        value={patient.EmergencyContact.Name}
                     />
                     <TextField
                         // error = {!!(formik.touched.availableQuantity && formik.errors.availableQuantity)}
                         fullWidth
                         // helperText={formik.touched.availableQuantity && formik.errors.availableQuantity}
-                        label="Available Quantity"
+                        label="Phone Number"
                         name="availableQuantity"
                         // onBlur={formik.handleBlur}
                         // onChange={formik.handleChange}
-                        value={medicine.availableQuantity}
+                        value={patient.EmergencyContact.Number}
+                    />
+                    <TextField
+                      // error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
+                      fullWidth
+                      // helperText={formik.touched.medicalUse && formik.errors.medicalUse}
+                      label="Relation"
+                      name="medicalUse"
+                      // onBlur={formik.handleBlur}
+                      // onChange={formik.handleChange}
+                      value={patient.EmergencyContact.Relation}
                     />
                     </Stack>
-                    <Stack spacing={2}>
-                        <TextField
-                            // error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
-                            fullWidth
-                            // helperText={formik.touched.medicalUse && formik.errors.medicalUse}
-                            label="Medical Use"
-                            name="medicalUse"
-                            // onBlur={formik.handleBlur}
-                            // onChange={formik.handleChange}
-                            value={medicine.medicalUse}
-                            />
-                        <TextField
-                            // error = {!!(formik.touched.description && formik.errors.description)}
-                            fullWidth
-                            // helperText={formik.touched.description && formik.errors.description}
-                            label="Description"
-                            name="description"
-                            // onBlur={formik.handleBlur}
-                            // onChange={formik.handleChange}
-                            value={medicine.Description}
-                        />
                     </Stack>
                 </Stack>
                 <Stack spacing={2} direction="row" sx={{mt: 3}}>
                     <Button
                         size="large"
-                        sx={{  height: 40}}
+                        sx={{  height: 40 , backgroundColor: 'error.main' }}
                         type="submit"
                         variant="contained"
                     >
-                        Update
+                        Remove
                     </Button>
                     <Button
                         size="large"
-                        sx={{  height: 40 , borderColor: 'primary' }}
-                        variant='outlined'
+                        sx={{  height: 40 , backgroundColor: 'success.main' , mt:"auto"}}
+                        variant='contained'
                         type='submit'
                         onClick={() => {setOpen(!open)}}
                     >
-                        Cancel
+                        Done
                     </Button>
                 </Stack>
               </Box> 

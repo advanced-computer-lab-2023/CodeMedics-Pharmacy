@@ -51,6 +51,7 @@ const Page = () => {
       })
       .then((data) => {
         if (data['patients']) {
+          console.log(data['patients']);
         setData(data['patients']);
         }
   })

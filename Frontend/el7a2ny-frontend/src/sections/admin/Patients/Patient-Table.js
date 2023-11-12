@@ -21,11 +21,9 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
 import React from 'react';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { indigo } from '../../../theme/colors';
-import { PatientEmergencyPopup } from './PatientEmergency-Popup';
-import { PatientDeletePopup } from './Patient-DeletePopup';
+
+import {Row} from './Patient-row';
 
 export const PatientTable = (props) => {
   const {
@@ -36,18 +34,19 @@ export const PatientTable = (props) => {
     page = 0,
     rowsPerPage = 0
   } = props;
-
-  const [activeEmergencyContactId, setActiveEmergencyContactId] = useState(null);
-  const [isOpenDelete, setOpenDelete] = useState(null);
   return (
     <Card>
       <Scrollbar>
-        <Box sx={{ minWidth: 800 }}>
+        <Box >
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell align="center">
+                <TableCell/>
+                <TableCell>
                   Name
+                </TableCell>
+                <TableCell>
+                  Username
                 </TableCell>
                 <TableCell>
                   Email
@@ -58,113 +57,12 @@ export const PatientTable = (props) => {
                 <TableCell>
                   Phone
                 </TableCell>
-                <TableCell>
-                  Username
-                </TableCell>
-                <TableCell>
-                  Date of Birth
-                </TableCell>
-                <TableCell>
-                  Wallet
-                </TableCell>
-                <TableCell>
-                  Emergency Contact
-                </TableCell>
-                <TableCell>
-                  Actions
-                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {items.map((customer) => {
-                //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-                const Name = customer.FirstName + ' ' + customer.LastName;
-                const relation = customer.EmergencyContacts.EmergencyContactRelation;
-                const fullName = customer.EmergencyContacts.EmergencyContactName;
-                const mobileNumber = customer.EmergencyContacts.EmergencyContactNumber;
                 return (
-                  <TableRow hover key={customer.id}>
-                    <TableCell>
-                      <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
-                      >
-                        <Avatar src={customer.avatar}>
-                          {getInitials(customer.Name)}
-                        </Avatar>
-                        <Typography variant="subtitle2">
-                          {Name}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      {customer.Email}
-                    </TableCell>
-                    <TableCell>
-                      {customer.Gender}
-                    </TableCell>
-                    <TableCell>
-                      {customer.Number}
-                    </TableCell>
-                    <TableCell>
-                      {customer.Username}
-                    </TableCell>
-                    <TableCell>
-                      {customer.DateOfBirth}
-                    </TableCell>
-                    <TableCell>
-                      {customer.Wallet}
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        color="primary"
-                        onClick={() => {
-                          setActiveEmergencyContactId(customer.Username);
-                        }}
-                      >
-                        <SvgIcon fontSize="large">
-                          <IdentificationIcon/>
-                        </SvgIcon>
-                      </IconButton>
-                      {fullName}
-                      <PatientEmergencyPopup
-                        items={
-                          {
-                            fullName: fullName,
-                            mobileNumber: mobileNumber,
-                            relation: relation
-                          }
-                        }
-                        width={'25%'} height={'15vh'}
-                        isOpenEmergencyContact={activeEmergencyContactId === customer.Username}
-                        onClose={() => setActiveEmergencyContactId(null)}/>
-
-                    </TableCell>
-                    <TableCell>
-                      <IconButton
-                        color="primary"
-                        onClick={() => {
-                          setOpenDelete(customer.Username);
-                        }}
-                      >
-                        <SvgIcon fontSize="small">
-                          <Xmark/>
-                        </SvgIcon>
-                      </IconButton>
-                      <IconButton
-                        color="primary"
-                      >
-                        <SvgIcon fontSize="small">
-                          <PencilIcon/>
-                        </SvgIcon>
-                      </IconButton>
-                      <PatientDeletePopup width={'25%'} height={'15vh'}
-                                          isOpenDelete={isOpenDelete === customer.Username}
-                                          items={customer.Username} onClose={() => setOpenDelete(null)}
-                                          username={customer.Username}/>
-                    </TableCell>
-                  </TableRow>
+                  <Row key={customer._id} row={customer}/>
                 );
               })}
             </TableBody>

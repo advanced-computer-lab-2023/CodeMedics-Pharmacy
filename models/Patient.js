@@ -45,11 +45,11 @@ const patientSchema = new Schema({
         type: [Prescription.schema],
         required: false
     },
-    EmergencyContacts: {
+    EmergencyContact: {
         type: {
-            EmergencyContactName: {type: String, required: true},
-            EmergencyContactNumber: {type: String, required: true},
-            EmergencyContactRelation: {type: String, required: true}
+            Name: {type: String, required: true},
+            Number: {type: String, required: true},
+            Relation: {type: String, required: true}
         } ,
         required: true
     },
