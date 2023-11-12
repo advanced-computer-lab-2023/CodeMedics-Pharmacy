@@ -25,7 +25,6 @@ const medicineSchema = new Schema({
     },
     sales:{
         type: Number,
-    
         default :0,
     },
     otc:{

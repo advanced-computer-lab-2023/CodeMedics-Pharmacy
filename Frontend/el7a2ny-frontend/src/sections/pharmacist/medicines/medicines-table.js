@@ -1,6 +1,9 @@
 import PropTypes from 'prop-types';
+import { Fragment } from 'react';
 import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpTrayIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
+import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon';
+import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon';
 import AdjustmentsVerticalIcon from '@heroicons/react/24/solid/AdjustmentsVerticalIcon';
 import { format } from 'date-fns';
 import {
@@ -20,34 +23,29 @@ import {
   IconButton,
   Tooltip,
   Typography,
- 
+  Collapse ,
   TextField,
   MenuItem 
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import {Row} from './medicines-row';
+
+
+
 
 export const MedicinesTable = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
     onPageChange = () => { },
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
   } = props;
-
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
   const router = useRouter()
-
-  
 
   return (
     <Card>
@@ -56,18 +54,7 @@ export const MedicinesTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell padding="checkbox">
-                  <Checkbox
-                    checked={selectedAll}
-                    indeterminate={selectedSome}
-                    onChange={(event) => {
-                      if (event.target.checked) {
-                        onSelectAll?.();
-                      } else {
-                        onDeselectAll?.();
-                      }
-                    }}
-                  />
+                <TableCell> 
                 </TableCell>
                 <TableCell>
                   Name
@@ -88,81 +75,9 @@ export const MedicinesTable = (props) => {
             </TableHead>
             <TableBody>
               {items.map((medicine) => {
-                const isSelected = selected.includes(medicine.id);
-                // const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
-
+                const [moreInfo , setMoreInfo] = useState(false);
                 return (
-                  <TableRow
-                    hover
-                    key={medicine._id}
-                    selected={isSelected}
-                  >
-                    <TableCell padding="checkbox">
-                      <Checkbox
-                        checked={isSelected}
-                        onChange={(event) => {
-                          if (event.target.checked) {
-                            onSelectOne?.(medicine.id);
-                          } else {
-                            onDeselectOne?.(medicine.id);
-                          }
-                        }}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Stack
-                        alignItems="center"
-                        direction="row"
-                        spacing={2}
-                      >
-                        <Avatar src={medicine.Picture}>
-                          {getInitials(medicine.name)}
-                        </Avatar>
-                        <Typography variant="subtitle2">
-                          {medicine.name}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      {medicine.price}
-                    </TableCell>
-                    <TableCell>
-                      {medicine.medicalUse}
-                    </TableCell>
-                    <TableCell>
-                      {medicine.Description}
-                    </TableCell>
-                    <TableCell>
-                    {/* <Tooltip title="Upload Photo">
-                      <IconButton 
-                        children ={(
-                          <SvgIcon fontSize="small">
-                            <ArrowUpOnSquareIcon />
-                          </SvgIcon>
-                        )}
-                        color="primary"
-                        onClick={() => {
-                        }}
-                      >
-                      </IconButton>
-                    </Tooltip> */}
-                    <Tooltip title="Edit Medicine">
-                      <IconButton 
-                        children ={(
-                          <SvgIcon fontSize="small">
-                            <PencilIcon />
-                          </SvgIcon>
-                        )}
-                        color="primary"
-                        onClick={() => {
-                          const encodedData = encodeURIComponent(JSON.stringify(medicine));
-                          router.push(`/pharmacist/editMedicine?data=${encodedData}`);
-                        }}
-                      >
-                      </IconButton >
-                      </Tooltip>
-                    </TableCell>
-                  </TableRow>
+                  <Row key={medicine._id} row={medicine} />
                 );
               })}
             </TableBody>

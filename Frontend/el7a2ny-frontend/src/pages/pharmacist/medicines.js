@@ -32,6 +32,7 @@ const useMedicineIds = (customers) => {
     [customers]
   );
 };
+
 const Page = () => {
   const [data, setData] = useState([]);
   const [searchData, setSearchData] = useState([]);
@@ -173,15 +174,10 @@ const Page = () => {
             { <MedicinesTable
               count={data.length}
               items={customers}
-              onDeselectAll={customersSelection.handleDeselectAll}
-              onDeselectOne={customersSelection.handleDeselectOne}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              onSelectAll={customersSelection.handleSelectAll}
-              onSelectOne={customersSelection.handleSelectOne}
               page={page}
               rowsPerPage={rowsPerPage}
-              selected={customersSelection.selected}
             />}
           </Stack>
         </Container>
