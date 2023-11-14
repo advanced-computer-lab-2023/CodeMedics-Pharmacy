@@ -27,7 +27,7 @@ const patientSchema = new Schema({
     },
     NationalID: {
         type: String,
-        required: [true, 'Please enter a national ID']
+        required: [false, 'Please enter a national ID']
     },
     DateOfBirth: {
         type: String,

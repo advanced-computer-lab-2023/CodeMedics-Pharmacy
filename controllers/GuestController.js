@@ -2,7 +2,8 @@ const PPatient = require('../models/pharmacyPatient');
 const Pharmacist = require("../models/Pharmacist");
 const patientModel = require("../models/pharmacyPatient");
 const Administrator = require("../models/Administrator");
-const PharmRequest = require("../models/pharmacistRequests");
+// const PharmRequest = require("../models/pharmacistRequests");
+const PharmRequest = require("../models/Pharmacist");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const upload = require('../config/multerConfig');
@@ -129,21 +130,23 @@ const logout = async (req, res) => {
 // User Login
 const loginUser = async (req, res) => {
     const {username, email, password} = req.body;
+    // console.log("HERE IN LOGINUSER", username, email, password);
     try {
         var patient = null, pharmacist = null, admin = null;
         if (username) {
             patient = await anotherPatientModel.findOne({Username: username});
-            pharmacist = await PharmRequest.findOne({username});
+            pharmacist = await PharmRequest.findOne({Username: username});
             admin = await Administrator.findOne({Username: username});
         }
         if (email) {
             patient = await anotherPatientModel.findOne({email});
-            pharmacist = await PharmRequest.findOne({email});
+            pharmacist = await PharmRequest.findOne({Email: email});
             admin = await Administrator.findOne({Email: email});
         }
         if (!patient && !pharmacist && !admin) {
             return res.status(404).json({message: 'User not found'});
         }
+        console.log("HERE IN LOGINUSER", patient, pharmacist, admin);
         if (patient) {
             const auth = await bcrypt.compare(password, patient.Password);
             if (auth) {
@@ -154,15 +157,16 @@ const loginUser = async (req, res) => {
                 return res.status(401).json({message: 'Wrong password'});
             }
         } else if (pharmacist) {
-            const auth = await bcrypt.compare(password, pharmacist.password);
+            const auth = await bcrypt.compare(password, pharmacist.Password);
             if (auth) {
-                const token = createToken(pharmacist.username);
+                const token = createToken(pharmacist.Username);
                 res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
                 return res.status(200).json({Type: 'Pharmacist', message: 'Login successful', pharmacist, token});
             } else {
                 return res.status(401).json({message: 'Wrong password'});
             }
         } else if (admin) {
+            console.log("HERE IN ADMIN", admin);
             const auth = await bcrypt.compare(password, admin.Password);
             if (auth) {
                 const token = createToken(admin.Username);

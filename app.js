@@ -50,8 +50,9 @@ const options = {
 const path = require('path');
 
 const upload = require('./config/multerConfig');
-const {registerPPatient, registerPharmacist, loginUser, changePassword} = require('./controllers/GuestController');
-
+const {registerPPatient, registerPharmacist, loginUser} = require('./controllers/GuestController');
+const {resetPassword} = require('./controllers/ResetPassword');
+const {changePassword} = require('./controllers/ChangePassword');
 const AdminRoutes = require('./routes/AdminRoutes')
 const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');
 const {multerMiddleware, addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); 
@@ -62,7 +63,7 @@ const {createPharmacist} = require('./controllers/PharmacistController');
 
 const {updateMedicine, getCart} = require('./controllers/updateMedicine');
 
-
+app.post('/resetPassword', resetPassword);
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
     res.sendFile(filePath);
@@ -79,7 +80,7 @@ app.get("/register", (req, res) => {
 // });
 
 app.patch("/updateMedicine", updateMedicine);
-app.patch("/changePassword", changePassword);
+app.post("/changePassword", changePassword);
 
 app.post("/edit", editMedicine);
 app.get("/editMedicine", (req, res) => {
