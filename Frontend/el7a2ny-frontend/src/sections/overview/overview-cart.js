@@ -26,12 +26,12 @@ import {
   CardMedia
 
 } from '@mui/material';
-
+import { useRouter } from 'next/router';
 const username = Cookies.get('username');
 
 export const OverviewLatestOrders = ({ orders, sx }) => {
   const [cart, setCart] = useState(orders);
-
+  const router = useRouter();
   useEffect(() => {
     fetch(`http://localhost:8000/getCart?username=${username}`)
       .then((response) => response.json())
@@ -77,6 +77,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
 
   const handleProceedToCheckout = () => {
     // Implement logic for proceeding to checkout
+    router.push('/user/review', );
     console.log('Proceeding to checkout...');
   };
 

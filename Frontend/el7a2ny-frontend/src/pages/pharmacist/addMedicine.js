@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { Box, Button, Container, Stack, SvgIcon, Typography , TextField ,CardContent,Card} from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import axios from 'axios';
+import DocumentArrowUpIcon from '@heroicons/react/24/solid/DocumentArrowUpIcon';
 
 
 
@@ -40,7 +41,7 @@ const Page = () => {
             description: '',
             activeIngredient: '',
             medicalUse: '',
-            picture: '',
+            picture: null,
             submit: null
         },
         validationSchema: Yup.object({
@@ -68,9 +69,8 @@ const Page = () => {
             .max(255)
             .required('Active Ingredient is required'),
             picture: Yup
-            .string()
-            .max(255)
-            .required('Picture is required'),
+            .mixed()
+            .test('fileRequired', 'Picture is required', value => value !== null),
         }),
         onSubmit: async (values, helpers) => {
           try {
@@ -83,7 +83,21 @@ const Page = () => {
                 "medicalUse": values.medicalUse,
                 "Picture": values.picture,
             };
-              await axios.post('http://localhost:8000/addMedicine' , body)
+            const formData = new FormData();
+            formData.append('name', values.name);
+            formData.append('price', values.price);
+            formData.append('availableQuantity', values.availableQuantity);
+            formData.append('Description', values.description);
+            formData.append('activeIngredients', values.activeIngredient);
+            formData.append('medicalUse', values.medicalUse);
+            formData.append('Picture', values.picture);
+
+            console.log(formData);
+
+              await axios.post('http://localhost:8000/addMedicine' , formData , { 
+                headers: {
+                'Content-Type': 'multipart/form-data',
+              },})
               .then((res) => { 
                 if(res.status != 200){
                   throw new Error(res.data.message); 
@@ -199,25 +213,61 @@ const Page = () => {
                     onChange={formik.handleChange}
                     value={formik.values.description}
                     />
-                    <TextField
-                    error = {!!(formik.touched.picture && formik.errors.picture)}
+                    <Stack sx={{pl:0,pr:60}}>
+                    <label htmlFor="picture">
+                    <Button
+                    component="span"
                     fullWidth
-                    helperText={formik.touched.picture && formik.errors.picture}
-                    label="Picture"
+                    size="medium"
+                    sx={{
+                      mt: 3,
+                      backgroundColor: '#F8F8F8', // Blue color
+                      '&:hover': {
+                        backgroundColor: '#F1F1F1', // Darker blue color on hover
+                      },
+                    }}
+                    endIcon={(
+                    <SvgIcon fontSize="small">
+                      <DocumentArrowUpIcon/>
+                    </SvgIcon>
+                  )}
+                  >
+                    Upload Picture   
+                  </Button>
+                  {formik.submitCount > 0 && !formik.values.picture && formik.touched.picture && (
+                    <Typography color="error" variant="body2" sx={{ mt: 1 }}>
+                      Picture is required
+                    </Typography>
+                  )}
+                  {formik.touched.picture && formik.errors.picture && (
+                    <Typography color="error" variant="body2" sx={{ mt: 1 }}/>
+                  )}
+                  {formik.values.picture && (
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      {formik.values.picture.name}
+                    </Typography>
+                  )}
+                  <input
+                    id="picture"
                     name="picture"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.picture}
-                    />
+                    type="file"
+                    accept=".jpg, .jpeg, .png, .pdf"
+                    onChange={(event) => {
+                      formik.setFieldValue('picture', event.currentTarget.files[0]);
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                </label>
+                </Stack>
                 </Stack>
               </Stack>
-              {formik.errors.Submit && (
+              {formik.errors.submit && (
                 <Typography
                   color="error"
                   sx={{ mt: 3 }}
                   variant="body2"
                 >
-                  {formik.errors.Submit}
+                  {formik.errors.submit}
                 </Typography>
               )}
               <Button

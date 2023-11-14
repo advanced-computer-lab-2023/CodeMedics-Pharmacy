@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const app = express();
 const Port = process.env.PORT || 8000;
+const stripe = require("stripe")('sk_test_51OA3YuHNsLfp0dKZBQsyFFPLXepbGkt9p5xZzd2Jzzj6zxLqUTY2DYF244qILCi0cfVjg37szrwdXZzin83e5ijm00X5eXuTnM');
+
 //const DeleteModelRecords = require('./config/DeleteAllRecords');
 
 const MongoURI = process.env.MONGO_URI;
@@ -70,7 +72,26 @@ const {createPharmacist} = require('./controllers/PharmacistController');
 
 const {updateMedicine, getCart} = require('./controllers/updateMedicine');
 
-app.post('/resetPassword', resetPassword);
+app.post("/create-payment-intent", async (req, res) => {
+    // const { items } = req.body;
+    const card = req.body.card;
+    console.log("we are in the create payment intent");
+    // Create a PaymentIntent with the order amount and currency
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: 100,
+      currency: "usd",
+      // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default.
+      automatic_payment_methods: {
+        enabled: true,
+      }
+    });
+  
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  });
+  app.post('/resetPassword', resetPassword);
+
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
     res.sendFile(filePath);
@@ -241,7 +262,7 @@ app.post("/rejectPharmacist", rejectPharmacist);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
-app.patch("/ditMedicine", editMedicine);
+app.patch("/ditMedicine", multerMiddleware ,editMedicine);
 app.get("/iewPatients", viewPatients);
 app.get("/iewPharmacists", viewPharmacists);
 app.get("/Medicines", viewMedicines);
@@ -249,6 +270,8 @@ app.get("/MedicinesPharmacist", viewMedicinesPharmacist);
 app.post("/earchMedicine", searchMedicine);
 app.get("/MedicalUses", getMedicalUses);
 app.get("/ilterMedicine", getMedicinesByMedicalUse);
+
+
 
 // Define your /addUser route here to handle the POST request
 // app.post("/register", registerPPatient);
