@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import PropTypes from 'prop-types';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
@@ -32,6 +32,7 @@ const username = Cookies.get('username');
 export const OverviewLatestOrders = ({ orders, sx }) => {
   const [cart, setCart] = useState(orders);
   const router = useRouter();
+  const username = Cookies.get('username');
   useEffect(() => {
     fetch(`http://localhost:8000/getCart?username=${username}`)
       .then((response) => response.json())
@@ -76,9 +77,21 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
   };
 
   const handleProceedToCheckout = () => {
-    // Implement logic for proceeding to checkout
-    router.push('/user/review', );
-    console.log('Proceeding to checkout...');
+    console.log(username);
+    router.push('/user/review');
+    // axios.get(`http://localhost:8000/user/checkValidity`, { username: username })
+    //   .then((res) => {
+    //     return res['data'];
+    //   })
+    //   .then((data) => {
+    //     router.push('/user/review');
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     alert(err.message);
+    //     window.location.reload();
+    //   });
+
   };
 
   return (

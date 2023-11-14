@@ -39,7 +39,8 @@ const options = {
 };
 
 const path = require('path');
-
+const ifPaymentDone = require('./controllers/ifPaymentDone');
+const checkValidity = require('./controllers/checkValidity');
 const upload = require('./config/multerConfig');
 const {registerPPatient, registerPharmacist, loginUser} = require('./controllers/GuestController');
 const {resetPassword} = require('./controllers/ResetPassword');
@@ -90,6 +91,9 @@ app.post("/create-payment-intent", async (req, res) => {
       clientSecret: paymentIntent.client_secret,
     });
   });
+
+  app.get("http://localhost:8000/user/checkValidity", checkValidity);
+
   app.post('/resetPassword', resetPassword);
 
 app.get("/", (req, res) => {
@@ -210,7 +214,7 @@ app.get("/viewPharmacistApplications", (req, res) => {
     res.sendFile(filePath);
 });
 
-
+app.post("/user/ifPaymentDone", ifPaymentDone)
 app.post("/edit", editMedicine);
 app.get("/editMedicine", (req, res) => {
     const filePath = path.join(__dirname, "pages", "editMedicine.html");
