@@ -76,6 +76,10 @@ export const PharmacistsTable = (props) => {
             <TableBody>
               {items.map((customer, index) => {
                 const isSelected = selected.includes(customer.id);
+                const originalDate = new Date(customer.DateOfBirth);
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                const formattedDate = originalDate.toLocaleDateString('en-GB', options);
+
                 //const createdAt = format(customer.createdAt, 'dd/MM/yyyy');
                 return (
                   <TableRow
@@ -110,7 +114,7 @@ export const PharmacistsTable = (props) => {
                       {customer.affiliation}
                     </TableCell>
                     <TableCell>
-                      {customer.DateOfBirth.substring(0, customer.DateOfBirth.indexOf('T'))}
+                      {formattedDate}
                     </TableCell>
                     <TableCell>
                       {customer.Degree}
