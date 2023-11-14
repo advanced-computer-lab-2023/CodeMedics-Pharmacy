@@ -13,6 +13,7 @@ import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 import Cookies from 'js-cookie';
 import React from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 
 const now = new Date();
@@ -24,6 +25,13 @@ const getCart = async (username) => {
 
 const Page = () => {
     const [cart, setCart] = React.useState(null);
+    const router = useRouter();
+
+    const handleProceedToPayment = () => {
+        // Implement logic for proceeding to payment
+        router.push('/user/payment', );
+        console.log('Proceeding to payment...');
+      };
 
     React.useEffect(() => {
         try {
@@ -62,7 +70,7 @@ const Page = () => {
                             lg={15}
                         >
                             <OverviewLatestOrders
-                        
+                            handleProceedToPayment={handleProceedToPayment}
                                 orders={cart}
                                 sx={{ height: '100%' }}
                             />

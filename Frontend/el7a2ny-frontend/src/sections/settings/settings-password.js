@@ -45,8 +45,9 @@ export const SettingsPassword = () => {
         console.log(123);
       }else{
         try {
+          console.log(username , values.password);
         const response = await fetch('http://localhost:8000/changePassword', {
-          method: 'PATCH',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -55,6 +56,7 @@ export const SettingsPassword = () => {
             newPassword: values.password,
           }),
         });
+        console.log(response);
         if (response.ok) {
           console.log('Password updated successfully');
           router.refresh();
@@ -62,6 +64,7 @@ export const SettingsPassword = () => {
           console.error('Failed to update password');
         }
       } catch (error) {
+        console.log(error);
         console.error('An error occurred while updating the password', error);
       }
     }

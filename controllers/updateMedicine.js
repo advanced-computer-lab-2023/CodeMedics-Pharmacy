@@ -53,17 +53,15 @@ const getCart = async(req, res) => {
         var medicineArray = [];
         for(let i = 0; i<patientCart.length; i++){
             let cur = patientCart[i];
-            console.log("cur", cur);
             let cnt = cur.Quantity;
             let id = cur.MedicineId;
             let med = await Medicine.findOne({_id: id});
             let picture = med.Picture;
-
             let medicineName = med.name;
             let price = med.price;
             medicineArray.push({"medicineName": medicineName, "quantity": cnt, "price": price, "medicineID": id, "picture": picture});
         }
-        console.log(medicineArray);
+        console.log('here -------->');
         return res.status(200).json(medicineArray);
     }catch(err){
         console.log(err)

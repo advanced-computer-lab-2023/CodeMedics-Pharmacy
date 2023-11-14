@@ -108,7 +108,7 @@ export const OverviewLatestProducts = (props) => {
                   {product.Picture ? (
                     <Box
                       component="img"
-                      src={product.Picture}
+                      src={`/assets/products/${product.Picture}`}
                       sx={{
                         borderRadius: '70%',
                         height: 130,

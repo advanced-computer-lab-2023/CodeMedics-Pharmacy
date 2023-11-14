@@ -70,6 +70,9 @@ const {
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
+const {getTotalAmont} = require('./controllers/getTotalAmount');
+
+app.patch("/getTotalAmount", getTotalAmont);
 
 const {updateMedicine, getCart} = require('./controllers/updateMedicine');
 

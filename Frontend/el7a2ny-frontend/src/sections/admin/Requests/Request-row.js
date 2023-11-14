@@ -69,7 +69,7 @@ export const Row = (props) => {
          });
   };
   const handleFileDownload = (fileName) => {
-    FileSaver.saveAs(`/uploads/${fileName}`, `${fileName}`);
+    FileSaver.saveAs(`/assets/products/${fileName}`, `${fileName}`);
   };
   return (
     <Fragment>
