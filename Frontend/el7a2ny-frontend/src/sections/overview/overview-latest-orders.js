@@ -36,16 +36,13 @@ export const OverviewLatestOrders = (props) => {
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Order
-                </TableCell>
-                <TableCell>
-                  Customer
+                  Status
                 </TableCell>
                 <TableCell sortDirection="desc">
                   Date
                 </TableCell>
                 <TableCell>
-                  Status
+                  Amount
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -56,20 +53,17 @@ export const OverviewLatestOrders = (props) => {
                 return (
                   <TableRow
                     hover
-                    key={order.id}
+                    key={order._id}
                   >
                     <TableCell>
-                      {order.ref}
+                      {order.status}
                     </TableCell>
                     <TableCell>
-                      {order.customer.name}
-                    </TableCell>
-                    <TableCell>
-                      {createdAt}
+                      {order.createdAt}
                     </TableCell>
                     <TableCell>
                       <SeverityPill color={statusMap[order.status]}>
-                        {order.status}
+                        {order.amount}
                       </SeverityPill>
                     </TableCell>
                   </TableRow>

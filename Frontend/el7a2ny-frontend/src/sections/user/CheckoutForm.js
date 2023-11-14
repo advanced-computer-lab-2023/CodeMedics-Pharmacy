@@ -36,9 +36,9 @@ export default function CheckoutForm({activeStep, setStep}) {
       switch (paymentIntent.status) {
         case "succeeded":
           {
-            setStep(2);
+            axios.post('http://localhost:8000/ifPaymentDone');
             setMessage("Payment succeeded!");
-        }
+          }
           break;
         case "processing":
           setMessage("Your payment is processing.");

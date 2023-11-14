@@ -267,7 +267,7 @@ const Page = () => {
                     </Typography>
                     {!credit && <Button
                         variant="contained"
-                        onClick={() => {}}
+                        onClick={() => {axios.post('http://localhost:8000/ifPaymentDone');}}
                         sx = {{width : 180 , height : 50}}
                         >
                             Pay Order
