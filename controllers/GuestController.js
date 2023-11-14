@@ -74,18 +74,18 @@ const registerPPatient = async (req, res) => {
 const registerPharmacist = async (req, res) => {
     try {
         // Process the registration and uploaded files
-        const { username, name, email, password, dob, gender, hourlyRate, affiliation, educationalBackground } = req.body;
+        const {username, name, email, password, dob, gender, hourlyRate, affiliation, educationalBackground} = req.body;
 
         // Check for uploaded files
         if (!req.files || Object.keys(req.files).length !== 3) {
-            return res.status(400).json({ message: 'Please upload ID Document, Medical Degree, and Medical License' });
+            return res.status(400).json({message: 'Please upload ID Document, Medical Degree, and Medical License'});
         }
 
-        const { IDDocument, pharmacyDegree, workingLicense } = req.files;
+        const {IDDocument, pharmacyDegree, workingLicense} = req.files;
 
         // Ensure that exactly one file is uploaded for each field
         if (!IDDocument || !pharmacyDegree || !workingLicense) {
-            return res.status(400).json({ message: 'Please upload one file for each of the following: ID Document, Medical Degree, Medical License' });
+            return res.status(400).json({message: 'Please upload one file for each of the following: ID Document, Medical Degree, Medical License'});
         }
 
         // Handle file uploads (files are available in req.files)
@@ -116,7 +116,7 @@ const registerPharmacist = async (req, res) => {
         res.status(201).json(newPharm); // Respond with the created PharmRequest details
     } catch (error) {
         console.error('Error processing request:', error);
-        res.status(500).json({ error: 'Error processing request', detailedError: error.message });
+        res.status(500).json({error: 'Error processing request', detailedError: error.message});
     }
 };
 //
@@ -125,12 +125,10 @@ const logout = async (req, res) => {
     res.cookie('jwt', '', {maxAge: 1});
     res.status(200).json({message: "User logged out"});
 }
-
-
 // User Login
 const loginUser = async (req, res) => {
     const {username, email, password} = req.body;
-    // console.log("HERE IN LOGINUSER", username, email, password);
+
     try {
         var patient = null, pharmacist = null, admin = null;
         if (username) {
@@ -146,7 +144,7 @@ const loginUser = async (req, res) => {
         if (!patient && !pharmacist && !admin) {
             return res.status(404).json({message: 'User not found'});
         }
-        console.log("HERE IN LOGINUSER", patient, pharmacist, admin);
+
         if (patient) {
             const auth = await bcrypt.compare(password, patient.Password);
             if (auth) {
@@ -158,15 +156,20 @@ const loginUser = async (req, res) => {
             }
         } else if (pharmacist) {
             const auth = await bcrypt.compare(password, pharmacist.Password);
+            if (auth && pharmacist.Status != "Approved") {
+                return res.status(401).json({message: `Your account is ${pharmacist.Status}`});
+
+            }
             if (auth) {
                 const token = createToken(pharmacist.Username);
                 res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
                 return res.status(200).json({Type: 'Pharmacist', message: 'Login successful', pharmacist, token});
             } else {
+                console.log('Wrong password');
                 return res.status(401).json({message: 'Wrong password'});
             }
         } else if (admin) {
-            console.log("HERE IN ADMIN", admin);
+
             const auth = await bcrypt.compare(password, admin.Password);
             if (auth) {
                 const token = createToken(admin.Username);
@@ -182,7 +185,7 @@ const loginUser = async (req, res) => {
 };
 
 const changePassword = async (req, res) => {
-    try{
+    try {
         const {username, newPassword} = req.body;
         console.log("HERE IN CHANGEPASSWORD");
         const patient = await anotherPatientModel.findOne({Username: username});
@@ -192,7 +195,7 @@ const changePassword = async (req, res) => {
         await patient.save();
         return res.status(200).json("Changed Password Successfully");
 
-    } catch(error){
+    } catch (error) {
         console.log(error)
         return res.status(500).json(error);
     }

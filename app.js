@@ -12,8 +12,7 @@ const MongoURI = process.env.MONGO_URI;
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({extended: false})); // Add this line to parse form data
-//DeleteModelRecords.deleteAllRecords();
-// Connect to MongoDB
+
 mongoose.connect(MongoURI)
     .then(() => {
         console.log("Connected to MongoDB");
@@ -37,16 +36,6 @@ const options = {
     autoClean: true
 };
 
-// // parse data with connect-multiparty. 
-// app.use(formData.parse(options));
-// // delete from the request all empty files (size == 0)
-// app.use(formData.format());
-// // change the file objects to fs.ReadStream 
-// app.use(formData.stream());
-// // union the body and the files
-// app.use(formData.union());
-
-// Import your routes here
 const path = require('path');
 
 const upload = require('./config/multerConfig');
@@ -54,8 +43,26 @@ const {registerPPatient, registerPharmacist, loginUser} = require('./controllers
 const {resetPassword} = require('./controllers/ResetPassword');
 const {changePassword} = require('./controllers/ChangePassword');
 const AdminRoutes = require('./routes/AdminRoutes')
-const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');
-const {multerMiddleware, addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); 
+const {
+    createAdmin,
+    removePharmacist,
+    removePatient,
+    viewPharmacistApplications,
+    viewPharmacists,
+    viewPatients,
+    acceptPharmacist,
+    rejectPharmacist
+} = require('./controllers/AdminController');
+const {
+    multerMiddleware,
+    addMedicine,
+    editMedicine,
+    viewMedicines,
+    viewMedicinesPharmacist,
+    searchMedicine,
+    getMedicinesByMedicalUse,
+    getMedicalUses
+} = require('./controllers/MedicineController');
 
 
 const AuthRoutes = require('./routes/AuthRoutes');
@@ -207,19 +214,19 @@ app.get("/viewMedicines", (req, res) => {
 app.use('/register', AuthRoutes);
 // app.use('/Pharmregister', AuthRoutes);
 app.use('/CreateAdmin', AdminRoutes);
-app.use('/auth' , AuthRoutes);
+app.use('/auth', AuthRoutes);
 
 app.use('/uploads', express.static('uploads'));
 app.post("/register", registerPPatient);
 
 app.post('/Pharmregister', upload.fields([
-    { name: 'IDDocument', maxCount: 1 },
-    { name: 'pharmacyDegree', maxCount: 1 },
-    { name: 'workingLicense', maxCount: 1 }
-  ]), registerPharmacist);
+    {name: 'IDDocument', maxCount: 1},
+    {name: 'pharmacyDegree', maxCount: 1},
+    {name: 'workingLicense', maxCount: 1}
+]), registerPharmacist);
 
 
-app.post('/addMedicine',multerMiddleware, addMedicine);
+app.post('/addMedicine', multerMiddleware, addMedicine);
 
 
 app.post("/addUser", registerPPatient);
@@ -229,6 +236,8 @@ app.post("/createPharmacist", createPharmacist);
 app.post("/login", loginUser);
 app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient", removePatient);
+app.post("/acceptPharmacist", acceptPharmacist);
+app.post("/rejectPharmacist", rejectPharmacist);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 

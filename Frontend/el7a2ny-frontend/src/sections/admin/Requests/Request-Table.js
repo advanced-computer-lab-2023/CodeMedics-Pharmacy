@@ -49,10 +49,10 @@ export const RequestTable = (props) => {
                   Name
                 </TableCell>
                 <TableCell>
-                  Username
+                  Email
                 </TableCell>
                 <TableCell>
-                  Gender
+                  Degree
                 </TableCell>
                 <TableCell>
                   Requested at
@@ -60,9 +60,9 @@ export const RequestTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((request) => {
+              {items.map((request,index) => {
                 return (
-                  <Row key={request.id} row={request}/>
+                  <Row key={request.id} row={request} index={index}/>
                 );
               })}
             </TableBody>

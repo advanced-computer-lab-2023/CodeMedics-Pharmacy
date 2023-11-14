@@ -7,7 +7,7 @@ const pharmacistReqSchema = new Schema({
     email: { type: String, required: true },
     password: { type: String, required: true },
     dob: { type: Date, required: true },
-    gender: { type: String, enum: ['male', 'female', 'other'], required: false },
+    //gender: { type: String, enum: ['male', 'female', 'other'], required: false },
     hourlyRate: { type: Number, required: true },
     affiliation: { type: String, required: true },
     educationalBackground: { type: String, required: true },
