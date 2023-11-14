@@ -74,38 +74,37 @@ const registerPPatient = async (req, res) => {
 const registerPharmacist = async (req, res) => {
     try {
         // Process the registration and uploaded files
-        const {username, name, email, password, dob, gender, hourlyRate, affiliation, educationalBackground} = req.body;
-
+        const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree} = req.body;
         // Check for uploaded files
-        if (!req.files || Object.keys(req.files).length !== 3) {
-            return res.status(400).json({message: 'Please upload ID Document, Medical Degree, and Medical License'});
-        }
 
         const {IDDocument, pharmacyDegree, workingLicense} = req.files;
-
-        // Ensure that exactly one file is uploaded for each field
-        if (!IDDocument || !pharmacyDegree || !workingLicense) {
-            return res.status(400).json({message: 'Please upload one file for each of the following: ID Document, Medical Degree, Medical License'});
-        }
-
         // Handle file uploads (files are available in req.files)
         const idDocumentFile = IDDocument[0].filename;
         const pharmacyDegreeFile = pharmacyDegree[0].filename;
         const workingLicenseFile = workingLicense[0].filename;
+        // Ensure that exactly one file is uploaded for each field
+
+        if (!req.files || Object.keys(req.files).length !== 3) {
+            return res.status(400).json({message: 'Please upload ID Document, Medical Degree, and Medical License'});
+        }
+        const found = await PharmRequest.find({Username: Username});
+        const found2 = await PharmRequest.find({Email: Email});
+        if (found.length > 0 || found2.length > 0) {
+            return res.status(400).json({message: 'Username or Email already exists. Please choose another one.'});
+        }
 
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        const hashedPassword = await bcrypt.hash(Password, salt);
 
         const newPharm = new PharmRequest({
-            username,
-            name,
-            email,
-            password: hashedPassword,
-            dob,
-            gender,
-            hourlyRate,
+            Username,
+            Name,
+            Email,
+            Password: hashedPassword,
+            DateOfBirth,
+            HourlyRate,
             affiliation,
-            educationalBackground,
+            Degree,
             IDDocument: idDocumentFile,
             pharmacyDegree: pharmacyDegreeFile,
             workingLicense: workingLicenseFile,
