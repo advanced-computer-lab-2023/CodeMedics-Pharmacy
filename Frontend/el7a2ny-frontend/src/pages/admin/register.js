@@ -134,7 +134,19 @@ const Page = () => {
                 type="submit"
                 variant="contained"
               >
-                Create
+                Create Admin
+              </Button>
+              <Button
+                fullWidth
+                size="large"
+                sx={{ mt: 3 }}
+                onClick = {() => {
+                  router.push('/admin');
+                }}
+                variant="contained"
+                style={{ backgroundColor: 'rgba(255, 0, 0, 0.5)', color: 'black' }}
+              >
+                Cancel
               </Button>
             </form>
           </div>

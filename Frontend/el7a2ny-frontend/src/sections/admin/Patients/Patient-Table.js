@@ -23,7 +23,7 @@ import { useState } from 'react';
 import React from 'react';
 import 'reactjs-popup/dist/index.css';
 
-import {Row} from './Patient-row';
+import { Row } from './Patient-row';
 
 export const PatientTable = (props) => {
   const {
@@ -37,7 +37,7 @@ export const PatientTable = (props) => {
   return (
     <Card>
       <Scrollbar>
-        <Box >
+        <Box>
           <Table>
             <TableHead>
               <TableRow>
@@ -60,9 +60,9 @@ export const PatientTable = (props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((patient) => {
+              {items.map((patient, index) => {
                 return (
-                  <Row key={patient._id} row={patient}/>
+                  <Row key={patient._id} row={patient} index={index}/>
                 );
               })}
             </TableBody>

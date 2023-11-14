@@ -57,6 +57,9 @@ export const RequestTable = (props) => {
                 <TableCell>
                   Requested at
                 </TableCell>
+                <TableCell>
+                  Documents
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
