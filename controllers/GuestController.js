@@ -47,12 +47,8 @@ const registerPPatient = async (req, res) => {
         if (existingUser2) {
             return res.status(400).json('email already exists. Please choose another one.');
         }
-        const existingUser3 = await anotherPatientModel.findOne({NationalID}) || await Pharmacist.findOne({NationalID}) || await Administrator.findOne({NationalID}) || await PharmRequest.findOne({NationalID});
-        if (existingUser2) {
-            return res.status(400).json('NationalID already exists. Please choose another one.');
-        }
         const existingUser4 = await anotherPatientModel.findOne({Number}) || await Pharmacist.findOne({Number}) || await Administrator.findOne({Number}) || await PharmRequest.findOne({Number});
-        if (existingUser2) {
+        if (existingUser4) {
             return res.status(400).json('Number already exists. Please choose another one.');
         }
         const ppatient = new anotherPatientModel({
