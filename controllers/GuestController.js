@@ -21,7 +21,6 @@ const createToken = (username) => {
 // patient Registration
 const registerPPatient = async (req, res) => {
     try {
-        console.log("hello");
         const {
             FirstName,
             LastName,
@@ -47,6 +46,14 @@ const registerPPatient = async (req, res) => {
         const existingUser2 = await anotherPatientModel.findOne({Email}) || await Pharmacist.findOne({Email}) || await Administrator.findOne({Email}) || await PharmRequest.findOne({Email});
         if (existingUser2) {
             return res.status(400).json('email already exists. Please choose another one.');
+        }
+        const existingUser3 = await anotherPatientModel.findOne({NationalID}) || await Pharmacist.findOne({NationalID}) || await Administrator.findOne({NationalID}) || await PharmRequest.findOne({NationalID});
+        if (existingUser2) {
+            return res.status(400).json('NationalID already exists. Please choose another one.');
+        }
+        const existingUser4 = await anotherPatientModel.findOne({Number}) || await Pharmacist.findOne({Number}) || await Administrator.findOne({Number}) || await PharmRequest.findOne({Number});
+        if (existingUser2) {
+            return res.status(400).json('Number already exists. Please choose another one.');
         }
         const ppatient = new anotherPatientModel({
             FirstName,

@@ -3,15 +3,18 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
+import { Alert, Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import axios from 'axios';
+import React from 'react';
 //import { error } from 'console';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  const [showErrorAlert, setShowErrorAlert] = React.useState(false);
+  const [error, setError] = React.useState('');
   const formik = useFormik({
     initialValues: {
       FirstName: '',
@@ -74,16 +77,15 @@ const Page = () => {
         "Number": values.Number,
         "Gender": values.Gender };
           await axios.post('http://localhost:8000/addUser' , body)
-          .then((res) => { 
-            if(res.status != 200){
-              throw new Error(res.data.message); 
-            }
+          .then((res) => {
               return res['data'];
             })
             .then((data) => {
               router.push('/auth/login');
             });
       } catch (err) {
+        setError(err.response.data);
+        if (err.response.status == 400) { setShowErrorAlert(true);}
         helpers.setStatus({ success: false });
         helpers.setErrors({ Submit: err.response.data.error});
         helpers.setSubmitting(false);
@@ -137,6 +139,9 @@ const Page = () => {
                   Log in
                 </Link>
               </Typography>
+              {showErrorAlert && (
+                <Alert severity="error">{error}</Alert>
+              )}
             </Stack>
             <form
               noValidate
