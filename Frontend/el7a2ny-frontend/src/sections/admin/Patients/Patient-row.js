@@ -33,7 +33,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 const axios = require('axios');
 export const Row = (props) => {
-  const { row: patient } = props;
+  const { row: patient ,index:index} = props;
   const [open, setOpen] = useState(false);
   const onRemovePatient = async (username) => {
     try {
@@ -117,7 +117,7 @@ export const Row = (props) => {
               </Typography>
               <Stack direction="row" spacing={10} sx={{ mt: 3 }}>
                 <Avatar
-                  src="/assets/avatars/1.png"
+                  src={`/assets/avatars/${index}.png`}
                   sx={{
                     width: 120,
                     height: 120,

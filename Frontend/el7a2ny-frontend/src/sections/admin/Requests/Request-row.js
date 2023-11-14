@@ -5,6 +5,7 @@ import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
 import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon';
 import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon';
 import AdjustmentsVerticalIcon from '@heroicons/react/24/solid/AdjustmentsVerticalIcon';
+import ArrowDownTrayIcon from '@heroicons/react/24/solid/ArrowDownTrayIcon';
 import { format } from 'date-fns';
 import {
   Avatar,
@@ -31,8 +32,8 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
-
 const axios = require('axios');
+import FileSaver from 'file-saver';
 export const Row = (props) => {
   const { row: request, index: index } = props;
   const [open, setOpen] = useState(false);
@@ -67,6 +68,9 @@ export const Row = (props) => {
            console.log(err);
          });
   };
+  const handleFileDownload = (fileName) => {
+    FileSaver.saveAs(`/uploads/${fileName}`, `${fileName}`);
+  };
   return (
     <Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -95,6 +99,38 @@ export const Row = (props) => {
         </TableCell>
         <TableCell>
           {request.createdAt.substring(0, request.createdAt.indexOf('T'))}
+        </TableCell>
+        <TableCell>
+          <Tooltip title="National ID">
+            <IconButton
+              color="primary"
+              onClick={() => handleFileDownload(request.IDDocument)}
+            >
+              <SvgIcon fontSize="small">
+                <ArrowDownTrayIcon />
+              </SvgIcon>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Working License">
+            <IconButton
+              color="primary"
+              onClick={() => handleFileDownload(request.workingLicense)}
+            >
+              <SvgIcon fontSize="small">
+                <ArrowDownTrayIcon />
+              </SvgIcon>
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Pharmacy Degree">
+            <IconButton
+              color="primary"
+              onClick={() => handleFileDownload(request.pharmacyDegree)}
+            >
+              <SvgIcon fontSize="small">
+                <ArrowDownTrayIcon />
+              </SvgIcon>
+            </IconButton>
+          </Tooltip>
         </TableCell>
       </TableRow>
       <TableRow>

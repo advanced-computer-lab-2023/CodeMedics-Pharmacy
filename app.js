@@ -266,7 +266,7 @@ app.post("/rejectPharmacist", rejectPharmacist);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
-app.patch("/ditMedicine", editMedicine);
+app.patch("/ditMedicine", multerMiddleware ,editMedicine);
 app.get("/iewPatients", viewPatients);
 app.get("/iewPharmacists", viewPharmacists);
 app.get("/Medicines", viewMedicines);
