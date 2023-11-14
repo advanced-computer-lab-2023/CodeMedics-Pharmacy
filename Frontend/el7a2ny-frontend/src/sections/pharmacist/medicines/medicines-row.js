@@ -94,7 +94,7 @@ export const  Row = (props) => {
                 </Typography>
                 <Stack direction="row" spacing={10} sx={{mt: 3,}}>
                     <Avatar 
-                        src={medicine.Picture} 
+                        src={`/assets/products/${medicine.Picture}`} 
                         sx={{
                             width: 120 , 
                             height:120 , 

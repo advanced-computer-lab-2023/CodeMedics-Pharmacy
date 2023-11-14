@@ -30,6 +30,7 @@
 const upload = require('../config/multerConfig');
 const multerMiddleware = upload.single('Picture');
 const addMedicine = async (req, res) => {
+    console.log(req.body);
     try {
         const { name, Description, activeIngredients, price, medicalUse, availableQuantity } = req.body;
         if (!req.file) {
@@ -68,6 +69,7 @@ const addMedicine = async (req, res) => {
 };
 
 const editMedicine = async (req, res) => {
+    console.log(req.body);
     try {
       const { name, ...updates } = req.body;
   
@@ -83,6 +85,9 @@ const editMedicine = async (req, res) => {
         if (Object.hasOwnProperty.call(updates, key)) {
           medicine[key] = updates[key];
         }
+      }
+      if(req.file){
+        medicine.Picture = req.file.filename;
       }
   
       // Save the updated medicine to the database

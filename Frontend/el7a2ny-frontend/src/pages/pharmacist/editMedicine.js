@@ -8,6 +8,8 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layo
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useState } from 'react';
+import DocumentArrowUpIcon from '@heroicons/react/24/solid/DocumentArrowUpIcon';
+
 
 
 
@@ -38,13 +40,13 @@ const Page = ({}) => {
 
     const formik = useFormik({
         initialValues: {
-            name: medicine['name']??'',
-            price: medicine['price']??0,
-            availableQuantity: medicine['availableQuantity']??'',
-            description: medicine['Description']??'',
-            activeIngredient: medicine['activeIngredients'][0]??'',
-            medicalUse: medicine['medicalUse']??'',
-            picture: medicine['Picture']??'',
+            name: medicine['name'],
+            price: medicine['price'],
+            availableQuantity: medicine['availableQuantity'],
+            description: medicine['Description'],
+            activeIngredient: medicine['activeIngredients'][0],
+            medicalUse: medicine['medicalUse'],
+            picture: null,
             submit: null
         },
         validationSchema: Yup.object({
@@ -71,23 +73,25 @@ const Page = ({}) => {
             .string()
             .max(255)
             .required('Active Ingredient is required'),
-            picture: Yup
-            .string()
-            .max(255)
-            .required('Picture is required'),
         }),
         onSubmit: async (values, helpers) => {
           try {
-            const body = {
-                "name": values.name,
-                "price": values.price,
-                "availableQuantity": values.availableQuantity,
-                "Description": values.description,
-                "activeIngredients": values.activeIngredient,
-                "medicalUse": values.medicalUse,
-                "Picture": values.picture,
-            };
-              await axios.patch('http://localhost:8000/ditMedicine' , body)
+
+            console.log(values.price);
+            
+            const formData = new FormData();
+            formData.append('name', values.name);
+            formData.append('price', values.price);
+            formData.append('availableQuantity', values.availableQuantity);
+            formData.append('Description', values.description);
+            formData.append('activeIngredients', values.activeIngredient);
+            formData.append('medicalUse', values.medicalUse);
+            formData.append('Picture', values.picture);
+
+
+              await axios.patch('http://localhost:8000/ditMedicine' , formData , {headers: {
+                'Content-Type': 'multipart/form-data',
+              },})
               .then((res) => { 
                 if(res.status != 200){
                   throw new Error(res.data.message); 
@@ -202,16 +206,45 @@ const Page = ({}) => {
                     onChange={formik.handleChange}
                     value={formik.values.description}
                     />
-                    <TextField
-                    error = {!!(formik.touched.picture && formik.errors.picture)}
+                    <label htmlFor="picture">
+                    <Button
+                    component="span"
                     fullWidth
-                    helperText={formik.touched.picture && formik.errors.picture}
-                    label="Picture"
+                    size="medium"
+                    sx={{
+                      mt: 3,
+                      backgroundColor: '#F8F8F8', // Blue color
+                      '&:hover': {
+                        backgroundColor: '#F1F1F1', // Darker blue color on hover
+                      },
+                    }}
+                    endIcon={(
+                    <SvgIcon fontSize="small">
+                      <DocumentArrowUpIcon/>
+                    </SvgIcon>
+                  )}
+                  >
+                    Upload Picture   
+                  </Button>
+                  {formik.touched.picture && formik.errors.picture && (
+                    <Typography color="error" variant="body2" sx={{ mt: 1 }}/>
+                  )}
+                  {formik.values.picture && (
+                    <Typography variant="body2" sx={{ mt: 1 }}>
+                      {formik.values.picture.name}
+                    </Typography>
+                  )}
+                  <input
+                    id="picture"
                     name="picture"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.picture}
-                    />
+                    type="file"
+                    accept=".jpg, .jpeg, .png, .pdf"
+                    onChange={(event) => {
+                      formik.setFieldValue('picture', event.currentTarget.files[0]);
+                    }}
+                    style={{ display: 'none' }}
+                  />
+                </label>
                 </Stack>
               </Stack>
               {formik.errors.Submit && (

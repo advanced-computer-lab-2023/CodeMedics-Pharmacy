@@ -3,7 +3,7 @@ const multer = require('multer');
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         // Specify the destination folder where the uploaded files will be stored
-        cb(null, 'uploads/');
+        cb(null, 'frontend/el7a2ny-frontend/public/assets/products/');
     },
     filename: function (req, file, cb) {
         // Specify the file name for the uploaded files
