@@ -32,10 +32,41 @@ import { getInitials } from 'src/utils/get-initials';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
+const axios = require('axios');
 export const Row = (props) => {
-  const { row: request } = props;
+  const { row: request, index: index } = props;
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  console.log(request.DateOfBirth);
+  const HandleAccept = () => {
+    axios.post('http://localhost:8000/acceptPharmacist', {
+      Username: request.Username,
+      Email: request.Email
+    })
+         .then((res) => {
+           if (res.status == 200) {
+             console.log('Accepted');
+             router.refresh();
+           }
+         })
+         .catch((err) => {
+           console.log(err);
+         });
+  };
+  const HandleReject = () => {
+    axios.post('http://localhost:8000/rejectPharmacist', {
+      Username: request.Username,
+      Email: request.Email
+    })
+         .then((res) => {
+           if (res.status == 200) {
+             router.refresh();
+           }
+         })
+         .catch((err) => {
+           console.log(err);
+         });
+  };
   return (
     <Fragment>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
@@ -53,14 +84,14 @@ export const Row = (props) => {
         </TableCell>
         <TableCell>
           <Typography variant="h7">
-            {request.name}
+            {request.Name}
           </Typography>
         </TableCell>
         <TableCell>
-          {request.username}
+          {request.Email}
         </TableCell>
         <TableCell>
-          {request.gender}
+          {request.Degree}
         </TableCell>
         <TableCell>
           {request.createdAt.substring(0, request.createdAt.indexOf('T'))}
@@ -69,20 +100,20 @@ export const Row = (props) => {
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ ml: 20,mt:3,mb:3, position: 'relative', textAlign:'left'}} >
+            <Box sx={{ ml: 20, mt: 3, mb: 3, position: 'relative', textAlign: 'left' }}>
               <Typography variant="h6" gutterBottom component="div">
                 Medicne Details
               </Typography>
               <Stack direction="row" spacing={5} sx={{ mt: 3 }}>
                 <Avatar
-                  src={request.Picture}
+                  src={`/assets/avatars/${index}.png`}
                   sx={{
                     width: 120,
                     height: 120,
                     borderRadius: '10%'
                   }}
                 >
-                  {getInitials(request.name)}
+                  {getInitials(request.Name)}
                 </Avatar>
                 <Stack spacing={2} sx={{ width: 250 }}>
                   <TextField
@@ -99,11 +130,11 @@ export const Row = (props) => {
                     // error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
                     fullWidth
                     // helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
-                    label="Educational background"
-                    name="educationalBackground"
+                    label="Username"
+                    name="Username"
                     // onBlur={formik.handleBlur}
                     // onChange={formik.handleChange}
-                    value={request.educationalBackground}
+                    value={request.Username}
                   />
                 </Stack>
                 <Stack spacing={2} sx={{ width: 200 }}>
@@ -115,7 +146,7 @@ export const Row = (props) => {
                     name="Date of birth"
                     // onBlur={formik.handleBlur}
                     // onChange={formik.handleChange}
-                    value={request.dob.substring(0, request.dob.indexOf('T'))}
+                    value={request.DateOfBirth}
                   />
                   <TextField
                     // error = {!!(formik.touched.availableQuantity && formik.errors.availableQuantity)}
@@ -125,25 +156,25 @@ export const Row = (props) => {
                     name="hourlyRate"
                     // onBlur={formik.handleBlur}
                     // onChange={formik.handleChange}
-                    value={request.hourlyRate}
+                    value={request.HourlyRate}
                   />
                 </Stack>
-                <Stack spacing={2} direction="column" sx={{ mt: 3}}>
+                <Stack spacing={2} direction="column" sx={{ mt: 3 }}>
                   <Button
                     size="large"
-                    sx={{ height: 40, backgroundColor:'#0B815A' }}
+                    sx={{ height: 40, backgroundColor: '#0B815A' }}
                     type="submit"
                     variant="contained"
-
+                    onClick={HandleAccept}
                   >
                     Accept
                   </Button>
                   <Button
                     size="large"
-                    sx={{ height: 40, borderColor: '#B42318',color: '#B42318' }}
+                    sx={{ height: 40, borderColor: '#B42318', color: '#B42318' }}
                     variant="outlined"
                     type="submit"
-                    onClick={() => {setOpen(!open);}}
+                    onClick={HandleReject}
                   >
                     Reject
                   </Button>

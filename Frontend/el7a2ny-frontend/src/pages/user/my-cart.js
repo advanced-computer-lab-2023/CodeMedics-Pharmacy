@@ -37,7 +37,7 @@ const Page = () => {
         } catch (err) {
             // console.log(err);
         }
-    }, [cart]);
+    }, []);
 
     return (
         <>

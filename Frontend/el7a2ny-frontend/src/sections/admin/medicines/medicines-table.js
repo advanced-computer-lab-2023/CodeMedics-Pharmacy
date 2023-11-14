@@ -1,40 +1,51 @@
 import PropTypes from 'prop-types';
-import Xmark from '@heroicons/react/24/solid/XMarkIcon';
-import Check from '@heroicons/react/24/solid/CheckIcon';
+import { Fragment } from 'react';
+import ArrowUpOnSquareIcon from '@heroicons/react/24/solid/ArrowUpTrayIcon';
+import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
+import ChevronRightIcon from '@heroicons/react/24/solid/ChevronRightIcon';
+import ChevronDownIcon from '@heroicons/react/24/solid/ChevronDownIcon';
+import AdjustmentsVerticalIcon from '@heroicons/react/24/solid/AdjustmentsVerticalIcon';
+import { format } from 'date-fns';
 import {
   Avatar,
   Box,
   Card,
-  Checkbox, IconButton,
-  Stack, SvgIcon,
+  Button,
+  Checkbox,
+  Stack,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TablePagination,
+  SvgIcon,
   TableRow,
-  Typography
+  IconButton,
+  Tooltip,
+  Typography,
+  Collapse ,
+  TextField,
+  MenuItem 
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
-import { useState } from 'react';
-import React from 'react';
-import 'reactjs-popup/dist/index.css';
-import { Row } from './Request-row';
+import { getInitials } from 'src/utils/get-initials';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import {Row} from './medicines-row';
 
-export const RequestTable = (props) => {
+
+
+
+export const MedicinesTable = (props) => {
   const {
     count = 0,
     items = [],
-    onDeselectAll,
-    onDeselectOne,
-    onPageChange = () => {},
+    onPageChange = () => { },
     onRowsPerPageChange,
-    onSelectAll,
-    onSelectOne,
     page = 0,
     rowsPerPage = 0,
-    selected = []
   } = props;
+  const router = useRouter()
 
   return (
     <Card>
@@ -43,26 +54,26 @@ export const RequestTable = (props) => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>
+                <TableCell> 
                 </TableCell>
-                <TableCell >
+                <TableCell>
                   Name
                 </TableCell>
                 <TableCell>
-                  Email
+                  Price
                 </TableCell>
                 <TableCell>
-                  Degree
+                  Medical Use
                 </TableCell>
                 <TableCell>
-                  Requested at
+                  Description
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {items.map((request,index) => {
+              {items.map((medicine) => {
                 return (
-                  <Row key={request.id} row={request} index={index}/>
+                  <Row key={medicine._id} row={medicine}/>
                 );
               })}
             </TableBody>
@@ -81,28 +92,8 @@ export const RequestTable = (props) => {
     </Card>
   );
 };
-// <TableCell>
-//   <IconButton
-//     color="#B42318"
-//     onClick={() => {
-//     }}
-//   >
-//     <SvgIcon fontSize="medium">
-//       <Xmark/>
-//     </SvgIcon>
-//   </IconButton>
-//   <IconButton
-//     color="primary"
-//     onClick={() => {
-//     }}
-//   >
-//     <SvgIcon fontSize="medium">
-//       <Check/>
-//     </SvgIcon>
-//   </IconButton>
-// </TableCell>
 
-RequestTable.propTypes = {
+MedicinesTable.propTypes = {
   count: PropTypes.number,
   items: PropTypes.array,
   onDeselectAll: PropTypes.func,

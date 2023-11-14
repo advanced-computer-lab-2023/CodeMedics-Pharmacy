@@ -139,7 +139,11 @@ export const OverviewLatestProducts = (props) => {
                 primaryTypographyProps={{variant: 'subtitle2'}}
                 secondaryTypographyProps={{variant: 'body2'}}
                 />
-
+                <ListItemText
+                secondary={product.Description}
+                primaryTypographyProps={{variant: 'subtitle2'}}
+                secondaryTypographyProps={{variant: 'body2'}}
+                />
               <CardActions>
                 <Button
                   color="primary"

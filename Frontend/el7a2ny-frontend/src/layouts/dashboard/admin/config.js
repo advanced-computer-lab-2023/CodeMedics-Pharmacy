@@ -27,6 +27,14 @@ export const items = [
       </SvgIcon>
     )
   },{
+    title: 'Medicines',
+    path: '/admin/medicines',
+    icon: (
+      <SvgIcon fontSize="small">
+        <UsersIcon />
+      </SvgIcon>
+    )
+  },{
     title: 'Pharmacists',
     path: '/admin/pharmacists',
     icon: (

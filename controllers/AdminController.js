@@ -64,7 +64,7 @@ const createAdmin = async (req, res) => {
         }
     }
     // If all required variables are present, proceed with creating an admin
-    const { Username, Password} = req.body;
+    const {Username, Password} = req.body;
     // Hash the password using bcrypt
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(Password, salt);
@@ -146,13 +146,11 @@ const viewPharmacists = async (req, res) => {
 
 const viewPharmacistApplications = async (req, res) => {
     try {
-        const pharmacistApplications = await pharmacistRequests.find();
-        console.log('Pharmacist Applications:', pharmacistApplications);
+        const pharmacistApplications = await pharmacistModel.find({Status: 'Pending'});
 
         if (!pharmacistApplications || pharmacistApplications.length == 0) {
             return res.status(404).json({message: 'No pharmacist applications found.'});
         }
-        console.log(pharmacistApplications);
         return res.status(200).json({pharmacistApplications});
     } catch (error) {
         return res.status(500).json({error: 'Failed to fetch pharmacist applications.'});
@@ -171,6 +169,26 @@ const viewPatients = async (req, res) => {
     } catch (error) {
         return res.status(500).json({error: 'Failed to fetch pharmacists.'});
     }
+};
+const acceptPharmacist = async (req, res) => {
+    const {Username, Email} = req.body;
+    const Pharmacist = await pharmacistModel.findOne({Username: Username, Email: Email});
+    if (!Pharmacist) {
+        return res.status(400).json({message: 'Pharmacist not found'});
+    }
+    await Pharmacist.updateOne({Status: 'Approved'});
+    await Pharmacist.save();
+    return res.status(200).json({message: 'Pharmacist approved successfully'});
+};
+const rejectPharmacist = async (req, res) => {
+    const {Username, Email} = req.body;
+    const Pharmacist = await pharmacistModel.findOne({Username: Username, Email: Email});
+    if (!Pharmacist) {
+        return res.status(400).json({message: 'Pharmacist not found'});
+    }
+    await Pharmacist.updateOne({Status: 'Rejected'});
+    await Pharmacist.save();
+    return res.status(200).json({message: 'Pharmacist Rejected successfully'});
 };
 
 // const searchMedicine = async (req, res) => {
@@ -247,5 +265,7 @@ module.exports = {
     viewPharmacists,
     viewPharmacistApplications,
     viewPatients,
-    auth
+    auth,
+    acceptPharmacist,
+    rejectPharmacist
 };

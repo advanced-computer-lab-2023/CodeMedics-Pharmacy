@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import {
   Box, Button,
-  Card, SvgIcon,
+  Card, Stack, SvgIcon,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +15,7 @@ import 'reactjs-popup/dist/index.css';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useRouter } from 'next/navigation';
+
 const axios = require('axios');
 export const PharmacistDeletePopup = (props) => {
   const {
@@ -30,7 +31,7 @@ export const PharmacistDeletePopup = (props) => {
     try {
       console.log(username + ' of api call');
       const removeResponse = await axios.delete('http://localhost:8000/removePharmacist', {
-        data: { Username: username },
+        data: { Username: username }
       });
       console.log('Pharmacist removed successfully.');
     } catch (error) {
@@ -38,7 +39,7 @@ export const PharmacistDeletePopup = (props) => {
       throw error;
     }
   };
-  const router=useRouter();
+  const router = useRouter();
   const handleRemoveClick = async () => {
     try {
       console.log(username + ' button handle');
@@ -71,32 +72,27 @@ export const PharmacistDeletePopup = (props) => {
       }}
     >
       <Box sx={{ minWidth: 300 }}>
-        <Typography variant="h5" paragraph={true}>
-          Are you sure you want to delete {items}?
-        </Typography>
-        <div style={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'flex-start',
-          padding: '10px'
-        }}>
-          <Button style={{ marginRight: '10px' }}
-                  startIcon={<SvgIcon fontSize="small"><CheckIcon/></SvgIcon>}
-                  variant="contained"
-                  onClick={handleRemoveClick}
-          >
-            Remove
-          </Button>
-          <Button
-            startIcon={<SvgIcon fontSize="small"><CancelIcon/></SvgIcon>}
-            variant="contained"
-            onClick={() => onClose()}>
+        <Stack direction="column" spacing={2}>
+          <Typography variant="h6" paragraph={true}>
+            Are you sure you want to delete {items}?
+          </Typography>
+         <Stack direction="row" spacing={0.1} >
+            <Button style={{ marginRight: '10px' }}
+                    startIcon={<SvgIcon fontSize="small"><CheckIcon/></SvgIcon>}
+                    variant="contained"
+                    onClick={handleRemoveClick}
+            >
+              Remove
+            </Button>
+            <Button
+              startIcon={<SvgIcon fontSize="small"><CancelIcon/></SvgIcon>}
+              variant="contained"
+              onClick={() => onClose()}>
 
-            Cancel
-          </Button></div>
+              Cancel
+            </Button>
+          </Stack>
+        </Stack>
       </Box>
 
     </Popup>
