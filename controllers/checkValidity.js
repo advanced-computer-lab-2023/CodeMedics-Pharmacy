@@ -1,5 +1,5 @@
 const Patient = require('../models/Patient');
-const { getUsername } = require('../../CodeMedics-Pharmacy/config/infoGetter');
+const { getUsername } = require('.././config/infoGetter');
 const Cart = require('../models/Cart');
 const checkValidity = async(req, res) =>{
     console.log("we are in the checkValidity");

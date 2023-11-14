@@ -1,6 +1,6 @@
 const Patient = require('../models/Patient');
 const Order = require('../models/Order');
-const { getUsername } = require('../../CodeMedics-Pharmacy/config/infoGetter');
+const { getUsername } = require('.././config/infoGetter');
 const Medicine = require('../models/Medicine');
 const updateAll = async(req, res) =>{
     const username = getUsername();
