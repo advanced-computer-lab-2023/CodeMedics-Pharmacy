@@ -32,8 +32,8 @@ const ifPaymentDone = async(req, res) =>{
     let amount = await calculateAmount(medicines);
     console.log(amount);
     const order = new Order({
+        PatientId: patient._id,
         patient: patient.FirstName + " " + patient.LastName,
-        patientUsername: patient.Username,
         items: medicines,
         amount: amount,
         status: "Ordered"

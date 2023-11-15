@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
+import axios from 'axios';
 
 const statusMap = {
   pending: 'warning',
@@ -41,6 +42,10 @@ function formatDate(inputDate) {
 
 export const OverviewLatestOrders = (props) => {
   const { orders, sx } = props;
+  const handleCancel = (orderId) => {
+    axios.post(`http://localhost:8000/cancelOrder?orderId=${orderId}`);
+    window.location.reload();
+  };
 
   return (
     <Card sx={sx}>
@@ -58,6 +63,9 @@ export const OverviewLatestOrders = (props) => {
                 </TableCell>
                 <TableCell>
                   Amount
+                </TableCell>
+                <TableCell>
+                  Actions
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -79,6 +87,17 @@ export const OverviewLatestOrders = (props) => {
                       <SeverityPill color={statusMap[order.status]}>
                         {order.amount}
                       </SeverityPill>
+                    </TableCell>
+                    <TableCell>
+                      <Button 
+                        color="inherit"
+                        size="small"
+                        variant="contained"
+                        style={{ backgroundColor: 'rgba(255, 0, 0, 0.6)', color: 'white' }}
+                        onClick={() => handleCancel(order._id)}
+                      >
+                        Cancel
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

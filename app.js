@@ -41,10 +41,11 @@ const options = {
 const path = require('path');
 const ifPaymentDone = require('./controllers/ifPaymentDone');
 const checkValidity = require('./controllers/checkValidity');
+const cancelOrder = require('./controllers/cancelOrder');
 const upload = require('./config/multerConfig');
 const {registerPPatient, registerPharmacist, loginUser} = require('./controllers/GuestController');
 const {resetPassword} = require('./controllers/ResetPassword');
-const {changePassword} = require('./controllers/ChangePassword');
+const {changePassword} = require('./controllers/changePassword');
 const AdminRoutes = require('./routes/AdminRoutes')
 const {
     createAdmin,
@@ -68,6 +69,7 @@ const {
 } = require('./controllers/MedicineController');
 
 const getOrders = require('./controllers/getOrders');
+
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
@@ -100,6 +102,8 @@ app.get("/user/checkValidity", checkValidity);
 app.get("/user/getOrders", getOrders);
 
 app.post('/resetPassword', resetPassword);
+
+app.post("/cancelOrder", cancelOrder);
 
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
