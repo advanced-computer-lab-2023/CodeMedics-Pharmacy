@@ -47,6 +47,25 @@ const Page = () => {
     }
   };
 
+    useEffect(() => {
+      await axios.post('http://localhost:8000/addMedicine' , body)
+              .then((res) => { 
+                if(res.status != 200){
+                  throw new Error(res.data.message); 
+                }
+                  return res['data'];
+                })
+                .then((data) => {
+                    router.push('/pharmacist/medicines');
+                });
+          } catch (err) {
+            console.log(err)
+            helpers.setStatus({ success: false });
+            helpers.setErrors({ Submit: err.response.data.message});
+            helpers.setSubmitting(false);
+          }
+    },[]);
+
     const formik = useFormik({
         initialValues: {
             name: '',
