@@ -93,8 +93,11 @@ export const OverviewLatestOrders = (props) => {
                         color="inherit"
                         size="small"
                         variant="contained"
-                        style={{ backgroundColor: 'rgba(255, 0, 0, 0.6)', color: 'white' }}
+                        style={{  backgroundColor: 'rgba(255, 0, 0, 0.6)', color: 'white', 
+                        ...(order.status !== 'Ordered' ? { backgroundColor: 'gray', color: 'white' } : {}),
+                      }}
                         onClick={() => handleCancel(order._id)}
+                        disabled={order.status !== 'Ordered'}
                       >
                         Cancel
                       </Button>
