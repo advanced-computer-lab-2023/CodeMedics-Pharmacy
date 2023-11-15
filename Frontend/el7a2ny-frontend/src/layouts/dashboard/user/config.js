@@ -1,7 +1,7 @@
 import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
 import CogIcon from '@heroicons/react/24/solid/CogIcon';
 import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
-import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
+import ShoppingCartIcon from '@heroicons/react/24/solid/ShoppingCartIcon';
 import CurrencyDollarIcon from '@heroicons/react/24/solid/CurrencyDollarIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
@@ -24,7 +24,7 @@ export const items = [
     path: '/user/my-cart',
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
+        <ShoppingCartIcon />
       </SvgIcon>
     )
   },
@@ -51,7 +51,7 @@ export const items = [
     path: '/user/account',
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
+        <ShoppingCartIcon />
       </SvgIcon>
     )
   },

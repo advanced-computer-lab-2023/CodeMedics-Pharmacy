@@ -75,6 +75,10 @@ const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
 const {getTotalAmont} = require('./controllers/getTotalAmount');
 
+const {getAdress} = require('./controllers/getAddress');
+
+app.get("/getAddress", getAdress);
+
 app.patch("/getTotalAmount", getTotalAmont);
 
 const {updateMedicine, getCart} = require('./controllers/updateMedicine');
@@ -272,7 +276,7 @@ app.delete("/removePharmacist", removePharmacist);
 app.delete("/removePatient", removePatient);
 app.post("/acceptPharmacist", acceptPharmacist);
 app.post("/rejectPharmacist", rejectPharmacist);
-//app.get("/viewPharmacistApplications", viewPharmacistApplications);
+app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
 app.patch("/ditMedicine", multerMiddleware ,editMedicine);

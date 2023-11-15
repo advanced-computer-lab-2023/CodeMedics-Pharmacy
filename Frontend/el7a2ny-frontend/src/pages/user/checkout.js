@@ -48,15 +48,13 @@ const Page = () => {
   };
 
     useEffect(() => {
-      await axios.post('http://localhost:8000/addMedicine' , body)
+      try{
+       axios.get('http://localhost:8000/getAddress' , body)
               .then((res) => { 
-                if(res.status != 200){
-                  throw new Error(res.data.message); 
-                }
                   return res['data'];
                 })
                 .then((data) => {
-                    router.push('/pharmacist/medicines');
+                  console.log(data);
                 });
           } catch (err) {
             console.log(err)

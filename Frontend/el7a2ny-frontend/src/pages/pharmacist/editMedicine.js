@@ -86,7 +86,7 @@ const Page = ({}) => {
             formData.append('Description', values.description);
             formData.append('activeIngredients', values.activeIngredient);
             formData.append('medicalUse', values.medicalUse);
-            formData.append('Picture', values.picture);
+            if(values.picture) formData.append('Picture', values.picture);
 
 
               await axios.patch('http://localhost:8000/ditMedicine' , formData , {headers: {

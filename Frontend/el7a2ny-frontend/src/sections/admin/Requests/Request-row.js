@@ -195,7 +195,7 @@ export const Row = (props) => {
                     value={request.HourlyRate}
                   />
                 </Stack>
-                <Stack spacing={2} direction="column" sx={{ mt: 3 }}>
+                <Stack spacing={2} direction="column" sx={{ pt: 2 }}>
                   <Button
                     size="large"
                     sx={{ height: 40, backgroundColor: '#0B815A' }}
