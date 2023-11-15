@@ -33,11 +33,12 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
   const [cart, setCart] = useState(orders);
   const router = useRouter();
   const username = Cookies.get('username');
+  console.log("in the overview", username);
   useEffect(() => {
     fetch(`http://localhost:8000/getCart?username=${username}`)
       .then((response) => response.json())
       .then((data) => {
-        console.log('Updated Cart:', data);
+        // console.log('Updated Cart:', data);
         setCart(data);
       })
       .catch((error) => {
@@ -77,20 +78,26 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
   };
 
   const handleProceedToCheckout = () => {
-    console.log(username);
-    router.push('/user/review');
-    // axios.get(`http://localhost:8000/user/checkValidity`, { username: username })
-    //   .then((res) => {
-    //     return res['data'];
-    //   })
-    //   .then((data) => {
-    //     router.push('/user/review');
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     alert(err.message);
-    //     window.location.reload();
-    //   });
+    // console.log(username);
+    // router.push('/user/review');
+    axios.get(`http://localhost:8000/user/checkValidity?username=${username}`, {})
+      .then((res) => {
+        return res['data'];
+      })
+      .then((data) => {
+        if(data.message === 'Valid'){
+          router.push('/user/review');
+        }
+        else{
+          alert(data.message);
+          window.location.reload();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        alert(err.message);
+        window.location.reload();
+      });
 
   };
 

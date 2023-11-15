@@ -6,17 +6,34 @@ import {
   useElements
 } from "@stripe/react-stripe-js";
 
-const handleBack = () =>{
-    window.location.href = "/users?step=0";
-}
-
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
+import { set } from "lodash";
 export default function CheckoutForm({activeStep, setStep}) {
   const stripe = useStripe();
   const elements = useElements();
 
-
+  const router = useRouter();
+  
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const username = Cookies.get('username');
+  const [isDone, setIsDone] = useState(false);
+  const [callOrders, setCallOrders] = useState(false);
+  useEffect(() => {
+    if (isDone) {
+      axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`);
+      setCallOrders(true);
+    }
+  }
+  , [isDone]);
+
+  useEffect(() => {
+    if (callOrders) {
+      router.push('/user/orders?username='+username);
+    }
+  }, [callOrders]);
 
   useEffect(() => {
     if (!stripe) {
@@ -36,7 +53,7 @@ export default function CheckoutForm({activeStep, setStep}) {
       switch (paymentIntent.status) {
         case "succeeded":
           {
-            axios.post('http://localhost:8000/ifPaymentDone');
+            setIsDone(true);
             setMessage("Payment succeeded!");
           }
           break;
@@ -65,7 +82,8 @@ export default function CheckoutForm({activeStep, setStep}) {
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: "http://localhost:3000/user/orders"
+        // return_url: "http://localhost:3000/user/orders"
+        return_url: window.location.href
       },
     });
 
@@ -92,16 +110,6 @@ export default function CheckoutForm({activeStep, setStep}) {
     <form id="payment-form" onSubmit={handleSubmit}>
 
       <PaymentElement id="payment-element" options={paymentElementOptions} />
-      {/* <Button
-        disabled={isLoading || !stripe || !elements}
-        id="submit"
-        variant="contained"
-        sx={{ marginTop: '20px' }} 
-      >
-        <span id="button-text">
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Pay Order"}
-        </span>
-      </Button> */}
       <button
   disabled={isLoading || !stripe || !elements}
   id="submit"
@@ -119,7 +127,7 @@ export default function CheckoutForm({activeStep, setStep}) {
   }}
 >
   <span id="button-text">
-    {isLoading ? <div className="spinner" id="spinner"></div> : "Pay Order"}
+    {isLoading ? <div className="spinner" id="spinner" ></div> : "Pay Order"}
   </span>
 </button>
 

@@ -24,8 +24,23 @@ const statusMap = {
   refunded: 'error'
 };
 
+
+function formatDate(inputDate) {
+  const date = new Date(inputDate);
+  
+  // Get day, month, and year
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based
+  const year = date.getFullYear();
+
+  // Construct the formatted date string
+  const formattedDate = `${day}/${month}/${year}`;
+
+  return formattedDate;
+}
+
 export const OverviewLatestOrders = (props) => {
-  const { orders = [], sx } = props;
+  const { orders, sx } = props;
 
   return (
     <Card sx={sx}>
@@ -48,8 +63,7 @@ export const OverviewLatestOrders = (props) => {
             </TableHead>
             <TableBody>
               {orders.map((order) => {
-                const createdAt = format(order.createdAt, 'dd/MM/yyyy');
-
+                const createdAt = formatDate(order.createdAt);
                 return (
                   <TableRow
                     hover

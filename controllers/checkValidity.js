@@ -1,20 +1,21 @@
 const Patient = require('../models/Patient');
 const { getUsername } = require('.././config/infoGetter');
-const Cart = require('../models/Cart');
+const Medicine = require('../models/Medicine');
 const checkValidity = async(req, res) =>{
     console.log("we are in the checkValidity");
-    const username = getUsername();
+    const username = req.query.username;
     const patient = await Patient.findOne({Username: username});
-    const cart = patient.Cart;
-    let ret = true;
+    const cart = patient.Cart.items;
     for (let i = 0; i < cart.length; i++) {
-        const curMedicine = await Cart.findOne({Name: cart[i].Name});
-        if(curMedicine.Quantity < cart[i].Quantity){
-            cart[i].Quantity = curMedicine.Quantity;
-            res.status(400).json({message: "Quantity of " + cart[i].Name + " is not available"});
+        const curMedicine = await Medicine.findOne({Name: cart[i].Name});
+        console.log(cart[i] , curMedicine.availableQuantity," ", cart[i].Quantity);
+        if(curMedicine.availableQuantity < cart[i].Quantity){
+            cart[i].Quantity = curMedicine.availableQuantity;
+            await patient.save();
+            res.status(200).json({message: "the available quantity of " + curMedicine.name + " is " + curMedicine.availableQuantity});
+            return;
         }
     }
-    await patient.save();
     res.status(200).json({message: "Valid"});
 }
 

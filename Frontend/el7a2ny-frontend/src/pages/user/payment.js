@@ -146,7 +146,7 @@ const Page = () => {
                       <ArrowSmallLeftIcon />
                     </SvgIcon>
                   )}
-                  onClick={() => router.push('/user/medicines')}
+                  onClick={() => router.push('/user/review')}
                   sx = {{width : 90}}
                 >
                   Back
@@ -267,7 +267,7 @@ const Page = () => {
                     </Typography>
                     {!credit && <Button
                         variant="contained"
-                        onClick={() => {axios.post('http://localhost:8000/ifPaymentDone');}}
+                        onClick={() => {axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`);}}
                         sx = {{width : 180 , height : 50}}
                         >
                             Pay Order

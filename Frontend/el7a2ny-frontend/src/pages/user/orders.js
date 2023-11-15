@@ -13,62 +13,100 @@ import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { set } from 'lodash';
 const now = new Date();
+
 
 const Orders = () => {
 
-  const[myOrders, setMyOrders] = useState([]);
+  const[myOrders, setMyOrders] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const username = Cookies.get('username');
   useEffect(() => {
-    axios.get(`http://localhost:8000/getOrders`, {username: username})
+    axios.get(`http://localhost:8000/user/getOrders?username=`+username)
       .then((res) => {
         return res['data'];
       })
       .then((data) => {
-        setMyOrders(data);
+        setMyOrders(data.orders);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
 
+
+  const styles = `
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+  }
+
+  .loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+`;
+
   return (
+   isLoading ? (
+    <div>
+      <style>{styles}</style>
+      <div className="loading-container">
+        <div className="loading-spinner"></div>
+        <p>Loading...</p>
+      </div>
+    </div>
+   ):(
     <>
-      <Head>
-        <title>
-          El7a2ny Pharmacy
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
+    <Head>
+      <title>
+        El7a2ny Pharmacy
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Grid
+          container
+          spacing={3}
+        >
+ 
           <Grid
-            container
-            spacing={3}
+            xs={20}
+            md={20}
+            lg={15}
           >
-   
-            <Grid
-              xs={20}
-              md={20}
-              lg={15}
-            >
-  
-              <OverviewLatestOrders
-                orders={myOrders}
-                sx={{ height: '100%' }}
-              />
-              
-            </Grid>
+
+            <OverviewLatestOrders
+              orders={myOrders}
+              sx={{ height: '100%' }}
+            />
+            
           </Grid>
-        </Container>
-      </Box>
-    </>
-  );
+        </Grid>
+      </Container>
+    </Box>
+  </>
+  ));
 }
 
 Orders.getLayout = (Orders) => (

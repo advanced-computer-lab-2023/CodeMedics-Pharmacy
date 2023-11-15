@@ -28,9 +28,7 @@ const Page = () => {
     const router = useRouter();
 
     const handleProceedToPayment = () => {
-        // Implement logic for proceeding to payment
         router.push('/user/payment', );
-        console.log('Proceeding to payment...');
       };
 
     React.useEffect(() => {

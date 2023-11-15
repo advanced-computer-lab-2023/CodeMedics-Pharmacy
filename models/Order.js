@@ -6,7 +6,7 @@ const OrderSchema = new Schema({
     },
     status : {
         type: String,
-        enum: ['Ordered', 'Delivered', 'Cancelled']
+        // enum: ['Ordered', 'Delivered', 'Cancelled']
     },
     amount : {
         type: Number

@@ -46,7 +46,7 @@ const updateMedicine = async(req, res) =>{
 const getCart = async(req, res) => {
     try{
         const username = req.query.username;
-        console.log(username);
+        // console.log(username);
         const patient = await PharmacyPatient.findOne({Username: username});
         if(!patient.Cart) return res.status(200).json([]);
         const patientCart = patient.Cart.items;
@@ -61,7 +61,7 @@ const getCart = async(req, res) => {
             let price = med.price;
             medicineArray.push({"medicineName": medicineName, "quantity": cnt, "price": price, "medicineID": id, "picture": picture});
         }
-        console.log('here -------->');
+        // console.log('here -------->');
         return res.status(200).json(medicineArray);
     }catch(err){
         console.log(err)

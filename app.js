@@ -6,7 +6,7 @@ require('dotenv').config();
 const app = express();
 const Port = process.env.PORT || 8000;
 const stripe = require("stripe")('sk_test_51OA3YuHNsLfp0dKZBQsyFFPLXepbGkt9p5xZzd2Jzzj6zxLqUTY2DYF244qILCi0cfVjg37szrwdXZzin83e5ijm00X5eXuTnM');
-
+const Patient = require('./models/Patient');
 //const DeleteModelRecords = require('./config/DeleteAllRecords');
 
 const MongoURI = process.env.MONGO_URI;
@@ -67,6 +67,7 @@ const {
     getMedicalUses
 } = require('./controllers/MedicineController');
 
+const getOrders = require('./controllers/getOrders');
 
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
@@ -77,8 +78,7 @@ app.patch("/getTotalAmount", getTotalAmont);
 const {updateMedicine, getCart} = require('./controllers/updateMedicine');
 
 app.post("/create-payment-intent", async (req, res) => {
-    // const { items } = req.body;
-    const card = req.body.card;
+    const card = req.body;
     console.log("we are in the create payment intent");
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
@@ -95,9 +95,11 @@ app.post("/create-payment-intent", async (req, res) => {
     });
   });
 
-  app.get("http://localhost:8000/user/checkValidity", checkValidity);
+app.get("/user/checkValidity", checkValidity);
 
-  app.post('/resetPassword', resetPassword);
+app.get("/user/getOrders", getOrders);
+
+app.post('/resetPassword', resetPassword);
 
 app.get("/", (req, res) => {
     const filePath = path.join(__dirname, "pages", "Home.html");
