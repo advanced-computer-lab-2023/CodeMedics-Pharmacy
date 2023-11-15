@@ -5,15 +5,27 @@ import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
 import axios from 'axios';
 const stripePromise = loadStripe('pk_test_51OA3YuHNsLfp0dKZSCi30qg6xY63jh2SiffqCIa42j0oTXnZ29hNOalf44tjkJZsjT27xldMpzbojdn6vYcEx9CI00kvtRqele');
-
+import Cookies from 'js-cookie';
 export default function PaymentForm({activeStep, setStep}) {
   const [clientSecret, setClientSecret] = useState('');
-
- 
+  const [products, setProducts] = useState(null);
+  const [total, setTotal] = useState(0);
+  const username = Cookies.get('username');
+  useEffect(()=>{
+    axios.get('http://localhost:8000/getCart?username='+username).then(response => {
+      console.log(response.data);
+      setProducts(response.data);
+      const gtotal = calculateTotal(response.data);
+      setTotal(gtotal);
+    }
+    ).catch(error => {
+      console.log('error here ---->', error);
+    });
+  })
   useEffect(() => {
     console.log('PaymentForm.js was here');
     // Create PaymentIntent as soon as the page loads
-     axios.post('http://localhost:8000/create-payment-intent', { })
+     axios.post('http://localhost:8000/create-payment-intent?amount='+total, { })
       .then((data) => setClientSecret(data.data.clientSecret)).catch((error) => {
         console.log(error);
       });

@@ -5,7 +5,8 @@ const Medicine = require('../models/Medicine');
 const calculateAmount = async(items) =>{
     let amount = 0;
     for (const item of items) {
-        const medicine = await Medicine.findOne({name: item.name});
+        const medicine = await Medicine.findById(item.MedicineId);
+        console.log(item);
         console.log(item.name, medicine);
         console.log(item.Quantity, medicine.price);
         amount += item.Quantity * medicine.price;
