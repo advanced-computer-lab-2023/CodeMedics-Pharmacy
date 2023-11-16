@@ -11,6 +11,7 @@ const cancelOrder = async(req, res) =>{
     }
     if(order.status == "Ordered"){
         order.status = "Cancelled";
+        
         await order.save();
         for(const o of patient.Orders){
             // console.log(o._id, orderId, o._id == orderId);
@@ -19,12 +20,16 @@ const cancelOrder = async(req, res) =>{
                 break;
             }
         }
-        await patient.save();
+        
+        let amount = 0;
         for(const m of order.items){
             const medicine = await Medicine.findOne({_id: m.MedicineId});
             medicine.availableQuantity += m.Quantity;
+            amount += (m.Quantity * medicine.price);
             await medicine.save();
         }
+        patient.Wallet += amount;   
+        await patient.save();
         res.status(200).json({message : "Order has been cancelled successfully"});
     }
     else{

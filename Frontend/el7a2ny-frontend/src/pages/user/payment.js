@@ -68,11 +68,13 @@ const Page = () => {
     }
   };
   
-  const handleWithWallet = async() =>{
+  const handleWithWallet =() =>{
       try{
-        await axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`, {type: 'Wallet'});
+        axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`, {type: 'Wallet'});
+        console.log('here --->');
         router.push('/user/orders?username='+username);   
       }catch(err){
+        console.log('here ---> 11  ');
         console.log(err);
       }
   }
