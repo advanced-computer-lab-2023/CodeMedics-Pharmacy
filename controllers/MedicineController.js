@@ -29,10 +29,10 @@
 // };
 const upload = require('../config/multerConfig');
 const multerMiddleware = upload.single('Picture');
+
 const addMedicine = async (req, res) => {
-    console.log(req.body);
     try {
-        const { name, Description, activeIngredients, price, medicalUse, availableQuantity } = req.body;
+        const { name, Description, activeIngredients, price, medicalUse, availableQuantity  , otc} = req.body;
         if (!req.file) {
             return res.status(400).json({ message: 'Please upload Medicine Picture' });
         }
@@ -54,7 +54,8 @@ const addMedicine = async (req, res) => {
                 price,
                 medicalUse,
                 availableQuantity: availableQuantity, 
-                Picture : req.file.filename
+                Picture : req.file.filename,
+                otc,
             });
 
 
@@ -170,7 +171,7 @@ const Medicine = require('../models/Medicine');
 
 const viewMedicines = async (req, res) => {
     try {
-        const medicines = await Medicine.find();
+        const medicines = await Medicine.find({availableQuantity: {$gt: 0}});
 
         if (!medicines || medicines.length === 0) {
             return res.status(404).json({ message: 'No medicines found.' });
@@ -187,7 +188,7 @@ const viewMedicines = async (req, res) => {
 
 const viewMedicinesPharmacist = async (req, res) => {
     try {
-        const medicines = await Medicine.find({}, 'name price Description Picture sales availableQuantity');
+        const medicines = await Medicine.find();
 
         if (!medicines || medicines.length === 0) {
             return res.status(404).json({ message: 'No medicines found.' });

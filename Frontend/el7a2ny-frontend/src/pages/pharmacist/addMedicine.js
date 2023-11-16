@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 import { useEffect, useState } from 'react';
 import * as Yup from 'yup';
-import { Box, Button, Container, Stack, SvgIcon, Typography , TextField ,CardContent,Card} from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography , TextField ,CardContent,Card,FormControlLabel , Checkbox} from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import axios from 'axios';
 import DocumentArrowUpIcon from '@heroicons/react/24/solid/DocumentArrowUpIcon';
@@ -41,6 +41,7 @@ const Page = () => {
             description: '',
             activeIngredient: '',
             medicalUse: '',
+            otc: true,
             picture: null,
             submit: null
         },
@@ -53,7 +54,7 @@ const Page = () => {
             .number()
             .required('Price is required'),
             availableQuantity: Yup
-            .string()
+            .number()
             .max(255)
             .required('Available Quantity is required'),
             description: Yup
@@ -68,6 +69,8 @@ const Page = () => {
             .string()
             .max(255)
             .required('Active Ingredient is required'),
+            otc: Yup
+            .boolean(),
             picture: Yup
             .mixed()
             .test('fileRequired', 'Picture is required', value => value !== null),
@@ -82,6 +85,7 @@ const Page = () => {
                 "activeIngredients": values.activeIngredient,
                 "medicalUse": values.medicalUse,
                 "Picture": values.picture,
+                "otc": values.otc,
             };
             const formData = new FormData();
             formData.append('name', values.name);
@@ -91,7 +95,7 @@ const Page = () => {
             formData.append('activeIngredients', values.activeIngredient);
             formData.append('medicalUse', values.medicalUse);
             formData.append('Picture', values.picture);
-
+            formData.append('otc', values.otc);
             console.log(formData);
 
               await axios.post('http://localhost:8000/addMedicine' , formData , { 
@@ -212,6 +216,15 @@ const Page = () => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     value={formik.values.description}
+                    />
+                    <FormControlLabel 
+                      control={
+                        <Checkbox 
+                          defaultChecked={formik.values.otc} 
+                          onChange={ () => formik.values.otc = !formik.values.otc}
+                        />
+                      } 
+                      label="Over The Counter" 
                     />
                     <Stack sx={{pl:0,pr:60}}>
                     <label htmlFor="picture">

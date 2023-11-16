@@ -53,6 +53,7 @@ export default function CheckoutForm({activeStep, setStep}) {
       switch (paymentIntent.status) {
         case "succeeded":
           {
+            console.log("here: 1");
             setIsDone(true);
             setMessage("Payment succeeded!");
           }
@@ -84,6 +85,7 @@ export default function CheckoutForm({activeStep, setStep}) {
       confirmParams: {
         // return_url: "http://localhost:3000/user/orders"
         return_url: window.location.href
+        // return_url: "http://localhost:3000/user/orders?username="+username
       },
     });
 

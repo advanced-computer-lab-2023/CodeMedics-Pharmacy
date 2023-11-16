@@ -45,8 +45,11 @@ export const MedicinesTable = (props) => {
     onRowsPerPageChange,
     page = 0,
     rowsPerPage = 0,
+    handleAddOne,
+    handleMinusOne,
   } = props;
   const router = useRouter()
+  const totalAmount = items.reduce((acc, item) => acc + item.price * item.quantity, 0);
 
   return (
     <Card>
@@ -73,41 +76,51 @@ export const MedicinesTable = (props) => {
             <TableBody>
               {items.map((medicine) => {
                 return (
-                  <Row key={medicine._id} row={medicine}/>
+                  <Row handleAddOne={handleAddOne} key={medicine._id} row={medicine} handleMinusOne={handleMinusOne}/>
                 );
               })}
             </TableBody>
           </Table>
-          <Divider/>
-          <Box sx={{pt:3 , pl:60}} align="center">
-            <Typography variant="subtitle1">
-              Total Amount: 1000 $
-            </Typography>
-          </Box>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex',
-              justifyContent: 'flex-end',
-              p: 3
-            }}
-          >
-            <Stack>
-            <Button
-              color="primary"
-              endIcon={
-                <SvgIcon fontSize="small">
-                  <ChevronRightIcon />
-                </SvgIcon>
+          {
+                items.length === 0 && <Box sx={{p:4 , pl:0 , pr:0}} align="center">
+                <Typography variant="h6" >
+                  No Items in Cart
+                </Typography>
+              </Box>
               }
-              sx={{ mr: 1 }}
-              variant="contained"
-            >
-              Proceed to Checkout
-            </Button>
-            </Stack>
+          <Divider/>
+          {items.length > 0 && <Box>
+            <Box sx={{pt:3 , pl:60}} align="center">
+              <Typography variant="subtitle1">
+                Total Amount: {totalAmount} $
+              </Typography>
             </Box>
-        </Box>
+            <Box
+              sx={{
+                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'flex-end',
+                p: 3
+              }}
+            >
+                <Button
+                  color="primary"
+                  endIcon={
+                    <SvgIcon fontSize="small">
+                      <ChevronRightIcon />
+                    </SvgIcon>
+                  }
+                  sx={{ mr: 1 }}
+                  variant="contained"
+                  onClick={() => {
+                    router.push('/user/payment', );
+                  }}
+                >
+                  Proceed to Checkout
+                </Button>
+              </Box>
+            </Box>}
+          </Box>
       </Scrollbar>
     </Card>
   );

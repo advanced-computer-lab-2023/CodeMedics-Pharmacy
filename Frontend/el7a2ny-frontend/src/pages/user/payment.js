@@ -167,68 +167,68 @@ const Page = () => {
               <Stack spacing={3} >
                 <Stack spacing={3} direction="row">
                     <TextField
-                    error = {!!(formik.touched.name && formik.errors.name)}
+                    // error = {!!(formik.touched.name && formik.errors.name)}
                     fullWidth
-                    helperText={formik.touched.name && formik.errors.name}
+                    // helperText={formik.touched.name && formik.errors.name}
                     label="First Name"
                     name="name"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.name}
+                    // onBlur={formik.handleBlur}
+                    // onChange={formik.handleChange}
+                    // value={formik.values.name}
                     />
                     <TextField
-                    error = {!!(formik.touched.price && formik.errors.price)}
+                    // error = {!!(formik.touched.price && formik.errors.price)}
                     fullWidth
-                    helperText={formik.touched.price && formik.errors.price}
+                    // helperText={formik.touched.price && formik.errors.price}
                     label="Last Name"
                     name="price"
-                    onBlur={formik.handleBlur}
-                    onChange={formik.handleChange}
-                    value={formik.values.price}
+                    // onBlur={formik.handleBlur}
+                    // onChange={formik.handleChange}
+                    // value={formik.values.price}
                     />
                 </Stack>
                     <Stack spacing={3} direction="row">
                         <TextField
-                        error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
+                        // error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
                         fullWidth
-                        helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
+                        // helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
                         label="Street Address"
                         name="activeIngredient"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.activeIngredient}
+                        // onBlur={formik.handleBlur}
+                        // onChange={formik.handleChange}
+                        // value={formik.values.activeIngredient}
                         />
                         <TextField
-                        error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
+                        // error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
                         fullWidth
-                        helperText={formik.touched.medicalUse && formik.errors.medicalUse}
+                        // helperText={formik.touched.medicalUse && formik.errors.medicalUse}
                         label="Street Line 2 (optional)"
                         name="medicalUse"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.medicalUse}
+                        // onBlur={formik.handleBlur}
+                        // onChange={formik.handleChange}
+                        // value={formik.values.medicalUse}
                         />
                     </Stack>
                     <Stack spacing={3} direction="row" maxWidth={312.5}>
                         <TextField
-                        error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
+                        // error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
                         fullWidth
-                        helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
+                        // helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
                         label="State"
                         name="activeIngredient"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.activeIngredient}
+                        // onBlur={formik.handleBlur}
+                        // onChange={formik.handleChange}
+                        // value={formik.values.activeIngredient}
                         />
                         <TextField
-                        error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
+                        // error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
                         fullWidth
-                        helperText={formik.touched.medicalUse && formik.errors.medicalUse}
+                        // helperText={formik.touched.medicalUse && formik.errors.medicalUse}
                         label="Zip code"
                         name="medicalUse"
-                        onBlur={formik.handleBlur}
-                        onChange={formik.handleChange}
-                        value={formik.values.medicalUse}
+                        // onBlur={formik.handleBlur}
+                        // onChange={formik.handleChange}
+                        // value={formik.values.medicalUse}
                         />
                     </Stack>
                 </Stack>

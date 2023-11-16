@@ -15,17 +15,17 @@ export default function PaymentForm({activeStep, setStep}) {
     axios.get('http://localhost:8000/getCart?username='+username).then(response => {
       console.log(response.data);
       setProducts(response.data);
-      const gtotal = calculateTotal(response.data);
-      setTotal(gtotal);
+      // const gtotal = calculateTotal(response.data);
+      // setTotal(gtotal);
     }
     ).catch(error => {
       console.log('error here ---->', error);
     });
-  })
+  },[])
   useEffect(() => {
     console.log('PaymentForm.js was here');
     // Create PaymentIntent as soon as the page loads
-     axios.post('http://localhost:8000/create-payment-intent?amount='+total, { })
+     axios.post('http://localhost:8000/create-payment-intent', { })
       .then((data) => setClientSecret(data.data.clientSecret)).catch((error) => {
         console.log(error);
       });

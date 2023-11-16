@@ -21,7 +21,7 @@ export const items = [
   },
   {
     title: 'My Cart',
-    path: '/user/my-cart',
+    path: '/user/myCart',
     icon: (
       <SvgIcon fontSize="small">
         <ShoppingCartIcon />
@@ -38,20 +38,11 @@ export const items = [
     )
   },
   {
-    title: 'Check Out',
-    path: '/user/checkout',
-    icon: (
-      <SvgIcon fontSize="small">
-        <CurrencyDollarIcon />
-      </SvgIcon>
-    )
-  },
-  {
     title: 'Account',
     path: '/user/account',
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingCartIcon />
+        <UsersIcon />
       </SvgIcon>
     )
   },

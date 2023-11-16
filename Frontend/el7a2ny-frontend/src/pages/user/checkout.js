@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
 import ShieldCheckIcon from '@heroicons/react/24/solid/ShieldCheckIcon';
+
 import { 
     Box, 
     Button, 

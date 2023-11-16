@@ -4,12 +4,8 @@ const stripe = require("stripe")("sk_test_51OA3YuHNsLfp0dKZBQsyFFPLXepbGkt9p5xZz
 const Medicine = require('../models/Medicine');
 const cancelOrder = async(req, res) =>{
     const orderId = req.query.orderId;
-    const order = await Order.findById(orderId);
-    const patient = await Patient.findById(order.PatientId);
-    console.log("in the cancel order", orderId);
-    console.log(order.PatientId);
-    console.log(order);
-    console.log(patient);
+    const order = await Order.findOne({_id: orderId});
+    const patient = await Patient.findOne({_id: order.PatientId});
     if(!order){
         res.status(200).json({message : "Order not found"});
     }
@@ -17,16 +13,16 @@ const cancelOrder = async(req, res) =>{
         order.status = "Cancelled";
         await order.save();
         for(const o of patient.Orders){
-            console.log(o._id, orderId, o._id == orderId);
+            // console.log(o._id, orderId, o._id == orderId);
             if(o._id == orderId){
                 o.status = "Cancelled";
                 break;
             }
         }
         await patient.save();
-        for(const m of order.Medicines){
-            const medicine = await Medicine.findById(m._id);
-            medicine.quantity += m.quantity;
+        for(const m of order.items){
+            const medicine = await Medicine.findOne({_id: m.MedicineId});
+            medicine.availableQuantity += m.Quantity;
             await medicine.save();
         }
         res.status(200).json({message : "Order has been cancelled successfully"});

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { useFormik } from 'formik';
 import { useRouter } from 'next/navigation';
 import * as Yup from 'yup';
-import { Box, Button, Container, Stack, SvgIcon, Typography , TextField } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography , TextField , Checkbox , FormControlLabel } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import axios from 'axios';
 import Cookies from 'js-cookie';
@@ -46,6 +46,7 @@ const Page = ({}) => {
             description: medicine['Description'],
             activeIngredient: medicine['activeIngredients'][0],
             medicalUse: medicine['medicalUse'],
+            otc: medicine['otc'],
             picture: null,
             submit: null
         },
@@ -69,6 +70,8 @@ const Page = ({}) => {
             .string()
             .max(255)
             .required('Medical Use is required'),
+            otc: Yup
+            .boolean(),
             activeIngredient: Yup
             .string()
             .max(255)
@@ -86,6 +89,7 @@ const Page = ({}) => {
             formData.append('Description', values.description);
             formData.append('activeIngredients', values.activeIngredient);
             formData.append('medicalUse', values.medicalUse);
+            formData.append('otc', values.otc);
             if(values.picture) formData.append('Picture', values.picture);
 
 
@@ -205,6 +209,15 @@ const Page = ({}) => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     value={formik.values.description}
+                    />
+                    <FormControlLabel 
+                      control={
+                        <Checkbox 
+                          defaultChecked={formik.values.otc} 
+                          onChange={ () => formik.values.otc = !formik.values.otc}
+                        />
+                      } 
+                      label="Over The Counter" 
                     />
                     <label htmlFor="picture">
                     <Button

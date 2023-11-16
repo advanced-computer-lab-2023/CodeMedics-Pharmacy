@@ -170,6 +170,16 @@ export const  Row = (props) => {
                         />
                     </Stack>
                 </Stack>
+                <TextField
+                            // error = {!!(formik.touched.description && formik.errors.description)}
+                            sx={{ml: 25 , mt: 2}}
+                            // helperText={formik.touched.description && formik.errors.description}
+                            label="Sales"
+                            name="sales"
+                            // onBlur={formik.handleBlur}
+                            // onChange={formik.handleChange}
+                            value={medicine.sales}
+                       />
                 <Stack spacing={2} direction="row" sx={{mt: 3}}>
                     <Button
                         size="large"

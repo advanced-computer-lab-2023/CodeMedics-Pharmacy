@@ -34,7 +34,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 
 export const  Row = (props) => {
-    const { row: medicine } = props;
+    const { row: medicine , handleAddOne , handleMinusOne} = props;
     const [open, setOpen] = useState(false);
     const router = useRouter();
     return (
@@ -88,7 +88,9 @@ export const  Row = (props) => {
                   </SvgIcon>
                 )}
                 color="primary"
-                onClick={() => {}}
+                onClick={() => {
+                  handleAddOne(medicine.medicineID)
+                }}
               >
               </IconButton >
             </Tooltip>
@@ -100,7 +102,7 @@ export const  Row = (props) => {
                   </SvgIcon>
                 )}
                 color="primary"
-                onClick={() => {}}
+                onClick={() => {handleMinusOne(medicine.medicineID)}}
               >
               </IconButton >
             </Tooltip>

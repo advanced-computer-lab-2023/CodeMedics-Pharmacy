@@ -66,10 +66,8 @@ const Page = () => {
     },[]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/Medicines')
+    fetch('http://localhost:8000/MedicinesPharmacist')
       .then((res) => {
-        if(res.statusCode == 401)
-           throw new Error('Error while fetching data'); 
         return res.json();
       })
       .then((data) => {

@@ -20,7 +20,7 @@ const ifPaymentDone = async(req, res) =>{
     const patient = await Patient.findOne({Username: username});
     const medicines = patient.Cart.items;
     for (const medicine of medicines) {
-        const curMedicine = await Medicine.findOne({Name: medicine.name});
+        const curMedicine = await Medicine.findOne({_id: medicine.MedicineId});
         if(curMedicine.availableQuantity < medicine.Quantity){
             res.status(400).json({message: "Not enough quantity for " + medicine.name});
         }

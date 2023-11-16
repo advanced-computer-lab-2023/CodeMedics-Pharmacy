@@ -6,7 +6,7 @@ const Medicine = require('../models/Medicine');
 const updateMedicine = async (req, res) => {
     try {
         const { Username, productID, quantity } = req.body;
-        console.log("IN UPDATE MEDICINE");
+        console.log("IN UPDATE MEDICINE" , Username , productID , quantity);
         const patient = await PharmacyPatient.findOne({ Username: Username });
         if (!patient) {
             throw new Error("Patient not found");
@@ -27,6 +27,7 @@ const updateMedicine = async (req, res) => {
             }
         }
         if (medicine.otc || foundInPrescription) {
+            console.log('added');
             for (let i = 0; i < patientCart.items.length; i++) {
                 if (patientCart.items[i].MedicineId == productID) {
                     found = true;

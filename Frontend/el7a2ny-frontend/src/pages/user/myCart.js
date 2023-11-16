@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography, TextField, Divider } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography, TextField, Divider,Alert } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
 import { MedicinesTable } from 'src/sections/user/cart/medicines-table';
@@ -16,6 +16,7 @@ import { bool } from 'prop-types';
 const Page = () => {
   const [data, setData] = useState([]);
   const [cart, setCart] = useState([]);
+  const [alert , setAlert] = useState(false);
   const router = useRouter();
   const username = Cookies.get('username');
 
@@ -33,7 +34,7 @@ const Page = () => {
     }
   }, []);
 
-  const updateCart = async () => {
+  const updateCart = async (productID , quantity) => {
     try {
       await axios.patch(`http://localhost:8000/updateMedicine`, {
       Username: username,
@@ -52,13 +53,37 @@ const Page = () => {
 
   const handleAddOne = (productID) => {
     const newCart = data.map((item) => {
-      if (item._id === productID) {
-        item.quantity += 1;
-        updateCart(productID, item.quantity);
+      if (item.medicineID === productID) {
+        if(item.quantity + 1 > item.maxQuantity){
+          setAlert(true);
+        }
+        else{
+          updateCart(productID , 1);
+          item.quantity += 1;
+        }
       }
       return item;
     });
-    setCart(newCart);
+    console.log(newCart.length);
+    setData(newCart);
+  };
+
+  const handleMinusOne = (productID) => {
+    const newCart = [];
+    for(let i=0; i<data.length; i++){
+      if(data[i].medicineID === productID){
+        console.log(data[i].medicineID);
+        data[i].quantity -= 1;
+        updateCart(productID , -1);
+        if(data[i].quantity > 0){
+          newCart.push(data[i]);
+        }
+      }
+      else{
+        newCart.push(data[i]);
+      }
+    }
+    setData(newCart);
   };
 
   const handlePageChange = useCallback(
@@ -91,6 +116,11 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={3}>
+            {alert && <Box sx={{pl:40 , pr:65}}>
+              <Alert severity="warning" onClose={() => {setAlert(false)}}>
+                <strong>Warning!</strong> No Enough Items in Stock
+              </Alert>
+            </Box>}
             <Stack
               direction="row"
               justifyContent="space-between"
@@ -112,6 +142,8 @@ const Page = () => {
             <MedicinesTable
               count={data.length}
               items={data}
+              handleAddOne={handleAddOne}
+              handleMinusOne={handleMinusOne}
             />
           </Stack>
         </Container>
