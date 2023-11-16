@@ -71,10 +71,12 @@ const Page = () => {
         return res.json();
       })
       .then((data) => {
+        if(data.medicines){
         setData(data['medicines']);
         setAllData(data['medicines']);
         setSearchData(data['medicines']);
         setFilteredData(data['medicines']);
+        }
       })
       .catch((err) => {
         console.log(err);

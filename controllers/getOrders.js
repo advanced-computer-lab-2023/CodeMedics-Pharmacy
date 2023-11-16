@@ -2,7 +2,11 @@ const Patient = require('../models/Patient');
 const getOrders = async (req, res) => {
     try {
         const username = req.query.username;
+        console.log(username);
         const patient = await Patient.findOne({ Username: username });
+        if(!patient){
+            return res.status(400).json({message: "Patient not found"});
+        }
         // console.log(patient, username);
         const orders = patient.Orders;
         let result = [];

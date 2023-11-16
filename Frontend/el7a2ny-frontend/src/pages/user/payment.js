@@ -68,6 +68,15 @@ const Page = () => {
     }
   };
   
+  const handleWithWallet = async() =>{
+      try{
+        await axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`, {type: 'Wallet'});
+        router.push('/user/orders?username='+username);   
+      }catch(err){
+        console.log(err);
+      }
+  }
+  
 
   return (
     <>
@@ -96,7 +105,7 @@ const Page = () => {
                       <ArrowSmallLeftIcon />
                     </SvgIcon>
                   )}
-                  onClick={() => router.push('/user/review')}
+                  onClick={() => router.push('/user/medicines')}
                   sx = {{width : 90}}
                 >
                   Back
@@ -158,7 +167,7 @@ const Page = () => {
                     </Typography>
                     {!credit && <Button
                         variant="contained"
-                        onClick={() => {axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`);}}
+                        onClick={() => {handleWithWallet()}}
                         sx = {{width : 180 , height : 50}}
                         >
                             Pay Order

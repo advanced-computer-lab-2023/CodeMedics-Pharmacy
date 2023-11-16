@@ -14,9 +14,8 @@ const calculateAmount = async(items) =>{
     return amount;
 }
 const ifPaymentDone = async(req, res) =>{
-    console.log("in the payment done")
+    const {type} = req.body;
     const username =  req.query.username;
-    console.log(username);
     const patient = await Patient.findOne({Username: username});
     const medicines = patient.Cart.items;
     for (const medicine of medicines) {
@@ -30,7 +29,9 @@ const ifPaymentDone = async(req, res) =>{
     console.log("order added");
     console.log(medicines);
     let amount = await calculateAmount(medicines);
-    console.log(amount);
+    if(type){
+        patient.Wallet -= amount;
+    }
     const order = new Order({
         PatientId: patient._id,
         patient: patient.FirstName + " " + patient.LastName,
