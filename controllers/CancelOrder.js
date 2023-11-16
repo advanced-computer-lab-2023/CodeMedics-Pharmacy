@@ -1,7 +1,7 @@
 const Patient = require('../models/Patient');
 const Order = require('../models/Order');
 const stripe = require("stripe")("sk_test_51OA3YuHNsLfp0dKZBQsyFFPLXepbGkt9p5xZzd2Jzzj6zxLqUTY2DYF244qILCi0cfVjg37szrwdXZzin83e5ijm00X5eXuTnM");
-
+const Medicine = require('../models/Medicine');
 const cancelOrder = async(req, res) =>{
     const orderId = req.query.orderId;
     const order = await Order.findById(orderId);
@@ -24,6 +24,11 @@ const cancelOrder = async(req, res) =>{
             }
         }
         await patient.save();
+        for(const m of order.Medicines){
+            const medicine = await Medicine.findById(m._id);
+            medicine.quantity += m.quantity;
+            await medicine.save();
+        }
         res.status(200).json({message : "Order has been cancelled successfully"});
     }
     else{
