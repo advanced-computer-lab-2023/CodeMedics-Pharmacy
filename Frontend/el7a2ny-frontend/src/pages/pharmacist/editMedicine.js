@@ -59,8 +59,7 @@ const Page = ({}) => {
             .number()
             .required('Price is required'),
             availableQuantity: Yup
-            .string()
-            .max(255)
+            .number()
             .required('Available Quantity is required'),
             description: Yup
             .string()

@@ -4,10 +4,26 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
 import { AccountProfile } from 'src/sections/patient/account-profile';
 import { AccountProfileDetails } from 'src/sections/patient/account-profile-details';
 import Cookies from 'js-cookie';
+import axios from 'axios';
+import { useEffect, useState } from 'react';
+
 
 const username = Cookies.get('username');
 
-const Page = () => (
+const Page = () => {
+  const [values, setValues] = useState({});
+
+  useEffect(() => {
+    axios.get(`http://localhost:8000/getMe?username=${username}`)
+      .then((req) => {
+        console.log(req.data);
+        setValues(req.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+  return(
   <>
     <Head>
       <title>
@@ -38,7 +54,7 @@ const Page = () => (
                 md={6}
                 lg={4}
               >
-                <AccountProfile />
+                <AccountProfile data={values}/>
               </Grid>
               <Grid
                 xs={12}
@@ -54,6 +70,7 @@ const Page = () => (
     </Box>
   </>
 );
+}
 
 Page.getLayout = (page) => (
   <DashboardLayout>

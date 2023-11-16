@@ -22,7 +22,7 @@ import {
     timezone: 'GTM-7'
   };
   
-  export const AccountProfile = () => (
+  export const AccountProfile = ({data}) => (
     <Card>
       <CardContent>
         <Box
@@ -62,12 +62,11 @@ import {
       </CardContent>
       <Divider />
       <CardActions>
-        <Button
-          fullWidth
-          variant="text"
-        >
-          Upload picture
-        </Button>
+        <Box sx={{p:2 , ml:15}}>
+        <Typography variant="h6">
+          {data.Wallet}$
+        </Typography>
+        </Box>
       </CardActions>
     </Card>
   );

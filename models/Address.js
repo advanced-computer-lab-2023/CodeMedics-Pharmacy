@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const AddressSchema = new Schema({
+    Name: {
+        type: String,
+        required: [true, 'Please enter a name']
+    },
     AddressLine: {
         type: String,
         required: [true, 'Please enter an address line']

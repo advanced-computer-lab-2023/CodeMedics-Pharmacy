@@ -76,6 +76,13 @@ const {createPharmacist} = require('./controllers/PharmacistController');
 const {getTotalAmont} = require('./controllers/getTotalAmount');
 
 const {getAdress} = require('./controllers/getAddress');
+const {addAddress} = require('./controllers/addAddress');
+
+const {getMe} = require('./controllers/getMe');
+
+app.get("/getMe", getMe);
+
+app.put('/addAddress', addAddress);
 
 app.get("/getAddress", getAdress);
 

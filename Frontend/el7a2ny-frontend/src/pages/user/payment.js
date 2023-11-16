@@ -21,6 +21,7 @@ import {
     RadioGroup, 
     FormControl, 
     FormControlLabel, 
+    MenuItem,
     FormLabel ,  
     Avatar,
     Card,
@@ -37,6 +38,25 @@ const Page = () => {
 
   const [value, setValue] = React.useState('creditCard');
   const [credit , setCredit] = React.useState(true);
+  const username = Cookies.get('username');
+  const [addresses , setAddresses] = useState([]);
+
+  useEffect(() => {
+    fetch(`http://localhost:8000/getAddress?username=${username}`)
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        const dt = [];
+        for(let i=0; i<data.length; i++){
+          dt.push({value : data[i]._id , label : `${data[i].Name} , Address: ${data[i].AddressLine} , City: ${data[i].City} , Postal Code: ${data[i].PostalCode}`});
+        }
+        setAddresses(dt);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -47,76 +67,6 @@ const Page = () => {
       setCredit(false);
     }
   };
-
-    const formik = useFormik({
-        initialValues: {
-            name: '',
-            price: '',
-            availableQuantity: '',
-            description: '',
-            activeIngredient: '',
-            medicalUse: '',
-            picture: '',
-            submit: null
-        },
-        validationSchema: Yup.object({
-            name: Yup
-            .string()
-            .max(255)
-            .required('Name is required'),
-            price: Yup
-            .number()
-            .required('Price is required'),
-            availableQuantity: Yup
-            .string()
-            .max(255)
-            .required('Available Quantity is required'),
-            description: Yup
-            .string()
-            .max(255)
-            .required('Description is required'),
-            medicalUse: Yup
-            .string()
-            .max(255)
-            .required('Medical Use is required'),
-            activeIngredient: Yup
-            .string()
-            .max(255)
-            .required('Active Ingredient is required'),
-            picture: Yup
-            .string()
-            .max(255)
-            .required('Picture is required'),
-        }),
-        onSubmit: async (values, helpers) => {
-          try {
-            const body = {
-                "name": values.name,
-                "price": values.price,
-                "availableQuantity": values.availableQuantity,
-                "Description": values.description,
-                "activeIngredients": values.activeIngredient,
-                "medicalUse": values.medicalUse,
-                "Picture": values.picture,
-            };
-              await axios.post('http://localhost:8000/addMedicine' , body)
-              .then((res) => { 
-                if(res.status != 200){
-                  throw new Error(res.data.message); 
-                }
-                  return res['data'];
-                })
-                .then((data) => {
-                    router.push('/pharmacist/medicines');
-                });
-          } catch (err) {
-            console.log(err)
-            helpers.setStatus({ success: false });
-            helpers.setErrors({ Submit: err.response.data.message});
-            helpers.setSubmitting(false);
-          }
-        }
-      });
   
 
   return (
@@ -160,79 +110,20 @@ const Page = () => {
                     Billing Address
                     </Typography>
                 </Stack>
-            <form
-              noValidate
-              onSubmit={formik.handleSubmit}
-            >
-              <Stack spacing={3} >
-                <Stack spacing={3} direction="row">
-                    <TextField
-                    // error = {!!(formik.touched.name && formik.errors.name)}
-                    fullWidth
-                    // helperText={formik.touched.name && formik.errors.name}
-                    label="First Name"
-                    name="name"
-                    // onBlur={formik.handleBlur}
-                    // onChange={formik.handleChange}
-                    // value={formik.values.name}
-                    />
-                    <TextField
-                    // error = {!!(formik.touched.price && formik.errors.price)}
-                    fullWidth
-                    // helperText={formik.touched.price && formik.errors.price}
-                    label="Last Name"
-                    name="price"
-                    // onBlur={formik.handleBlur}
-                    // onChange={formik.handleChange}
-                    // value={formik.values.price}
-                    />
-                </Stack>
-                    <Stack spacing={3} direction="row">
-                        <TextField
-                        // error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
-                        fullWidth
-                        // helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
-                        label="Street Address"
-                        name="activeIngredient"
-                        // onBlur={formik.handleBlur}
-                        // onChange={formik.handleChange}
-                        // value={formik.values.activeIngredient}
-                        />
-                        <TextField
-                        // error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
-                        fullWidth
-                        // helperText={formik.touched.medicalUse && formik.errors.medicalUse}
-                        label="Street Line 2 (optional)"
-                        name="medicalUse"
-                        // onBlur={formik.handleBlur}
-                        // onChange={formik.handleChange}
-                        // value={formik.values.medicalUse}
-                        />
-                    </Stack>
-                    <Stack spacing={3} direction="row" maxWidth={312.5}>
-                        <TextField
-                        // error = {!!(formik.touched.activeIngredient && formik.errors.activeIngredient)}
-                        fullWidth
-                        // helperText={formik.touched.activeIngredient && formik.errors.activeIngredient}
-                        label="State"
-                        name="activeIngredient"
-                        // onBlur={formik.handleBlur}
-                        // onChange={formik.handleChange}
-                        // value={formik.values.activeIngredient}
-                        />
-                        <TextField
-                        // error = {!!(formik.touched.medicalUse && formik.errors.medicalUse)}
-                        fullWidth
-                        // helperText={formik.touched.medicalUse && formik.errors.medicalUse}
-                        label="Zip code"
-                        name="medicalUse"
-                        // onBlur={formik.handleBlur}
-                        // onChange={formik.handleChange}
-                        // value={formik.values.medicalUse}
-                        />
-                    </Stack>
-                </Stack>
-                </form>
+                {addresses.length > 0 && <TextField
+                  sx={{ width: 200 }}
+                  id="myAddress"
+                  select
+                  label="My Addresses"
+                  defaultValue={addresses[0].value}
+                  helperText=""
+                  onChange={(str) => {console.log(str.target.value)}}
+                > {addresses.map((option) => (
+                    <MenuItem key={option.value} value={option.value} >
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>}
                 <Stack direction="row" spacing={2}>
                     <Avatar sx={{bgcolor : 'primary.main'}}>2</Avatar>
                     <Typography variant="h6" sx={{pt: 1,}}>

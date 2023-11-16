@@ -55,7 +55,6 @@ const Page = () => {
             .required('Price is required'),
             availableQuantity: Yup
             .number()
-            .max(255)
             .required('Available Quantity is required'),
             description: Yup
             .string()
@@ -121,7 +120,7 @@ const Page = () => {
       });
   
 
-  return (auth &&
+  return (
     <>
       <Head>
         <title>

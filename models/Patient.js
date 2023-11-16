@@ -78,7 +78,7 @@ const patientSchema = new Schema({
     },
     Wallet:{
         type: Number,
-        default: 0,
+        default: 10000,
         required: false
     },
     Cart :{
@@ -87,10 +87,12 @@ const patientSchema = new Schema({
     }
     , Orders: {
         type: [Order.schema],
+        default: [],
         required: false
     },
     Addresses : {
         type: [Address.schema],
+        default: [],
         required: false
     }
 }, {timestamps: true});
