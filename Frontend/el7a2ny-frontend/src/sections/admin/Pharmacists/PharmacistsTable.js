@@ -3,6 +3,7 @@ import { format } from 'date-fns';
 import IdentificationIcon from '@heroicons/react/24/solid/IdentificationIcon';
 import Xmark from '@heroicons/react/24/solid/XMarkIcon';
 import PencilIcon from '@heroicons/react/24/solid/PencilIcon';
+import { PharmacistDeletePopup } from './Pharmacist-DeletePopup';
 import {
   Avatar,
   Box,
@@ -21,10 +22,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
 import React from 'react';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
-import { indigo } from '../../../theme/colors';
-import { PatientPopup } from '../Popup-generic';
 
 export const PharmacistsTable = (props) => {
   const {
@@ -41,9 +39,7 @@ export const PharmacistsTable = (props) => {
     selected = []
   } = props;
 
-  const selectedSome = (selected.length > 0) && (selected.length < items.length);
-  const selectedAll = (items.length > 0) && (selected.length === items.length);
-  const [isOpenEmergencyContact, setIsOpenEmergencyContact] = useState(false);
+  const [isOpenDelete, setOpenDelete] = useState(null);
   return (
     <Card>
       <Scrollbar>
@@ -84,7 +80,7 @@ export const PharmacistsTable = (props) => {
                 return (
                   <TableRow
                     hover
-                    key={customer.id}
+                    key={customer.Username}
                     selected={isSelected}
                   >
                     <TableCell>
@@ -123,6 +119,7 @@ export const PharmacistsTable = (props) => {
                       <IconButton
                         color="primary"
                         onClick={() => {
+                          setOpenDelete(customer.Username);
                         }}
                       >
                         <SvgIcon fontSize="small">
@@ -138,6 +135,10 @@ export const PharmacistsTable = (props) => {
                           <PencilIcon/>
                         </SvgIcon>
                       </IconButton>
+                      <PharmacistDeletePopup width={'25%'} height={'15vh'}
+                                          isOpenDelete={isOpenDelete === customer.Username}
+                                          items={customer.Name} onClose={() => setOpenDelete(null)}
+                                          username={customer.Username}/>
                     </TableCell>
                   </TableRow>
                 );

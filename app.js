@@ -5,13 +5,14 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const app = express();
 const Port = process.env.PORT || 3000;
+//const DeleteModelRecords = require('./config/DeleteAllRecords');
 
 const MongoURI = process.env.MONGO_URI;
 
 app.use(cors());
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: false })); // Add this line to parse form data
-
+app.use(bodyParser.urlencoded({extended: false})); // Add this line to parse form data
+//DeleteModelRecords.deleteAllRecords();
 // Connect to MongoDB
 mongoose.connect(MongoURI)
     .then(() => {
@@ -32,8 +33,8 @@ const os = require("os");
  * By default, it is "false".
  */
 const options = {
-  uploadDir: os.tmpdir(),
-  autoClean: true
+    uploadDir: os.tmpdir(),
+    autoClean: true
 };
 
 // // parse data with connect-multiparty. 
@@ -54,10 +55,11 @@ const AdminRoutes = require('./routes/AdminRoutes')
 const {createAdmin, removePharmacist, removePatient, viewPharmacistApplications, viewPharmacists, viewPatients} = require('./controllers/AdminController');
 const {multerMiddleware, addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, searchMedicine, getMedicinesByMedicalUse, getMedicalUses} = require('./controllers/MedicineController'); 
 
+
 const AuthRoutes = require('./routes/AuthRoutes');
 const {createPharmacist} = require('./controllers/PharmacistController');
 
-const {updateMedicine , getCart} = require('./controllers/updateMedicine');
+const {updateMedicine, getCart} = require('./controllers/updateMedicine');
 
 
 app.get("/", (req, res) => {
@@ -87,14 +89,13 @@ app.use('/register', AuthRoutes);
 //app.use('/Pharmregister', AuthRoutes);
 
 
-app.put('/editMedicine',editMedicine);
+app.put('/editMedicine', editMedicine);
 
 
 app.get("/admin", (req, res) => {
     const filePath = path.join(__dirname, "pages", "admin.html");
     res.sendFile(filePath);
 });
-
 
 
 app.get("/addMedicine", (req, res) => {
@@ -200,13 +201,13 @@ app.get("/viewMedicines", (req, res) => {
 });
 
 
-
 app.use('/register', AuthRoutes);
 // app.use('/Pharmregister', AuthRoutes);
 app.use('/CreateAdmin', AdminRoutes);
 
 app.use('/uploads', express.static('uploads'));
 app.post("/register", registerPPatient);
+
 app.post('/Pharmregister', upload.fields([
     { name: 'IDDocument', maxCount: 1 },
     { name: 'pharmacyDegree', maxCount: 1 },
@@ -218,19 +219,19 @@ app.post('/addMedicine',multerMiddleware, addMedicine);
 
 app.post("/addUser", registerPPatient);
 app.post("/CreateAdmin", createAdmin);
-app.get("/getCart" , getCart);
+app.get("/getCart", getCart);
 app.post("/createPharmacist", createPharmacist);
 app.post("/login", loginUser);
 app.delete("/removePharmacist", removePharmacist);
-app.delete("/removePatient" , removePatient);
+app.delete("/removePatient", removePatient);
 //app.get("/viewPharmacistApplications", viewPharmacistApplications);
 
 
 app.patch("/ditMedicine", editMedicine);
 app.get("/iewPatients", viewPatients);
 app.get("/iewPharmacists", viewPharmacists);
-app.get("/Medicines",viewMedicines);
-app.get("/MedicinesPharmacist",viewMedicinesPharmacist);
+app.get("/Medicines", viewMedicines);
+app.get("/MedicinesPharmacist", viewMedicinesPharmacist);
 app.post("/earchMedicine", searchMedicine);
 app.get("/MedicalUses", getMedicalUses);
 app.get("/ilterMedicine", getMedicinesByMedicalUse);

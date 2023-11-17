@@ -41,115 +41,116 @@ const Page = () => {
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
 
-
   useEffect(() => {
     fetch('http://localhost:8000/iewPatients')
       .then((res) => {
-        if (res.statusCode == 401) {
+        if (res.status == 401) {
           throw new Error('Error while fetching data');
         }
         return res.json();
       })
       .then((data) => {
+        if (data['patients']) {
         setData(data['patients']);
-      })
-      .catch((err) => {});
-  }, []);
+        }
+  })
+    .catch((err) => {});
+}, []);
+const handlePageChange = useCallback(
+  (event, value) => {
+    setPage(value);
+  },
+  []
+);
 
-  const handlePageChange = useCallback(
-    (event, value) => {
-      setPage(value);
-    },
-    []
-  );
+const handleRowsPerPageChange = useCallback(
+  (event) => {
+    setRowsPerPage(event.target.value);
+  },
+  []
+);
 
-  const handleRowsPerPageChange = useCallback(
-    (event) => {
-      setRowsPerPage(event.target.value);
-    },
-    []
-  );
-
-  return (
-    <>
-      <Head>
-        <title>
-          Patients
-        </title>
-      </Head>
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          py: 8
-        }}
-      >
-        <Container maxWidth="xl">
-          <Stack spacing={3}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              spacing={4}
-            >
-              <Stack spacing={1}>
-                <Typography variant="h4">
-                  Patients
-                </Typography>
-                <Stack
-                  alignItems="center"
-                  direction="row"
-                  spacing={1}
-                >
-                  <Button
-                    color="inherit"
-                    startIcon={(
-                      <SvgIcon fontSize="small">
-                        <ArrowUpOnSquareIcon/>
-                      </SvgIcon>
-                    )}
-                  >
-                    Import
-                  </Button>
-                  <Button
-                    color="inherit"
-                    startIcon={(
-                      <SvgIcon fontSize="small">
-                        <ArrowDownOnSquareIcon/>
-                      </SvgIcon>
-                    )}
-                  >
-                    Remove
-                  </Button>
-                </Stack>
-              </Stack>
-              <div>
+return (
+  <>
+    <Head>
+      <title>
+        Patients
+      </title>
+    </Head>
+    <Box
+      component="main"
+      sx={{
+        flexGrow: 1,
+        py: 8
+      }}
+    >
+      <Container maxWidth="xl">
+        <Stack spacing={3}>
+          <Stack
+            direction="row"
+            justifyContent="space-between"
+            spacing={4}
+          >
+            <Stack spacing={1}>
+              <Typography variant="h4">
+                Patients
+              </Typography>
+              <Stack
+                alignItems="center"
+                direction="row"
+                spacing={1}
+              >
                 <Button
+                  color="inherit"
                   startIcon={(
                     <SvgIcon fontSize="small">
-                      <PlusIcon/>
+                      <ArrowUpOnSquareIcon/>
                     </SvgIcon>
                   )}
-                  variant="contained"
                 >
-                  Add
+                  Import
                 </Button>
-              </div>
+                <Button
+                  color="inherit"
+                  startIcon={(
+                    <SvgIcon fontSize="small">
+                      <ArrowDownOnSquareIcon/>
+                    </SvgIcon>
+                  )}
+                >
+                  Remove
+                </Button>
+              </Stack>
             </Stack>
-            <PatientsSearch/>
-            <PatientTable
-              count={data.length}
-              items={customers}
-              onPageChange={handlePageChange}
-              onRowsPerPageChange={handleRowsPerPageChange}
-              page={page}
-              rowsPerPage={rowsPerPage}
-            />
+            <div>
+              <Button
+                startIcon={(
+                  <SvgIcon fontSize="small">
+                    <PlusIcon/>
+                  </SvgIcon>
+                )}
+                variant="contained"
+              >
+                Add
+              </Button>
+            </div>
           </Stack>
-        </Container>
-      </Box>
-    </>
-  );
-};
+          <PatientsSearch/>
+          <PatientTable
+            count={data.length}
+            items={customers}
+            onPageChange={handlePageChange}
+            onRowsPerPageChange={handleRowsPerPageChange}
+            page={page}
+            rowsPerPage={rowsPerPage}
+          />
+        </Stack>
+      </Container>
+    </Box>
+  </>
+);
+}
+;
 
 Page.getLayout = (page) => (
   <DashboardLayout>
