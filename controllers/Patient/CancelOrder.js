@@ -1,7 +1,8 @@
-const Patient = require('../models/Patient');
-const Order = require('../models/Order');
+const Patient = require('../../models/Patient');
+const Order = require('../../models/Order');
 const stripe = require("stripe")("sk_test_51OA3YuHNsLfp0dKZBQsyFFPLXepbGkt9p5xZzd2Jzzj6zxLqUTY2DYF244qILCi0cfVjg37szrwdXZzin83e5ijm00X5eXuTnM");
-const Medicine = require('../models/Medicine');
+const Medicine = require('../../models/Medicine');
+
 const cancelOrder = async(req, res) =>{
     const orderId = req.query.orderId;
     const order = await Order.findOne({_id: orderId});
@@ -11,7 +12,6 @@ const cancelOrder = async(req, res) =>{
     }
     if(order.status == "Ordered"){
         order.status = "Cancelled";
-        
         await order.save();
         for(const o of patient.Orders){
             // console.log(o._id, orderId, o._id == orderId);
@@ -37,4 +37,4 @@ const cancelOrder = async(req, res) =>{
     }
 }
 
-module.exports = cancelOrder;
+module.exports = {cancelOrder};

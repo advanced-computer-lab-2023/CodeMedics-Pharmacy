@@ -1,5 +1,6 @@
-const Patient = require('../models/Patient');
-exports.getAdress = async (req, res) => {
+const Patient = require('../../models/Patient');
+
+exports.getAddress = async (req, res) => {
     try {
         const username = req.query.username;
         const user = await Patient.findOne({ Username: username });

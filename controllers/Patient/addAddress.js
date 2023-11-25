@@ -1,9 +1,9 @@
-const Patient = require('../models/Patient');
-const { getUsername } = require('../../CodeMedics-Pharmacy/config/infoGetter');
-const Address = require('../models/Address');
+const Patient = require('../../models/Patient');
+const { getUsername } = require('../../config/infoGetter');
+const Address = require('../../models/Address');
+
 const addAddress = async (req, res) => {
     try {
-        console.log('here ----> ', req.body);
         const {username} = req.body;
         const {Name, AddressLine, City, PostalCode, PatientUsername } = req.body;
         const patient = await Patient.findOne({ Username: username });

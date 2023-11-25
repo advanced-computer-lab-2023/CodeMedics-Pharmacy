@@ -1,4 +1,4 @@
-const Patient = require('../models/Patient');
+const Patient = require('../../models/Patient');
 const getOrders = async (req, res) => {
     try {
         const username = req.query.username;
@@ -21,4 +21,4 @@ const getOrders = async (req, res) => {
     }
 }
 
-module.exports = getOrders;
+module.exports = {getOrders};

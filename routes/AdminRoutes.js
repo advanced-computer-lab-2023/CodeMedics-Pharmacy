@@ -1,32 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const AdminController = require('../controllers/AdminController');
-const {createAdmin, viewPharmacistApplications, viewPharmacists, viewPatients} = require('../controllers/AdminController');
+const {createAdmin} = require('../controllers/Admin/AdminsController');
+const {viewPharmacists, viewPharmacistApplications , acceptPharmacist , rejectPharmacist , removePharmacist} = require('../controllers/Admin/PharmacistsController');
+const {removePatient, viewPatients} = require('../controllers/Admin/PatientsController');
 
+// ================== Admins ==================
 router.post('/createAdmin', createAdmin);
 
-router.delete('/removePharmacist', (req, res) => {
-    AdminController.removePharmacist(req, res);
-});
-router.delete('/removePatient', (req, res) => {
-    AdminController.removePatient(req, res);
-});
-// router.get('/viewMedicines', (req, res) => {
-//     AdminController.viewMedicines(req, res);
-// });
-//// router.get('/getMedicalUses', (req, res) => {
-//     AdminController.getMedicalUses(req, res);
-// });
-// router.get('/getMedicinesByMedicalUse', (req, res) => {
-//     AdminController.getMedicinesByMedicalUse(req, res);
-// });
-
-// router.get('/viewPharmacists', viewPharmacists);
+// ================== Pharmacists ==================
+router.get('/viewPharmacists', viewPharmacists);
 router.get('/viewPharmacistApplications', viewPharmacistApplications);
-router.get('/viewPatient', viewPatients);
-// router.get('/viewMedicines', viewMedicines);
-//// router.get('/getMedicalUses', getMedicalUses);
-// router.get('/getMedicinesByMedicalUse', getMedicinesByMedicalUse);
+router.patch('/acceptPharmacist', acceptPharmacist);
+router.patch('/rejectPharmacist', rejectPharmacist);
+router.delete('/removePharmacist', removePharmacist);
 
+// ================== Patients ==================
+
+router.delete('/removePatient', removePatient);
+router.get('/viewPatients', viewPatients);
 
 module.exports = router;

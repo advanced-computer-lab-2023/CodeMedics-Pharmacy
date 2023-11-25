@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { registerPPatient, loginUser, registerPharmacist } = require('../controllers/GuestController');
+const { registerPharmacist } = require('../controllers/Pharmacist/PharmacistController');
+const {CreatePatient} = require('../controllers/Patient/CreatePatient');
 const upload = require('../config/multerConfig');
-const {auth} = require('../controllers/AdminController');
+const {loginUser , logout , auth} = require('../controllers/Auth/Login-out');
 
 
 // User Registration
-router.post('/register', registerPPatient);
-router.post('/Pharmregister', upload.fields([
+router.post('/registerPatient', CreatePatient);
+router.post('/registerPharmacist', upload.fields([
   { name: 'IDDocument', maxCount: 1 },
   { name: 'pharmacyDegree', maxCount: 1 },
   { name: 'workingLicense', maxCount: 1 }
@@ -15,6 +16,7 @@ router.post('/Pharmregister', upload.fields([
 
 // User Login
 router.post('/login', loginUser);
+router.post('/logout', logout);
 router.post('/', auth);
 
 module.exports = router;

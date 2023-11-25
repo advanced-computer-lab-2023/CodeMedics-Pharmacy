@@ -1,16 +1,22 @@
-const PPatient = require('../models/pharmacyPatient');
-const Pharmacist = require("../models/Pharmacist");
-const patientModel = require("../models/pharmacyPatient");
-const Administrator = require("../models/Administrator");
-// const PharmRequest = require("../models/pharmacistRequests");
-const PharmRequest = require("../models/Pharmacist");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const upload = require('../config/multerConfig');
-//The one with shopping cart
-const anotherPatientModel = require('../models/Patient');
+const Administrator = require('../../models/Administrator');
+const Pharmacist = require('../../models/Pharmacist');
+const Patient = require('../../models/Patient');
+const {default: mongoose} = require('mongoose');
+// const getUsername = require('../config/usernameGetter');
+const Medicine = require('../../models/Medicine');
 
-// create json web token
+const viewList = async (req, res) => {
+    //get list of all medicine
+    try {
+        const medicines = await Medicine.find({}, 'Name Description Price ImageURL');
+        // Send the list of medicines as JSON response
+        res.json(medicines);
+    } catch (error) {
+        console.error('Error fetching medicines:', error);
+        res.status(500).json({ message: 'Error fetching medicines' });
+    }
+}
+
 const maxAge = 3 * 24 * 60 * 60;
 const createToken = (username) => {
     return jwt.sign({username}, 'supersecret', {
@@ -19,7 +25,7 @@ const createToken = (username) => {
 };
 
 // patient Registration
-const registerPPatient = async (req, res) => {
+const CreatePatient = async (req, res) => {
     try {
         const {
             FirstName,
@@ -39,19 +45,19 @@ const registerPPatient = async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(Password, salt);
 
-        const existingUser = await anotherPatientModel.findOne({Username}) || await Pharmacist.findOne({Username}) || await Administrator.findOne({Username}) || await PharmRequest.findOne({Username});
+        const existingUser = await Patient.findOne({Username}) || await Pharmacist.findOne({Username}) || await Administrator.findOne({Username});
         if (existingUser) {
             return res.status(400).json('Username already exists. Please choose another one.');
         }
-        const existingUser2 = await anotherPatientModel.findOne({Email}) || await Pharmacist.findOne({Email}) || await Administrator.findOne({Email}) || await PharmRequest.findOne({Email});
+        const existingUser2 = await Patient.findOne({Email}) || await Pharmacist.findOne({Email}) || await Administrator.findOne({Email});
         if (existingUser2) {
             return res.status(400).json('email already exists. Please choose another one.');
         }
-        const existingUser4 = await anotherPatientModel.findOne({Number}) || await Pharmacist.findOne({Number}) || await Administrator.findOne({Number}) || await PharmRequest.findOne({Number});
+        const existingUser4 = await Patient.findOne({Number}) || await Pharmacist.findOne({Number}) || await Administrator.findOne({Number});
         if (existingUser4) {
-            return res.status(400).json('Number already exists. Please choose another one.');
+            return res.status(400).json('Phone Number already exists. Please choose another one.');
         }
-        const ppatient = new anotherPatientModel({
+        const ppatient = new Patient({
             FirstName,
             LastName,
             Username,
@@ -75,5 +81,4 @@ const registerPPatient = async (req, res) => {
 };
 
 
-
-module.exports = {registerPPatient, registerPharmacist, loginUser, logout, changePassword};
+module.exports = {viewList , CreatePatient};

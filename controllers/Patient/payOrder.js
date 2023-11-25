@@ -1,5 +1,5 @@
-const PharmacyPatient = require('../../CodeMedics-Pharmacy/models/PharmacyPatient');
-const Order = require('../../CodeMedics-Pharmacy/models/Order');
+const PharmacyPatient = require('../../models/Patient');
+const Order = require('../../models/Order');
 const stripe = require("stripe")(process.env.SECRET_KEY);
 
 const payOrder = async(req, res) =>{

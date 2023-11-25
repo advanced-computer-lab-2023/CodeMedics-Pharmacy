@@ -1,6 +1,6 @@
-const Patient = require('../models/Patient');
-const Pharmacist = require('../models/Pharmacist');
-const Admin = require('../models/Administrator');
+const Patient = require('../../models/Patient');
+const Pharmacist = require('../../models/Pharmacist');
+const Admin = require('../../models/Administrator');
 const nodeMailer = require('nodemailer');
 
 function generateRandomNumber() {

@@ -1,6 +1,7 @@
-const Patient = require('../models/Patient');
-const Cart = require('../models/Cart');
-exports.getTotalAmont = async (req, res) => {
+const Patient = require('../../models/Patient');
+const Cart = require('../../models/Cart');
+
+exports.getTotalAmount = async (req, res) => {
     try{
     const { username } = req.body;
     const cart = await Cart.findOne({ PatientId: username });

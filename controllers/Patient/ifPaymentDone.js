@@ -1,7 +1,8 @@
-const Patient = require('../models/Patient');
-const Order = require('../models/Order');
-const { getUsername } = require('.././config/infoGetter');
-const Medicine = require('../models/Medicine');
+const Patient = require('../../models/Patient');
+const Order = require('../../models/Order');
+const { getUsername } = require('../../config/infoGetter');
+const Medicine = require('../../models/Medicine');
+
 const calculateAmount = async(items) =>{
     let amount = 0;
     for (const item of items) {
@@ -26,8 +27,6 @@ const ifPaymentDone = async(req, res) =>{
         curMedicine.availableQuantity -= medicine.Quantity;
         await curMedicine.save();
     }
-    console.log("order added");
-    console.log(medicines);
     let amount = await calculateAmount(medicines);
     if(type){
         patient.Wallet -= amount;
@@ -46,4 +45,4 @@ const ifPaymentDone = async(req, res) =>{
     await patient.save();
 }
 
-module.exports = ifPaymentDone;
+module.exports = {ifPaymentDone};

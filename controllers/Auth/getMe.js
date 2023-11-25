@@ -1,4 +1,4 @@
-const Patient = require('../models/Patient');
+const Patient = require('../../models/Patient');
 
 exports.getMe = async (req, res) => {
     try{
@@ -10,6 +10,6 @@ exports.getMe = async (req, res) => {
         return res.status(200).json(user);
     }
     catch(err){
-
+        return res.status(500).json({message: err.message});
     }
 };

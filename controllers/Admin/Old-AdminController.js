@@ -1,9 +1,9 @@
-const adminModel = require('../models/Administrator');
-const pharmacistModel = require('../models/Pharmacist');
-const patientModel = require('../models/Patient');
+const adminModel = require('../../models/Administrator');
+const pharmacistModel = require('../../models/Pharmacist');
+const patientModel = require('../../models/Patient');
 const {default: mongoose} = require('mongoose');
-const medicineModel = require('../models/Medicine');
-const pharmacistRequests = require('../models/pharmacistRequests');
+const medicineModel = require('../../models/Medicine');
+const pharmacistRequests = require('../../models/pharmacistRequests');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -180,6 +180,7 @@ const acceptPharmacist = async (req, res) => {
     await Pharmacist.save();
     return res.status(200).json({message: 'Pharmacist approved successfully'});
 };
+
 const rejectPharmacist = async (req, res) => {
     const {Username, Email} = req.body;
     const Pharmacist = await pharmacistModel.findOne({Username: Username, Email: Email});

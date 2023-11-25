@@ -1,7 +1,7 @@
-const PharmacyPatient = require('../models/Patient');
-const Cart = require('../models/Cart');
+const PharmacyPatient = require('../../models/Patient');
+const Cart = require('../../models/Cart');
 const stripe = require("stripe")(process.env.SECRET_KEY);
-const Medicine = require('../models/Medicine');
+const Medicine = require('../../models/Medicine');
 
 const updateMedicine = async (req, res) => {
     try {

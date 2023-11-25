@@ -1,6 +1,6 @@
-const patientModel = require('../models/Patient');
-const adminModel = require('../models/Administrator');
-const pharmacistModel = require('../models/Pharmacist');
+const patientModel = require('../../models/Patient');
+const adminModel = require('../../models/Administrator');
+const pharmacistModel = require('../../models/Pharmacist');
 const bcrypt = require('bcryptjs');
 
 
