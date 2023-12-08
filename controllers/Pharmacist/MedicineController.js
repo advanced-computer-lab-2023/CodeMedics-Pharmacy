@@ -147,9 +147,43 @@ const viewMedicinesPharmacist = async (req, res) => {
     }
 };
 
+const archiveMedicine = async (req, res) => {
+    try {
+        const { name } = req.body;
+        const medicine = await medicineModel.findOne({ name });
 
+        if (!medicine) {
+            return res.status(404).json({ error: 'Medicine not found' });
+        }
 
-  module.exports = { multerMiddleware, addMedicine,editMedicine, viewMedicines,viewMedicinesPharmacist };
+        medicine.archived = true;
+        await medicine.save();
+
+        res.status(200).json({ message: 'Medicine archived successfully', medicine });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+const unarchiveMedicine = async (req, res) => {
+    try {
+        const { name } = req.body;
+        const medicine = await medicineModel.findOne({ name });
+
+        if (!medicine) {
+            return res.status(404).json({ error: 'Medicine not found' });
+        }
+
+        medicine.archived = false;
+        await medicine.save();
+
+        res.status(200).json({ message: 'Medicine unarchived successfully', medicine });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+  module.exports = { multerMiddleware, addMedicine,editMedicine, viewMedicines,viewMedicinesPharmacist , archiveMedicine, unarchiveMedicine};
   
 
 
