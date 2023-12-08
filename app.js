@@ -20,6 +20,7 @@ const pharmacistRoutes = require('./routes/PharmacistRoutes');
 const patientRoutes = require('./routes/PateintRoutes');
 const authRoutes = require('./routes/AuthRoutes');
 const medicineRoutes = require('./routes/MedicineRoutes');
+
 // Connect to MongoDB
 connectDB().then(r => console.log("Connected to MongoDB 200 OK".bgGreen.bold));
 
@@ -50,11 +51,15 @@ app.set('view engine', 'ejs');
 
 // routes
 
+app.use('/medicine' , medicineRoutes);
+
+
 app.use('/admin', adminRoutes);
 app.use('/pharmacist', pharmacistRoutes);
 app.use('/patient', patientRoutes);
 app.use('/', authRoutes);
 app.use('/medicine', medicineRoutes);
+
 
 
 app.post("/package/create-payment-intent", async (req, res) => {
