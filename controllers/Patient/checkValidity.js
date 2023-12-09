@@ -6,6 +6,7 @@ const checkValidity = async (req, res) => {
     try {
         const username = req.query.username;
         const patient = await Patient.findOne({ Username: username });
+        console.log("HERE IN CHECKVALIDITY")
         const cart = patient.Cart.items;
         for (let i = 0; i < cart.length; i++) {
             const curMedicine = await Medicine.findOne({ Name: cart[i].Name });
