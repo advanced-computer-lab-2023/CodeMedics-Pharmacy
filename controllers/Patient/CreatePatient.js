@@ -4,6 +4,8 @@ const Patient = require('../../models/Patient');
 const {default: mongoose} = require('mongoose');
 // const getUsername = require('../config/usernameGetter');
 const Medicine = require('../../models/Medicine');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const viewList = async (req, res) => {
     //get list of all medicine

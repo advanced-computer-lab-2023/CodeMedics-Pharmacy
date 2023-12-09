@@ -54,7 +54,7 @@ const patientFormik = useFormik({
     'emergencyContact.relation': Yup.string().required('Emergency Contact Relation is required'),
   }),
   onSubmit : async (values, helpers) => { // Call the handleFormSubmit function
-    fetch('http://localhost:3000/register', {
+    fetch('http://localhost:3001/register', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -126,7 +126,7 @@ const formik = useFormik({
       .required('Degree is required')  
   }),
   onSubmit: async (values, helpers) => {
-    fetch('http://localhost:3000/Pharmregister', {
+    fetch('http://localhost:3001/Pharmregister', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
