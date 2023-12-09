@@ -66,7 +66,7 @@ const Page = () => {
     },[]);
 
   useEffect(() => {
-    fetch('http://localhost:8001/MedicinesPharmacist')
+    fetch('http://localhost:8001/medicine/viewMedicinesPharmacist') // done new Route
       .then((res) => {
         return res.json();
       })

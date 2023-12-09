@@ -35,7 +35,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
   const username = Cookies.get('username');
   console.log("in the overview", username);
   useEffect(() => {
-    fetch(`http://localhost:8001/getCart?username=${username}`)
+    fetch(`http://localhost:8001/patient/getCart?username=${username}`) // done new Route
       .then((response) => response.json())
       .then((data) => {
         // console.log('Updated Cart:', data);
@@ -57,7 +57,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
   };
 
   const updateCart = (productID, quantity) => {
-    fetch(`http://localhost:8001/updateMedicine`, {
+    fetch(`http://localhost:8001/patient/updateMedicine`, { // done new Route
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
   const handleProceedToCheckout = () => {
     // console.log(username);
     // router.push('/user/review');
-    axios.get(`http://localhost:8001/user/checkValidity?username=${username}`, {})
+    axios.get(`http://localhost:8001/patient/checkValidity?username=${username}`, {}) // Done new Route
       .then((res) => {
         return res['data'];
       })

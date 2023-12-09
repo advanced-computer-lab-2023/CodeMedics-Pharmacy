@@ -62,7 +62,7 @@ export const OverviewLatestProducts = (props) => {
               };
             
               const addToCartApiCall = (username, productId, quantity) => {
-                fetch(`http://localhost:8001/updateMedicine`, {
+                fetch(`http://localhost:8001/patient/updateMedicine`, { // done new Route
                   method: 'PATCH',
                   headers: {
                     'Content-Type': 'application/json',

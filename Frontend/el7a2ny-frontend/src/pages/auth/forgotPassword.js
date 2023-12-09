@@ -44,7 +44,7 @@ const Page = () => {
         if(flag){
       try {
         const body = {"username": values.username};
-          axios.post('http://localhost:8001/resetPassword' , body)
+          axios.post('http://localhost:8001/changePassword' , body) // done new Route
             .then((res) => { 
                 setOtpNum(res.data.OTP);
                 setFlag(false);

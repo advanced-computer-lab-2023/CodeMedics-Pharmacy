@@ -29,7 +29,7 @@ const Page = () => {
         .required('Password is required')
     }),
     onSubmit: async (values, helpers) => { // Call the handleFormSubmit function
-      fetch('http://localhost:8001/CreateAdmin', {
+      fetch('http://localhost:8001/admin/createAdmin', { // done new Route
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

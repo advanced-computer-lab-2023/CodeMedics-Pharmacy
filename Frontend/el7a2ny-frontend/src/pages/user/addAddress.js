@@ -51,7 +51,7 @@ const Page = () => {
                 "username": username
             }
             console.log('here -111111> ');
-              await axios.put('http://localhost:8001/addAddress' , body)
+              await axios.put('http://localhost:8001/patient/addAddress' , body) // done new Route
               .then((res) => { 
                   return res.data;
                 })

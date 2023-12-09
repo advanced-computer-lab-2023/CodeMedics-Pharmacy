@@ -12,7 +12,7 @@ export default function PaymentForm({activeStep, setStep}) {
   const [total, setTotal] = useState(0);
   const username = Cookies.get('username');
   useEffect(()=>{
-    axios.get('http://localhost:8001/getCart?username='+username).then(response => {
+    axios.get('http://localhost:8001/patient/getCart?username='+username).then(response => { // done new Route
       console.log(response.data);
       setProducts(response.data);
       // const gtotal = calculateTotal(response.data);

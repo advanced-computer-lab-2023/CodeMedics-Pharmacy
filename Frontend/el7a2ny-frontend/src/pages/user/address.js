@@ -44,7 +44,7 @@ const Page = () => {
   const username = Cookies.get('username');
 
   useEffect(() => {
-    fetch(`http://localhost:8001/getAddress?username=${username}`)
+    fetch(`http://localhost:8001/patient/getAddress?username=${username}`) // done new Route
       .then((res) => {
         return res.json();
       })

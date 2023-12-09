@@ -50,7 +50,7 @@ const Page = () => {
 
     useEffect(() => {
       try{
-       axios.get('http://localhost:8001/getAddress' , body)
+       axios.get('http://localhost:8001/patient/getAddress' , body) // done new Route but TODO -> check if this is working
               .then((res) => { 
                   return res['data'];
                 })

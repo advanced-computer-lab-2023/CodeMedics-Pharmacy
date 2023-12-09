@@ -92,7 +92,7 @@ const Page = ({}) => {
             if(values.picture) formData.append('Picture', values.picture);
 
 
-              await axios.patch('http://localhost:8001/ditMedicine' , formData , {headers: {
+              await axios.patch('http://localhost:8001/medicine/editMedicine' , formData , {headers: { // done new Route
                 'Content-Type': 'multipart/form-data',
               },})
               .then((res) => { 

@@ -9,9 +9,11 @@ const {ifPaymentDone} = require('../controllers/Patient/ifPaymentDone');
 const {payOrder} = require('../controllers/Patient/payOrder');
 const {CreatePatient} = require('../controllers/Patient/CreatePatient');
 const {getCart , updateMedicine} = require('../controllers/Patient/updateMedicine');
+const {checkValidity} = require('../controllers/Patient/checkValidity');
 
 router.post('/addAddress', addAddress);
 router.get('/getAddress/:username', getAddress);
+router.get('/checkValidity/:username', checkValidity);
 
 router.get('/getOrders/:username', getOrders);
 router.patch('/cancelOrder/:orderId', cancelOrder);

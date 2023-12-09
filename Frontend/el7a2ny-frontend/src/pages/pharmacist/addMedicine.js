@@ -97,7 +97,7 @@ const Page = () => {
             formData.append('otc', values.otc);
             console.log(formData);
 
-              await axios.post('http://localhost:8001/addMedicine' , formData , { 
+              await axios.post('http://localhost:8001/medicine/addMedicine' , formData , { // done new Route
                 headers: {
                 'Content-Type': 'multipart/form-data',
               },})
