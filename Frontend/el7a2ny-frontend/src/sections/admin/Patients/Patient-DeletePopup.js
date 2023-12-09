@@ -28,7 +28,7 @@ export const PatientDeletePopup = (props) => {
 
   const onRemovePatient = async (username) => {
     try {
-      const removeResponse = await axios.delete('http://localhost:8000/removePatient', {
+      const removeResponse = await axios.delete('http://localhost:8001/removePatient', {
         data: { Username: username },
       });
     } catch (error) {

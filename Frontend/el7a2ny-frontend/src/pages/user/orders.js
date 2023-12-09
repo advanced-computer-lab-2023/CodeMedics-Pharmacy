@@ -23,7 +23,7 @@ const Orders = () => {
   const [isLoading, setIsLoading] = useState(true);
   const username = Cookies.get('username');
   useEffect(() => {
-    axios.get(`http://localhost:8000/user/getOrders?username=`+username)
+    axios.get(`http://localhost:8001/user/getOrders?username=`+username)
       .then((res) => {
         return res['data'];
       })

@@ -99,7 +99,7 @@ const Page = () => {
         //
         // };
 
-        await axios.post('http://localhost:8000/Pharmregister', formData, {
+        await axios.post('http://localhost:8001/Pharmregister', formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }

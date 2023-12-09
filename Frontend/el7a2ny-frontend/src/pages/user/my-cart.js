@@ -33,7 +33,7 @@ const Page = () => {
 
     React.useEffect(() => {
         try {
-            axios.get(`http://localhost:8000/getCart?username=${username}`, {})
+            axios.get(`http://localhost:8001/getCart?username=${username}`, {})
                 .then((res) => {
                     return res['data'];
                 })

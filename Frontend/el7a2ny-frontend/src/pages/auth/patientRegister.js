@@ -76,7 +76,7 @@ const Page = () => {
         "DateOfBirth": values.DateOfBirth,
         "Number": values.Number,
         "Gender": values.Gender };
-          await axios.post('http://localhost:8000/addUser' , body)
+          await axios.post('http://localhost:8001/addUser' , body)
           .then((res) => {
               return res['data'];
             })

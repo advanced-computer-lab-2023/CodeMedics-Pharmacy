@@ -43,7 +43,7 @@ function formatDate(inputDate) {
 export const OverviewLatestOrders = (props) => {
   const { orders, sx } = props;
   const handleCancel = async (orderId) => {
-    await axios.post(`http://localhost:8000/cancelOrder?orderId=${orderId}`);
+    await axios.post(`http://localhost:8001/cancelOrder?orderId=${orderId}`);
     window.location.reload();
   };
 

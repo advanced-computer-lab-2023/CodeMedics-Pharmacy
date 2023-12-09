@@ -17,7 +17,7 @@ const Page = () => {
     if(!Cookies.get('token')) 
       router.replace('/auth/login');
     else{
-        axios.post('http://localhost:8000/auth',{
+        axios.post('http://localhost:8001/auth',{
           "token": Cookies.get('token'),
           "type": 'pharmacist'
         }).then((res) => {

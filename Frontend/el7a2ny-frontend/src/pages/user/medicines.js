@@ -81,7 +81,7 @@ Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 export async function getServerSideProps() {
   try {
     // Fetch data from the provided API
-    const response = await axios.get('http://localhost:8000/Medicines');
+    const response = await axios.get('http://localhost:8001/Medicines');
     const medicines = response.data;
 
     return {

@@ -22,7 +22,7 @@ const Page = () => {
 
   useEffect(() => {
     try {
-      axios.get(`http://localhost:8000/getCart?username=${username}`, {})
+      axios.get(`http://localhost:8001/getCart?username=${username}`, {})
         .then((res) => {
           return res['data'];
         })
@@ -36,7 +36,7 @@ const Page = () => {
 
   const updateCart = async (productID , quantity) => {
     try {
-      await axios.patch(`http://localhost:8000/updateMedicine`, {
+      await axios.patch(`http://localhost:8001/updateMedicine`, {
       Username: username,
       productID: productID,
       quantity,})

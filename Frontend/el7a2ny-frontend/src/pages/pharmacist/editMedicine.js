@@ -20,7 +20,7 @@ const Page = ({}) => {
     if(!Cookies.get('token')) 
       router.replace('/auth/login');
     else{
-        axios.post('http://localhost:8000/auth',{
+        axios.post('http://localhost:8001/auth',{
           "token": Cookies.get('token'),
           "type": 'pharmacist'
         }).then((res) => {
@@ -92,7 +92,7 @@ const Page = ({}) => {
             if(values.picture) formData.append('Picture', values.picture);
 
 
-              await axios.patch('http://localhost:8000/ditMedicine' , formData , {headers: {
+              await axios.patch('http://localhost:8001/ditMedicine' , formData , {headers: {
                 'Content-Type': 'multipart/form-data',
               },})
               .then((res) => { 

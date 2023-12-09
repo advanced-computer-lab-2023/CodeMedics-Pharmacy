@@ -12,7 +12,7 @@ export default function PaymentForm({activeStep, setStep}) {
   const [total, setTotal] = useState(0);
   const username = Cookies.get('username');
   useEffect(()=>{
-    axios.get('http://localhost:8000/getCart?username='+username).then(response => {
+    axios.get('http://localhost:8001/getCart?username='+username).then(response => {
       console.log(response.data);
       setProducts(response.data);
       // const gtotal = calculateTotal(response.data);
@@ -25,7 +25,7 @@ export default function PaymentForm({activeStep, setStep}) {
   useEffect(() => {
     console.log('PaymentForm.js was here');
     // Create PaymentIntent as soon as the page loads
-     axios.post('http://localhost:8000/create-payment-intent', { })
+     axios.post('http://localhost:8001/create-payment-intent', { })
       .then((data) => setClientSecret(data.data.clientSecret)).catch((error) => {
         console.log(error);
       });

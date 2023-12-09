@@ -42,7 +42,7 @@ const Page = () => {
   const customersSelection = useSelection(customersIds);
 
   useEffect(() => {
-    fetch('http://localhost:8000/iewPatients')
+    fetch('http://localhost:8001/iewPatients')
       .then((res) => {
         if (res.status == 401) {
           throw new Error('Error while fetching data');

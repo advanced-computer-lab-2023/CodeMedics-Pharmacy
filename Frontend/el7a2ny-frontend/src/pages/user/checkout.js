@@ -50,7 +50,7 @@ const Page = () => {
 
     useEffect(() => {
       try{
-       axios.get('http://localhost:8000/getAddress' , body)
+       axios.get('http://localhost:8001/getAddress' , body)
               .then((res) => { 
                   return res['data'];
                 })
@@ -116,7 +116,7 @@ const Page = () => {
                 "medicalUse": values.medicalUse,
                 "Picture": values.picture,
             };
-              await axios.post('http://localhost:8000/addMedicine' , body)
+              await axios.post('http://localhost:8001/addMedicine' , body)
               .then((res) => { 
                 if(res.status != 200){
                   throw new Error(res.data.message); 

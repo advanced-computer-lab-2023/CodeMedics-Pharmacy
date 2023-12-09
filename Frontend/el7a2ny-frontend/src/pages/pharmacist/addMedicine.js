@@ -19,7 +19,7 @@ const Page = () => {
     if(!Cookies.get('token')) 
       router.replace('/auth/login');
     else{
-        axios.post('http://localhost:8000/auth',{
+        axios.post('http://localhost:8001/auth',{
           "token": Cookies.get('token'),
           "type": 'pharmacist'
         }).then((res) => {
@@ -97,7 +97,7 @@ const Page = () => {
             formData.append('otc', values.otc);
             console.log(formData);
 
-              await axios.post('http://localhost:8000/addMedicine' , formData , { 
+              await axios.post('http://localhost:8001/addMedicine' , formData , { 
                 headers: {
                 'Content-Type': 'multipart/form-data',
               },})

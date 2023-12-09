@@ -14,7 +14,7 @@ const Page = () => {
   const [values, setValues] = useState({});
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/getMe?username=${username}`)
+    axios.get(`http://localhost:8001/getMe?username=${username}`)
       .then((req) => {
         console.log(req.data);
         setValues(req.data);

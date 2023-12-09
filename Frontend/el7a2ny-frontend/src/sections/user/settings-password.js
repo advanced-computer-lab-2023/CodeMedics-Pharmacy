@@ -45,7 +45,7 @@ export const SettingsPassword = () => {
         console.log(123);
       }else{
         try {
-        const response = await fetch('http://localhost:8000/changePassword', {
+        const response = await fetch('http://localhost:8001/changePassword', {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

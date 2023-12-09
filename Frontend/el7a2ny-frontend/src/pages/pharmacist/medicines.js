@@ -50,7 +50,7 @@ const Page = () => {
     if(!Cookies.get('token')) 
       router.replace('/auth/login');
     else{
-        axios.post('http://localhost:8000/auth',{
+        axios.post('http://localhost:8001/auth',{
           "token": Cookies.get('token'),
           "type": 'pharmacist'
         }).then((res) => {
@@ -66,7 +66,7 @@ const Page = () => {
     },[]);
 
   useEffect(() => {
-    fetch('http://localhost:8000/MedicinesPharmacist')
+    fetch('http://localhost:8001/MedicinesPharmacist')
       .then((res) => {
         return res.json();
       })
