@@ -37,7 +37,7 @@ export default function Review() {
   const [total, setTotal] = useState(0);
   console.log("in the review component");
   useEffect(() => {
-    axios.get(`http://localhost:8000/getCart?username=${userName}`).then(response => {
+    axios.get(`http://localhost:8001/patient/getCart?username=${userName}`).then(response => { // done new Route
       console.log(response.data);
       setOrderedProducts(response.data);
       const gtotal = calculateTotal(response.data);

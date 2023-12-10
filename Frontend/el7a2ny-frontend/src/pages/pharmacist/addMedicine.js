@@ -14,25 +14,6 @@ import DocumentArrowUpIcon from '@heroicons/react/24/solid/DocumentArrowUpIcon';
 const Page = () => {
   const router = useRouter();
   const [auth , setAuth] = useState(false);
-
-  useEffect(() => {
-    if(!Cookies.get('token')) 
-      router.replace('/auth/login');
-    else{
-        axios.post('http://localhost:8000/auth',{
-          "token": Cookies.get('token'),
-          "type": 'pharmacist'
-        }).then((res) => {
-          return res;
-        })
-        .then((data) => {
-          setAuth(true);
-        })
-        .catch((err) => {
-          router.replace('/pharmacist/404');
-        });
-    }
-    },[]);
     const formik = useFormik({
         initialValues: {
             name: '',
@@ -97,7 +78,7 @@ const Page = () => {
             formData.append('otc', values.otc);
             console.log(formData);
 
-              await axios.post('http://localhost:8000/addMedicine' , formData , { 
+              await axios.post('http://localhost:8001/medicine/addMedicine' , formData , { // done new Route
                 headers: {
                 'Content-Type': 'multipart/form-data',
               },})

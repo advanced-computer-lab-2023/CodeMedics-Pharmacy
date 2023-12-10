@@ -40,7 +40,7 @@ export const Row = (props) => {
   const router = useRouter();
   console.log(request.DateOfBirth);
   const HandleAccept = () => {
-    axios.post('http://localhost:8000/acceptPharmacist', {
+    axios.post('http://localhost:8001/admin/acceptPharmacist', { // done new Route
       Username: request.Username,
       Email: request.Email
     })
@@ -55,7 +55,7 @@ export const Row = (props) => {
          });
   };
   const HandleReject = () => {
-    axios.post('http://localhost:8000/rejectPharmacist', {
+    axios.post('http://localhost:8001/admin/rejectPharmacist', { // done new Route
       Username: request.Username,
       Email: request.Email
     })

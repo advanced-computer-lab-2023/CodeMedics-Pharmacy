@@ -30,7 +30,7 @@ export const PharmacistDeletePopup = (props) => {
   const onRemovePharmacist = async (username) => {
     try {
       console.log(username + ' of api call');
-      const removeResponse = await axios.delete('http://localhost:8000/removePharmacist', {
+      const removeResponse = await axios.delete('http://localhost:8001/admin/removePharmacist', { // done new Route
         data: { Username: username }
       });
       console.log('Pharmacist removed successfully.');

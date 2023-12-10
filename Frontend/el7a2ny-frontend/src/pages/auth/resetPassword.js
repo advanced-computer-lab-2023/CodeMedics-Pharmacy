@@ -53,7 +53,7 @@ const Page = () => {
                 console.log(123);
             } else {
                 try {
-                    axios.post('http://localhost:8000/changePassword',{username: username , newPassword: values.password})
+                    axios.post('http://localhost:8001/changePassword',{username: username , newPassword: values.password}) // done new Route
                     .then((response) => {
                         console.log('Password updated successfully');
                         router.replace('/auth/login');

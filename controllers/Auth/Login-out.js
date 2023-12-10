@@ -93,14 +93,14 @@ const auth = async (req, res) => {
                     res.status(400).json({message: 'You are not authorized'});
                 }
             } else if (type === 'pharmacist') {
-                const pharmacist = await pharmacistModel.findOne({Username: username});
+                const pharmacist = await PharmRequest.findOne({Username: username});
                 if (pharmacist) {
                     res.status(200).json({message: 'You are authorized'});
                 } else {
                     res.status(400).json({message: 'You are not authorized'});
                 }
             } else if (type === 'patient') {
-                const patient = await patientModel.findOne({Username: username});
+                const patient = await PatientModel.findOne({Username: username});
                 if (patient) {
                     res.status(200).json({message: 'You are authorized'});
                 } else {

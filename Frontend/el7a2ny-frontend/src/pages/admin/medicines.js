@@ -47,7 +47,7 @@ const Page = () => {
   const [auth , setAuth] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:8000/Medicines')
+    fetch('http://localhost:8001/medicine/viewMedicinesPharmacist') //done new Route
       .then((res) => {
         if(res.statusCode == 401)
            throw new Error('Error while fetching data'); 

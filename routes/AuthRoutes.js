@@ -4,6 +4,8 @@ const { registerPharmacist } = require('../controllers/Pharmacist/PharmacistCont
 const {CreatePatient} = require('../controllers/Patient/CreatePatient');
 const upload = require('../config/multerConfig');
 const {loginUser , logout , auth} = require('../controllers/Auth/Login-out');
+const {changePassword} = require('../controllers/Auth/ChangePassword');
+const {getMe} = require('../controllers/auth/getMe');
 
 
 // User Registration
@@ -18,5 +20,8 @@ router.post('/registerPharmacist', upload.fields([
 router.post('/login', loginUser);
 router.post('/logout', logout);
 router.post('/', auth);
+router.post('/changePassword', changePassword);
+
+router.get('/getMe', getMe);
 
 module.exports = router;

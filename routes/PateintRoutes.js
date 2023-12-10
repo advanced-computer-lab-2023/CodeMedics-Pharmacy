@@ -9,19 +9,22 @@ const {ifPaymentDone} = require('../controllers/Patient/ifPaymentDone');
 const {payOrder} = require('../controllers/Patient/payOrder');
 const {CreatePatient} = require('../controllers/Patient/CreatePatient');
 const {getCart , updateMedicine} = require('../controllers/Patient/updateMedicine');
+const {checkValidity} = require('../controllers/Patient/checkValidity');
 
 router.post('/addAddress', addAddress);
-router.get('/getAddress/:username', getAddress);
+router.get('/getAddress', getAddress);
 
-router.get('/getOrders/:username', getOrders);
-router.patch('/cancelOrder/:orderId', cancelOrder);
+router.get('/getOrders', getOrders);
+router.patch('/cancelOrder', cancelOrder);
 router.get('/getTotalAmount', getTotalAmount);
-router.post('/ifPaymentDone/:username', ifPaymentDone);
+router.post('/ifPaymentDone', ifPaymentDone);
 router.post('/payOrder', payOrder);
 
 router.post('/CreatePatient', CreatePatient);
 
-router.get('/getCart/:username', getCart);
+router.get('/getCart', getCart);
 router.patch('/updateMedicine', updateMedicine);
+//router.get('/checkValidity', checkValidity);
+
 
 module.exports = router;

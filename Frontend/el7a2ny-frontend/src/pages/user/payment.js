@@ -42,7 +42,7 @@ const Page = () => {
   const [addresses , setAddresses] = useState([]);
 
   useEffect(() => {
-    fetch(`http://localhost:8000/getAddress?username=${username}`)
+    fetch(`http://localhost:8001/patient/getAddress?username=${username}`) // done new Route
       .then((res) => {
         return res.json();
       })
@@ -70,7 +70,7 @@ const Page = () => {
   
   const handleWithWallet =() =>{
       try{
-        axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`, {type: 'Wallet'});
+        axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`, {type: 'Wallet'}); // done new Route
         console.log('here --->');
         router.push('/user/orders?username='+username);   
       }catch(err){

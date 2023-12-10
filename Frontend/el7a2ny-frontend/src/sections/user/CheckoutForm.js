@@ -23,7 +23,7 @@ export default function CheckoutForm({activeStep, setStep}) {
   const [callOrders, setCallOrders] = useState(false);
   useEffect(() => {
     if (isDone) {
-      axios.post(`http://localhost:8000/user/ifPaymentDone?username=${username}`);
+      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`); // done new Route
       setCallOrders(true);
     }
   }

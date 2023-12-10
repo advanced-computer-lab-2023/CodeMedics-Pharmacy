@@ -4,6 +4,7 @@ const stripe = require("stripe")("sk_test_51OA3YuHNsLfp0dKZBQsyFFPLXepbGkt9p5xZz
 const Medicine = require('../../models/Medicine');
 
 const cancelOrder = async(req, res) =>{
+    console.log("ENTERED CANCEL ORDER");
     const orderId = req.query.orderId;
     const order = await Order.findOne({_id: orderId});
     const patient = await Patient.findOne({_id: order.PatientId});
@@ -17,6 +18,7 @@ const cancelOrder = async(req, res) =>{
             // console.log(o._id, orderId, o._id == orderId);
             if(o._id == orderId){
                 o.status = "Cancelled";
+                await o.save();
                 break;
             }
         }

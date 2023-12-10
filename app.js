@@ -7,7 +7,7 @@ const logger = require('morgan');
 const colors = require('colors');
 const cors = require('cors');
 const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: 'http://localhost:3001',
     credentials: true,
     optionSuccessStatus: 200
 };
@@ -26,7 +26,7 @@ connectDB().then(r => console.log("Connected to MongoDB 200 OK".bgGreen.bold));
 
 //Start Express server
 const app = express();
-const Port = process.env.PORT || 3000;
+const Port = process.env.PORT || 8001;
 
 app.use(express.static("public"));
 app.use(express.json());
