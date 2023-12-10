@@ -29,7 +29,7 @@ export const OverviewLatestProducts = (props) => {
   const { products: initialProducts = [], sx } = props;
   const [products, setProducts] = useState(initialProducts);
   const [selectedQuantities, setSelectedQuantities] = useState({});
-
+  const [viewingAlternatives, setViewingAlternatives] = useState(false);
   const username = Cookies.get("username");
   // console.log(username);
   const handleQuantityChange = (event, productId) => {
@@ -48,9 +48,16 @@ export const OverviewLatestProducts = (props) => {
         }
       }
       setProducts(alternatives);
+      setViewingAlternatives(true);
     } catch (error) {
       console.error('Error fetching alternative medicines:', error);
     }
+  };
+
+  const handleBackToAllMedicines = () => {
+    // Reset products to the initial state and set viewingAlternatives to false
+    setProducts(initialProducts);
+    setViewingAlternatives(false);
   };
 
  
@@ -206,6 +213,18 @@ export const OverviewLatestProducts = (props) => {
           );
         })}
       </Box>
+      {viewingAlternatives && (
+        <Box mt={2} textAlign="center">
+          <Button
+            color="primary"
+            variant="contained"
+            size="small"
+            onClick={handleBackToAllMedicines}
+          >
+            Back to All Medicines
+          </Button>
+        </Box>
+      )}
       <Divider />
     </CardContent>
   );

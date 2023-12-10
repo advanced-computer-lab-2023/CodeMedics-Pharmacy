@@ -47,25 +47,6 @@ const Page = () => {
   const [auth , setAuth] = useState(false);
 
   useEffect(() => {
-    if(!Cookies.get('token')) 
-      router.replace('/auth/login');
-    else{
-        axios.post('http://localhost:8001/auth',{
-          "token": Cookies.get('token'),
-          "type": 'pharmacist'
-        }).then((res) => {
-          return res;
-        })
-        .then((data) => {
-          setAuth(true);
-        })
-        .catch((err) => {
-          router.replace('/pharmacist/404');
-        });
-    }
-    },[]);
-
-  useEffect(() => {
     fetch('http://localhost:8001/medicine/viewMedicinesPharmacist') // done new Route
       .then((res) => {
         return res.json();
@@ -124,7 +105,7 @@ const Page = () => {
     }
   }
 
-  return ( auth &&
+  return (
     <>
       <Head>
         <title>

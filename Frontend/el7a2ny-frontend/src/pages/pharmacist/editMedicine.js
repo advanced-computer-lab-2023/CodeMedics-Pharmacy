@@ -16,24 +16,7 @@ import DocumentArrowUpIcon from '@heroicons/react/24/solid/DocumentArrowUpIcon';
 const Page = ({}) => {
   const router = useRouter();
   const [auth , setAuth] = useState(false);
-  useEffect(() => {
-    if(!Cookies.get('token')) 
-      router.replace('/auth/login');
-    else{
-        axios.post('http://localhost:8001/auth',{
-          "token": Cookies.get('token'),
-          "type": 'pharmacist'
-        }).then((res) => {
-          return res;
-        })
-        .then((data) => {
-          setAuth(true);
-        })
-        .catch((err) => {
-          router.replace('/pharmacist/404');
-        });
-    }
-    },[]);
+  
     const params = new URLSearchParams(window.location.search);
     const encodedData = params.get('data');
     const medicine = JSON.parse(decodeURIComponent(encodedData)) || {"activeIngredients":["asd"]};
@@ -114,7 +97,7 @@ const Page = ({}) => {
       });
   
 
-  return (auth &&
+  return (
     <>
       <Head>
         <title>
