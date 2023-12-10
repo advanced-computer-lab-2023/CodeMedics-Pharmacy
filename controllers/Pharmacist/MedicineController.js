@@ -117,7 +117,8 @@ const notifyAllPharmacists = async (subject, text) => {
 
 const viewMedicines = async (req, res) => {
     try {
-        const medicines = await medicineModel.find({availableQuantity: {$gt: 0}});
+        //const medicines = await medicineModel.find({availableQuantity: {$gt: 0}});
+        const medicines = await medicineModel.find();
 
         if (!medicines || medicines.length === 0) {
             return res.status(404).json({ message: 'No medicines found.' });
@@ -127,6 +128,30 @@ const viewMedicines = async (req, res) => {
     } catch (error) {
         console.error('Error fetching medicines:', error);
         return res.status(500).json({ error: 'Failed to fetch medicines.' });
+    }
+};
+
+const viewAlternativeMedicines = async (req, res) => {
+    try{
+        const activeIngrediant = req.query.activeIngredient;
+        const medicines = await medicineModel.find({availableQuantity: {$gt: 0}});
+        var alternatives = [];
+        for(let i = 0; i<medicines.length; i++){
+            const current = medicines[i];
+            if(current.activeIngredients[0] === activeIngrediant){
+                alternatives.push(current);
+            }
+        }
+        console.log(alternatives);
+        if(alternatives.length === 0){
+            return res.status(404).json({message: "No Alternatives Found"});
+        }
+        
+        return res.status(200).json({alternatives});
+
+    } catch (error){
+        console.error("Error fetching alternative medicines", error);
+        return res.status(500).json({error: "Failed to fetch alternative medicines."});
     }
 };
 
@@ -183,7 +208,8 @@ const unarchiveMedicine = async (req, res) => {
     }
 };
 
-  module.exports = { multerMiddleware, addMedicine,editMedicine, viewMedicines,viewMedicinesPharmacist , archiveMedicine, unarchiveMedicine};
+  module.exports = { multerMiddleware, addMedicine,editMedicine, viewMedicines,viewMedicinesPharmacist , archiveMedicine, unarchiveMedicine, 
+ viewAlternativeMedicines};
   
 
 

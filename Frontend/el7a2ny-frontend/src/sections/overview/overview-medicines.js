@@ -23,10 +23,11 @@ import {
   MenuItem,
   Typography,
 } from '@mui/material';
+import axios from 'axios';
 
 export const OverviewLatestProducts = (props) => {
-  const { products = [], sx } = props;
-
+  const { products: initialProducts = [], sx } = props;
+  const [products, setProducts] = useState(initialProducts);
   const [selectedQuantities, setSelectedQuantities] = useState({});
 
   const username = Cookies.get("username");
@@ -35,6 +36,21 @@ export const OverviewLatestProducts = (props) => {
     const updatedQuantities = { ...selectedQuantities };
     updatedQuantities[productId] = event.target.value;
     setSelectedQuantities(updatedQuantities);
+  };
+
+  const handleViewAlternatives = async (activeIngredient) => {
+    try {
+      const alternatives = [];
+      for(let i = 0; i<products.length; i++){
+        const currentProduct = products[i];
+        if(currentProduct.availableQuantity > 0 && currentProduct.activeIngredients[0] === activeIngredient){
+          alternatives.push(currentProduct);
+        }
+      }
+      setProducts(alternatives);
+    } catch (error) {
+      console.error('Error fetching alternative medicines:', error);
+    }
   };
 
  
@@ -48,6 +64,7 @@ export const OverviewLatestProducts = (props) => {
         {products.map((product, index) => {
 
             // console.log(product);
+            const isOutOfStock = product.availableQuantity === 0;
 
             const handleAddToCart = (productID) => {
                 const quantity = selectedQuantities[productID];
@@ -135,7 +152,7 @@ export const OverviewLatestProducts = (props) => {
                 />
               </ListItem>
               <ListItemText
-                secondary={product.price}
+                secondary={product.price + "$"}
                 primaryTypographyProps={{variant: 'subtitle2'}}
                 secondaryTypographyProps={{variant: 'body2'}}
                 />
@@ -145,14 +162,28 @@ export const OverviewLatestProducts = (props) => {
                 secondaryTypographyProps={{variant: 'body2'}}
                 />
               <CardActions>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  size="small"
-                  onClick={() => {handleAddToCart(product._id)}} //
-                >
-                  Add to Cart
-                </Button>
+              {isOutOfStock ? (
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    size="small"
+                    // You can implement the logic for "View Alternatives" here
+                    onClick={() => {handleViewAlternatives(product.activeIngredients[0]);}}
+                  >
+                    View Alternatives
+                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      size="small"
+                      onClick={() => {
+                        handleAddToCart(product._id);
+                      }}
+                    >
+                      Add to Cart
+                    </Button>
                 <Box sx={{ marginRight: 8 }} /> {/* Add space between the select and the button */}
                 <FormControl variant="outlined" size="small" sx={{ minWidth: 80 }}>
                   <InputLabel id={`quantity-label-${product._id}`}>Quantity</InputLabel>
@@ -168,6 +199,8 @@ export const OverviewLatestProducts = (props) => {
                     {/* Add more options as needed */}
                   </Select>
                 </FormControl>
+                </>
+                )}
               </CardActions>
             </Card>
           );
