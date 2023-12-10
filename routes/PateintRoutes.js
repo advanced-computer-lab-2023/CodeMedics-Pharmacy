@@ -15,9 +15,9 @@ router.post('/addAddress', addAddress);
 router.get('/getAddress', getAddress);
 
 router.get('/getOrders', getOrders);
-router.patch('/cancelOrder/:orderId', cancelOrder);
+router.patch('/cancelOrder', cancelOrder);
 router.get('/getTotalAmount', getTotalAmount);
-router.post('/ifPaymentDone/:username', ifPaymentDone);
+router.post('/ifPaymentDone', ifPaymentDone);
 router.post('/payOrder', payOrder);
 
 router.post('/CreatePatient', CreatePatient);
