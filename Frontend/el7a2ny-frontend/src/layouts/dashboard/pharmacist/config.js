@@ -19,6 +19,15 @@ export const items = [
     )
   },
   {
+    title: 'Sales',
+    path: '/pharmacist/Sales',
+    icon: (
+      <SvgIcon fontSize="small">
+        <CogIcon />
+      </SvgIcon>
+    )
+  },
+  {
     title: 'Medicines ',
     path: '/pharmacist/medicines',
     icon: (
@@ -44,5 +53,5 @@ export const items = [
         <CogIcon />
       </SvgIcon>
     )
-  },
+  }
 ];
