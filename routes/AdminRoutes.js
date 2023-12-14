@@ -1,11 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const {createAdmin} = require('../controllers/Admin/AdminsController');
-const {viewPharmacists, viewPharmacistApplications , acceptPharmacist , rejectPharmacist , removePharmacist} = require('../controllers/Admin/PharmacistsController');
+const {
+    viewPharmacists,
+    viewPharmacistApplications,
+    acceptPharmacist,
+    rejectPharmacist,
+    removePharmacist
+} = require('../controllers/Admin/PharmacistsController');
 const {removePatient, viewPatients} = require('../controllers/Admin/PatientsController');
+const {TotalSales, SalesPerMonth} = require('../controllers/TotalSales');
 
 // ================== Admins ==================
 router.post('/createAdmin', createAdmin);
+router.get('/TotalSales', TotalSales);
+router.get('/SalesPerMonth', SalesPerMonth);
+
 
 // ================== Pharmacists ==================
 router.get('/viewPharmacists', viewPharmacists);
