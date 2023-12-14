@@ -2,10 +2,10 @@ const adminModel = require("../models/Administrator");
 const Pharmacist = require("../models/Pharmacist");
 const patientModel = require("../models/pharmacyPatient");
 const Administrator = require("../models/Administrator");
-
+const jwt = require('jsonwebtoken');
 
 const getUsername = async (req, res) => {
-        const token = req.cookies.jwt;
+        const token = req.cookies.jwt || req.cookies.token;
         let username = "";
     if(token){
         jwt.verify(token, 'supersecret', (err, decodedToken) => {
