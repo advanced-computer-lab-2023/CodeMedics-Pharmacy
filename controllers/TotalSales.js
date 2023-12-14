@@ -64,7 +64,7 @@ const SalesPerMonth = async (req, res) => {
     } catch (err) {
         res.status(400).json({message: "Invalid month or year"});
     }
-    ;
+
 };
 
 module.exports = {TotalSales, SalesPerMonth};
