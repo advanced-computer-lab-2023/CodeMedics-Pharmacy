@@ -2,13 +2,13 @@ import Head from 'next/head';
 import { subDays, subHours } from 'date-fns';
 import { Box, Container, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/layout';
-import { OverviewBudget } from 'src/sections/overview/overview-budget';
+import { OverviewTotalSales } from 'src/sections/overview/Admin/overview-total-sales';
 import { OverviewLatestOrders } from 'src/sections/overview/overview-latest-orders';
 import { OverviewLatestProducts } from 'src/sections/overview/overview-latest-products';
 import { OverviewSales } from 'src/sections/overview/overview-sales';
 import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-progress';
-import { OverviewTotalCustomers } from 'src/sections/overview/overview-total-customers';
-import { OverviewTotalProfit } from 'src/sections/overview/overview-total-profit';
+import { OverviewTotalPatients } from 'src/sections/overview/Admin/overview-total-patients';
+import { OverviewTotalCompletedOrders } from 'src/sections/overview/Admin/overview-total-completed-orders';
 import { OverviewTraffic } from 'src/sections/overview/overview-traffic';
 
 const now = new Date();
@@ -37,7 +37,7 @@ const Page = () => (
             sm={6}
             lg={3}
           >
-            <OverviewBudget
+            <OverviewTotalSales
               difference={12}
               positive
               sx={{ height: '100%' }}
@@ -49,7 +49,7 @@ const Page = () => (
             sm={6}
             lg={3}
           >
-            <OverviewTotalCustomers
+            <OverviewTotalPatients
               difference={16}
               positive={false}
               sx={{ height: '100%' }}
@@ -71,7 +71,7 @@ const Page = () => (
             sm={6}
             lg={3}
           >
-            <OverviewTotalProfit
+            <OverviewTotalCompletedOrders
               sx={{ height: '100%' }}
               value="$15k"
             />

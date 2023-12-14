@@ -20,9 +20,17 @@ const updateMedicine = async (req, res) => {
         const prescriptions = patient.Prescriptions;
         const foundInPrescription = false;
         for (let i = 0; i < prescriptions.length; i++) {
-            const p = prescriptions[i];
-            if (p.Drug === medicine.name) {
-                foundInPrescription = true;
+            const p = prescriptions[i].Drug;
+            var foundInner = false;
+            for(let j = 0; j<p.length; j++){
+                const currentDrug = p[j].drugName;
+                if (currentDrug === medicine.name) {
+                    foundInPrescription = true;
+                    foundInner = true;
+                    break;
+                }
+            }
+            if(foundInner){
                 break;
             }
         }
