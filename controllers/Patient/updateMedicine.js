@@ -18,7 +18,7 @@ const updateMedicine = async (req, res) => {
         let found = false;
         const medicine = await Medicine.findOne({ _id: productID });
         const prescriptions = patient.Prescriptions;
-        const foundInPrescription = false;
+        var foundInPrescription = false;
         for (let i = 0; i < prescriptions.length; i++) {
             const p = prescriptions[i].Drug;
             var foundInner = false;
