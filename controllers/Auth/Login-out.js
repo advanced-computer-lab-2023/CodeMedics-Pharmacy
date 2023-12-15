@@ -13,7 +13,8 @@ const createToken = (username) => {
 };
 
 const logout = async (req, res) => {
-    res.cookie('jwt', '', {maxAge: 1});
+    res.clearCookie('jwt');
+    res.clearCookie('token');
     res.status(200).json({message: "User logged out"});
 }
 // User Login
@@ -49,7 +50,6 @@ const loginUser = async (req, res) => {
             const auth = await bcrypt.compare(password, pharmacist.Password);
             if (auth && pharmacist.Status != "Approved") {
                 return res.status(401).json({message: `Your account is ${pharmacist.Status}`});
-
             }
             if (auth) {
                 const token = createToken(pharmacist.Username);

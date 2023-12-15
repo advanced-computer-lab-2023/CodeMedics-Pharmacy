@@ -12,7 +12,7 @@ const Page = () => {
       const response = await axios.get('http://localhost:8001/pharmacist/getPharmacistMessages', { withCredentials: true });
       
       // Log the entire response to see its structure
-      console.log('Response:', response);
+      console.log('Response: ', response);
   
       // Assuming the messages are nested under the "Messages" property
       const messages = response.data.Messages;

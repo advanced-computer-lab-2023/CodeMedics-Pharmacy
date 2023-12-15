@@ -46,7 +46,11 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
           const body = {"email": values.email, "password": values.password};
-          await axios.post('http://localhost:8001/login' , body) // done new Route
+          await axios('http://localhost:8001/login', {
+          method: 'POST',
+          data: body,
+          withCredentials: true,
+        })
             .then((res) => { 
               console.log(res);
               return res['data'];
@@ -91,7 +95,11 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         const body = {"username": values.username, "password": values.password};
-          await axios.post('http://localhost:8001/login' , body) // done new Route
+        await axios('http://localhost:8001/login', {
+          method: 'POST',
+          data: body,
+          withCredentials: true,
+        })
             .then((res) => { 
               if(res.status != 200){
                 console.log(res.status);
