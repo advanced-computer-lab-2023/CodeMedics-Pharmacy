@@ -1,6 +1,7 @@
 import { createContext, useContext, useEffect, useReducer, useRef } from 'react';
 import PropTypes from 'prop-types';
 import Cookies from 'js-cookie';
+import axios from 'axios';
 
 const HANDLERS = {
   INITIALIZE: 'INITIALIZE',
@@ -154,7 +155,18 @@ export const AuthProvider = (props) => {
 
   const signOut = () => {
     Cookies.remove('username');
+    Cookies.remove('jwt');
     Cookies.remove('token');
+    axios('http://localhost:8001/logout', {
+      method: 'POST',
+      withCredentials: true
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     dispatch({
       type: HANDLERS.SIGN_OUT
     });
