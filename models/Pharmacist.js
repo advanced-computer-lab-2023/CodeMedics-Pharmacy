@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+    const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const pharmacistSchema = new Schema({
@@ -42,7 +42,16 @@ const pharmacistSchema = new Schema({
         enum: ['Approved', 'Pending', 'Rejected'],
         default: 'Pending',
         required: false,
-    }
+    },Messages: {
+        type: [{
+            sender: String,
+            content: String,
+            timestamp: { type: Date, default: Date.now },
+        }],
+        default: [],
+        required: false,
+    },
+
 }, {timestamps: true});
 
 const Pharmacist = mongoose.model('Pharmacist', pharmacistSchema, 'Pharmacists');
