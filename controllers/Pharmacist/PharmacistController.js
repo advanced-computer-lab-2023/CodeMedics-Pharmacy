@@ -30,7 +30,7 @@ const registerPharmacist = async (req, res) => {
         // Process the registration and uploaded files
         const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree} = req.body;
         // Check for uploaded files
-
+        console.log(req.files);
         const {IDDocument, pharmacyDegree, workingLicense} = req.files;
         // Handle file uploads (files are available in req.files)
         const idDocumentFile = IDDocument[0].filename;

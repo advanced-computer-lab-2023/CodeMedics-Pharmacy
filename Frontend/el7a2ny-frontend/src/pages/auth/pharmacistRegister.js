@@ -71,7 +71,6 @@ const Page = () => {
     }), onSubmit: async (values, helpers) => {
 
       try {
-
         const formData = new FormData();
         formData.append('Name', values.Name);
         formData.append('Username', values.Username);
@@ -84,6 +83,7 @@ const Page = () => {
         formData.append('IDDocument', values.IDDocument);
         formData.append('pharmacyDegree', values.pharmacyDegree);
         formData.append('workingLicense', values.workingLicense);
+        console.log('IDDocument ------> ',values.IDDocument);
         // const body = {
         //   'Name': values.Name,
         //   'Username': values.Username,
@@ -99,10 +99,11 @@ const Page = () => {
         //
         // };
 
-        await axios.post('http://localhost:8001/pharmacist/registerPharmacist', formData, { // done new Route
+        await axios.post('http://localhost:8001/pharmacist/register', formData, 
+        { // done new Route
           headers: {
             'Content-Type': 'multipart/form-data'
-          }
+          },
         })
                    .then((res) => {
                      return res['data'];
@@ -306,6 +307,7 @@ const Page = () => {
                   type="file"
                   accept=".jpg, .jpeg, .png, .pdf"
                   onChange={(event) => {
+                    console.log('IDDocument ------> ',event.currentTarget.files[0]);
                     formik.setFieldValue('IDDocument', event.currentTarget.files[0]);
                   }}
                   style={{ display: 'none' }}

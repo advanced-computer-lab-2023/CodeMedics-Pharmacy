@@ -5,6 +5,7 @@ import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
+import MessageChatSquareIcon from '../../../icons/untitled-ui/duocolor/message-chat-square';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
 
@@ -33,6 +34,15 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Chat',
+    path: '/pharmacist/chat',
+    icon: (
+      <SvgIcon fontSize="small">
+        <MessageChatSquareIcon   />
       </SvgIcon>
     )
   },

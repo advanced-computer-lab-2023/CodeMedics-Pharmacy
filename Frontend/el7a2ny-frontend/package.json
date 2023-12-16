@@ -38,6 +38,7 @@
     "react-dom": "18.2.0",
     "reactjs-popup": "^2.0.6",
     "simplebar-react": "^3.2.1",
+    "socket.io-client": "^4.7.2",
     "stripe": "^14.4.0",
     "yup": "1.0.0"
   },
