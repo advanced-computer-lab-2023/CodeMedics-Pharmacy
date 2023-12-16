@@ -45,7 +45,6 @@ const addMedicine = async (req, res) => {
 
 const editMedicine = async (req, res) => {
     try {
-        console.log('holllla -- > ', req.body);
         const { name, ...updates } = req.body;
         const medicine = await medicineModel.findOne({ name });
 
