@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const adminSchema = new Schema({
+    Name: {
+        type: String,
+        required: false,
+    },
     Username: {
         type: String,
         required: [true, 'Please enter a username']
@@ -9,9 +13,18 @@ const adminSchema = new Schema({
     Password: {
         type: String,
         required: [true, 'Please enter a password']
+    },
+    Email: {
+        type: String,
+        required: false,
+    },
+    isCreator: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 
 }, {timestamps: true});
 
-const Admin = mongoose.model('Adminstrator', adminSchema, 'Adminstrator');
+const Admin = mongoose.model('Admin', adminSchema, 'Admins');
 module.exports = Admin;
