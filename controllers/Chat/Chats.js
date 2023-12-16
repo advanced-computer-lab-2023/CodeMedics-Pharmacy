@@ -29,6 +29,11 @@ exports.getChats = async (req, res) => {
                 chats.push({chat: newChat , doctor , latestMessage: null});
             }
         }
+        chats.sort((a, b) => {
+            if(a.chat.updatedAt > b.chat.updatedAt) return -1;
+            else if(a.chat.updatedAt < b.chat.updatedAt) return 1;
+            else return 0;
+        });
         res.status(200).json({ chats });
     } catch (error) {
         res.status(404).json({ message: error.message });

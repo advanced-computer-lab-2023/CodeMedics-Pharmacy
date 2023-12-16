@@ -20,14 +20,21 @@ const Page = () => {
     const [selectedChat, setSelectedChat] = useState(null);
     useEffect(() => {
         axios.get('http://localhost:8001/chat/getChats', { withCredentials: true })
-            .then((response) => {
-                console.log(response.data.chats);
-                setChats(response.data.chats);
-            }).catch((error) => {
-                console.log(error);
-            });
+        .then((response) => {
+            console.log(response.data.chats);
+            setChats(response.data.chats);
+        }).catch((error) => {
+            console.log(error);
+        });
+        socket.emit("iWantToJoin");
     }, []);
 
+
+    socket.on('newMessagePharmacy', (message) => {
+        console.log("Received new message from bla bla bla", message);
+        changeChatAndMessages(message);
+    });
+    
     const changeChatAndMessages = (message) => {
         const tmp = [];
         for(let i = 0; i < chats.length; i++) {
@@ -40,15 +47,16 @@ const Page = () => {
                 tmp.push(chats[i]);
             }
         }
+        tmp.sort((a, b) => {
+            if(a.chat.updatedAt > b.chat.updatedAt) return -1;
+            else if(a.chat.updatedAt < b.chat.updatedAt) return 1;
+            else return 0;
+        });
         setChats(tmp);
         if(selectedChat && selectedChat.chat._id == message.chat) {
             setMessages([...messages, message]);
         }
     };
-
-    socket.on('newMessage', (message) => {
-        changeChatAndMessages(message);
-    });
 
      const getMessages = (chatId) => {
         if(selectedChat && chatId == selectedChat.chat._id) return;
@@ -68,8 +76,7 @@ const Page = () => {
         };
         axios.post("http://localhost:8001/chat/sendMessage", body , { withCredentials: true })
             .then((response) => {
-                changeChatAndMessages(response.data.newMessage);
-                socket.emit('newMessage', {message: response.data.newMessage, receiver: selectedChat.doctor.Username});
+                socket.emit('newMessagePharmacy', {message: response.data.newMessage, receiver: selectedChat.doctor ? selectedChat.doctor.Username : selectedChat.patient.Username, sendingToPharmacy: false});
             }).catch((error) => {
                 console.log(error);
             });
