@@ -9,7 +9,7 @@ router.get('/viewMedicinesPharmacist', viewMedicinesPharmacist);
 router.get('/viewAlternativeMedicines', viewAlternativeMedicines);
 router.get('/viewMedicines', viewMedicines);
 router.post('/addMedicine', multerMiddleware,addMedicine);
-router.patch('/editMedicine', editMedicine);
+router.patch('/editMedicine', multerMiddleware,editMedicine);
 router.patch('/archiveMedicine', archiveMedicine);
 router.patch('/unarchiveMedicine', unarchiveMedicine);
 
