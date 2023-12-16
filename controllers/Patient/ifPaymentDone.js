@@ -2,6 +2,7 @@ const Patient = require('../../models/Patient');
 const Order = require('../../models/Order');
 const { getUsername } = require('../../config/infoGetter');
 const Medicine = require('../../models/Medicine');
+const PharmacyWallet = require('../../models/PharmacyWallet');
 
 const calculateAmount = async(items) =>{
     let amount = 0;
@@ -18,6 +19,11 @@ const ifPaymentDone = async(req, res) =>{
     const {type} = req.body;
     const username =  req.query.username;
     const patient = await Patient.findOne({Username: username});
+    const pharmacy = await PharmacyWallet.find();
+    if(pharmacy == []){
+        return res.status(500).json({message: "Pharmacy Wallet not Found"});
+    }
+    const pharmacyWallet = pharmacy[0];
     const medicines = patient.Cart.items;
     for (const medicine of medicines) {
         const curMedicine = await Medicine.findOne({_id: medicine.MedicineId});
@@ -30,6 +36,7 @@ const ifPaymentDone = async(req, res) =>{
     let amount = await calculateAmount(medicines);
     if(type){
         patient.Wallet -= amount;
+        pharmacyWallet.Wallet += amount;
     }
     const order = new Order({
         PatientId: patient._id,
@@ -43,6 +50,7 @@ const ifPaymentDone = async(req, res) =>{
     patient.Cart.items = [];
     patient.Orders.push(order);
     await patient.save();
+    await pharmacyWallet.save();
 }
 
 module.exports = {ifPaymentDone};

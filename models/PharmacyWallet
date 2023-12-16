@@ -1,0 +1,13 @@
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
+
+const pharmacyWalletSchema = new Schema({
+
+    Wallet:{
+        type: Number,
+        default: 0
+    }
+}, {timestamps: true});
+
+const PharmacyWallet = mongoose.model('PharmacyWallet', pharmacyWalletSchema, 'PharmacyWallet');
+module.exports = PharmacyWallet;
