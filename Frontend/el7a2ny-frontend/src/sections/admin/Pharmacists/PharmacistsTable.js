@@ -16,13 +16,15 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography
+  Typography,
+  Button
 } from '@mui/material';
 import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useState } from 'react';
 import React from 'react';
 import 'reactjs-popup/dist/index.css';
+import axios from 'axios';
 
 export const PharmacistsTable = (props) => {
   const {
@@ -40,6 +42,12 @@ export const PharmacistsTable = (props) => {
   } = props;
 
   const [isOpenDelete, setOpenDelete] = useState(null);
+
+  const addSalary = async (username) => {
+    await axios.patch(`http://localhost:8001/pharmacist/addSalary?username=${username}`);
+    window.alert("Salary added successfully");
+  };
+
   return (
     <Card>
       <Scrollbar>
@@ -70,6 +78,9 @@ export const PharmacistsTable = (props) => {
                 </TableCell>
                 <TableCell>
                   Actions
+                </TableCell>
+                <TableCell align="center">
+                  Add Salary
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -144,6 +155,15 @@ export const PharmacistsTable = (props) => {
                                              items={customer.Name}
                                              onClose={() => setOpenDelete(null)}
                                              username={customer.Username}/>
+                    </TableCell>
+                    <TableCell>
+                      <Button 
+                        variant="text"
+                        color="primary" 
+                        onClick={() => {addSalary(customer.Username);}}
+                      >
+                        Add Salary
+                      </Button>
                     </TableCell>
                   </TableRow>
                 );

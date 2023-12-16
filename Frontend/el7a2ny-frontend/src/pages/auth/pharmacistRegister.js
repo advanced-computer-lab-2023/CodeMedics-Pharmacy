@@ -71,7 +71,6 @@ const Page = () => {
     }), onSubmit: async (values, helpers) => {
 
       try {
-
         const formData = new FormData();
         formData.append('Name', values.Name);
         formData.append('Username', values.Username);
@@ -84,6 +83,9 @@ const Page = () => {
         formData.append('IDDocument', values.IDDocument);
         formData.append('pharmacyDegree', values.pharmacyDegree);
         formData.append('workingLicense', values.workingLicense);
+        for (var key of formData.entries()) {
+          console.log(key[0] + ', ' + key[1]);
+      }
         // const body = {
         //   'Name': values.Name,
         //   'Username': values.Username,
@@ -99,10 +101,11 @@ const Page = () => {
         //
         // };
 
-        await axios.post('http://localhost:8001/pharmacist/registerPharmacist', formData, { // done new Route
+        await axios.post('http://localhost:8001/pharmacist/register', formData, { // done new Route
           headers: {
             'Content-Type': 'multipart/form-data'
-          }
+          },
+          withCredentials: true
         })
                    .then((res) => {
                      return res['data'];
@@ -421,3 +424,4 @@ Page.getLayout = (page) => (<AuthLayout>
 </AuthLayout>);
 
 export default Page;
+

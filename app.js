@@ -20,6 +20,7 @@ const pharmacistRoutes = require('./routes/PharmacistRoutes');
 const patientRoutes = require('./routes/PateintRoutes');
 const authRoutes = require('./routes/AuthRoutes');
 const medicineRoutes = require('./routes/MedicineRoutes');
+const chatRoutes = require('./routes/ChatRoutes');
 
 // Connect to MongoDB
 connectDB().then(r => console.log("Connected to MongoDB 200 OK".bgGreen.bold));
@@ -59,6 +60,7 @@ app.use('/pharmacist', pharmacistRoutes);
 app.use('/patient', patientRoutes);
 app.use('/', authRoutes);
 app.use('/medicine', medicineRoutes);
+app.use('/chat' ,chatRoutes )
 
 
 

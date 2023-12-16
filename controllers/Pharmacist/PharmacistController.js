@@ -1,6 +1,7 @@
 const adminModel = require('../../models/Administrator.js');
 const pharmacistModel = require('../../models/Pharmacist.js');
 const patientModel = require('../../models/pharmacyPatient.js');
+const asyncHandler = require('express-async-handler');  
 const {default: mongoose} = require('mongoose');
 const getUsername = require('../../config/infoGetter.js');
 const medicineModel = require('../../models/Medicine.js');
@@ -25,12 +26,24 @@ const getPharmacits = async (req, res) => {
       }
 };
 
-const registerPharmacist = async (req, res) => {
+const addSalary = async(req, res) => {
+    try{
+        const {username} = req.query;
+        const pharmacist = await pharmacistModel.findOne({Username: username});
+        const salaryAmount = pharmacist.HourlyRate * 9 * 21;
+        pharmacist.Wallet += salaryAmount;
+        await pharmacist.save();
+
+    }catch(error){
+        return res.status(500).json({message: "Error Occured While Adding Salary"});
+    }
+}; 
+
+const registerPharmacist = asyncHandler(async (req, res) => {
     try {
         // Process the registration and uploaded files
         const {Name, Username, Password, Email, DateOfBirth, HourlyRate, affiliation, Degree} = req.body;
         // Check for uploaded files
-
         const {IDDocument, pharmacyDegree, workingLicense} = req.files;
         // Handle file uploads (files are available in req.files)
         const idDocumentFile = IDDocument[0].filename;
@@ -71,9 +84,9 @@ const registerPharmacist = async (req, res) => {
         console.error('Error processing request:', error);
         res.status(500).json({error: 'Error processing request', detailedError: error.message});
     }
-};
+});
 
 
 
 
-module.exports = { getPharmacits, registerPharmacist};
+module.exports = { getPharmacits, registerPharmacist, addSalary};
