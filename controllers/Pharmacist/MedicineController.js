@@ -62,7 +62,8 @@ const editMedicine = async (req, res) => {
 
         if (medicine.availableQuantity === 0) {
             // notifyPharmacist('Out of Stock', `Medicine "${medicine.name}" is out of stock.`);
-            notifyAllPharmacists('Out of Stock', `Medicine "${medicine.name}" is out of stock.`);
+            notifyAllPharmacists('Out of Stock', `Medicine ${medicine.name} is out of stock.`);
+            messageAllPharmacists(`Medicine ${medicine.name} is out of stock.`);
         }
         // Save the updated medicine to the database
         await medicine.save();
@@ -76,15 +77,15 @@ const editMedicine = async (req, res) => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'mirnahaitham2@gmail.com',
-        pass: 'dygc irfq totb kuzy',
+        user: 'codemedics2@gmail.com',
+        pass: 'wwtv oszi mcju tilf',
     },
 });
 
 async function sendEmail(recipient, subject, message) {
     try {
         const mailOptions = {
-            from: 'mirnahaitham2@gmail.com', // Replace with your Gmail email
+            from: 'codemedics2@gmail.com', // Replace with your Gmail email
             to: recipient,
             subject: subject,
             text: message,
@@ -208,9 +209,29 @@ const unarchiveMedicine = async (req, res) => {
     }
 };
 
+const messageAllPharmacists = async (text) => {
+    try {
+      // Fetch all pharmacists from the database
+      const allPharmacists = await Pharmacist.find();
+  
+      // Loop through all pharmacists and append the message to their Messages list
+      for (const pharmacist of allPharmacists) {
+        pharmacist.Messages.push({
+            sender: 'System',
+            content: text,
+            timestamp: new Date(),
+        }); // Ensure the value is a string
+        await pharmacist.save();
+      }
+  
+      console.log(`Message "${text}" sent to all pharmacists.`);
+    } catch (error) {
+      console.error('Error notifying pharmacists:', error);
+    }
+  };
 module.exports = {
     multerMiddleware, addMedicine, editMedicine, viewMedicines, viewMedicinesPharmacist, archiveMedicine, unarchiveMedicine,
-    viewAlternativeMedicines
+    viewAlternativeMedicines, messageAllPharmacists
 };
 
 
