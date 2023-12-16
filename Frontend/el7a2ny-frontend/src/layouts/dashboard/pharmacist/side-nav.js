@@ -117,42 +117,7 @@ export const SideNav = (props) => {
             })}
           </Stack>
         </Box>
-        <Divider sx={{ borderColor: 'neutral.700' }} />
-        <Box
-          sx={{
-            px: 2,
-            py: 3
-          }}
-        >
-          <Typography
-            color="neutral.100"
-            variant="subtitle2"
-          >
-            Need any help?
-          </Typography>
-          <Typography
-            color="neutral.500"
-            variant="body2"
-          >
-            Get instant answers to the most common questions and learn how to use our platform.
-          </Typography>
-          
-          <Button
-            component="a"
-            // endIcon={(
-            //   <SvgIcon fontSize="small">
-            //     <ArrowTopRightOnSquareIcon />
-            //   </SvgIcon>
-            // )}
-            fullWidth
-            // href="https://material-kit-pro-react.devias.io/"
-            sx={{ mt: 2 }}
-            target="_blank"
-            variant="contained"
-          >
-            Contact us
-          </Button>
-        </Box>
+        
       </Box>
     </Scrollbar>
   );
