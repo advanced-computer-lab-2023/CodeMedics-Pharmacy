@@ -9,6 +9,8 @@ import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import MapIcon from '@heroicons/react/24/solid/MapIcon';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
+import MessageChatSquareIcon from '../../../icons/untitled-ui/duocolor/message-chat-square';
+
 
 export const items = [
   {
@@ -44,6 +46,15 @@ export const items = [
     icon: (
       <SvgIcon fontSize="small">
         <MapIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Chat',
+    path: '/user/chat',
+    icon: (
+      <SvgIcon fontSize="small">
+        <MessageChatSquareIcon   />
       </SvgIcon>
     )
   },
