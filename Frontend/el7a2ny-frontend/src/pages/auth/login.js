@@ -20,6 +20,7 @@ import {
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
+import socket from 'src/components/socket';
 
 const Page = () => {
   const router = useRouter();
@@ -59,6 +60,10 @@ const Page = () => {
               Cookies.set('token', data['token']);
               if (data['Type'] === 'Patient') {
                 Cookies.set('username', data['patient']['username']);
+                socket.on('me', (id) => {
+                  Cookies.set('socketID', id);
+                });
+                socket.emit('iAmReady', Cookies.get('username'));
                 router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
                 Cookies.set('username', data['pharmacist']['username']);
@@ -111,6 +116,10 @@ const Page = () => {
               Cookies.set('token', data['token']);
               if (data['Type'] === 'Patient') {
                 Cookies.set('username', data['patient']['Username']);
+                socket.on('me', (id) => {
+                  Cookies.set('socketID', id);
+                });
+                socket.emit('iAmReady', Cookies.get('username'));
                 router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
                 Cookies.set('username', data['pharmacist']['Username']);
