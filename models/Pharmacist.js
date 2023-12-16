@@ -51,6 +51,11 @@ const pharmacistSchema = new Schema({
         default: [],
         required: false,
     },
+    Wallet:{
+        type: Number,
+        default: 0,
+        required: false
+    },
 
 }, {timestamps: true});
 
