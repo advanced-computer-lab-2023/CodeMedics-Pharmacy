@@ -13,7 +13,7 @@ import { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import socket from 'src/components/socket';
 import { SettingsConsumer, SettingsProvider } from '../contexts/settings-context';
-import { Tooltip, SvgIcon } from '@mui/material';
+import { Tooltip, SvgIcon, Box, ButtonBase } from '@mui/material';
 import SunIcon from '@heroicons/react/24/solid/SunIcon';
 import MoonIcon from '@heroicons/react/24/solid/MoonIcon';
 import { useState } from 'react';
@@ -28,7 +28,7 @@ const App = (props) => {
   useNProgress();
 
   const getLayout = Component.getLayout ?? ((page) => page);
-  const [icon , setIcon] = useState(true);
+  const [icon, setIcon] = useState(true);
 
   useEffect(() => {
     if (Cookies.get('username') !== undefined) {
@@ -62,7 +62,7 @@ const App = (props) => {
                   <SettingsConsumer>
                     {
                       (settings) => {
-                        
+
                         const theme = createTheme({
                           mode: settings.mode,
                         });
@@ -75,16 +75,17 @@ const App = (props) => {
                               (
                                 <>
                                   {getLayout(<Component {...pageProps} />)}
-                                  <Tooltip title="More options">
-                                    <IconButton
-                                      onClick={() => { 
+                                  
+                                    <Box {...props}
+                                      onClick={() => {
                                         settings.handleUpdate({ mode: settings.mode === 'dark' ? 'light' : 'dark' });
                                         setIcon(!icon);
                                       }}
                                       sx={{
                                         backgroundColor: 'background.paper',
                                         borderRadius: '50%',
-                                        bottom: -13,
+                                        bottom: -13.5,
+                                        
                                         boxShadow: 16,
                                         margin: (theme) => theme.spacing(4),
                                         position: 'fixed',
@@ -92,12 +93,23 @@ const App = (props) => {
                                         zIndex: (theme) => theme.zIndex.speedDial
                                       }}
                                     >
-                                      <SvgIcon>
-                                        {!icon && <MoonIcon />}
-                                        {icon && <SunIcon />}
-                                      </SvgIcon>
-                                    </IconButton>
-                                  </Tooltip>
+                                      <ButtonBase
+
+                                        sx={{
+                                          backgroundColor: 'primary.main',
+                                          borderRadius: '50%',
+                                          color: 'primary.contrastText',
+                                          p: '10px'
+                                        }}
+                                      >
+                                        <SvgIcon>
+                                          {icon && <MoonIcon />}
+                                          {!icon && <SunIcon />}
+                                        </SvgIcon>
+                                      </ButtonBase>
+                                    </Box>
+
+                                 
                                 </>
                               )}
                           </ThemeProvider>
