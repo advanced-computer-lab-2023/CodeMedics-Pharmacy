@@ -81,7 +81,8 @@ export const ChatMessageAdd = (props) => {
                 color: 'primary.contrastText',
                 '&:hover': {
                   backgroundColor: 'primary.dark'
-                }
+                },
+                mr:7,
               }}
               onClick={handleSend}
             >

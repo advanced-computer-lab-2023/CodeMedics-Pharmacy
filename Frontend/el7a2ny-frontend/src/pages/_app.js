@@ -84,7 +84,7 @@ const App = (props) => {
                                       sx={{
                                         backgroundColor: 'background.paper',
                                         borderRadius: '50%',
-                                        bottom: 0,
+                                        bottom: -13,
                                         boxShadow: 16,
                                         margin: (theme) => theme.spacing(4),
                                         position: 'fixed',
