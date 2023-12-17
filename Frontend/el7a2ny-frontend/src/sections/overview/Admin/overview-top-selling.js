@@ -45,7 +45,7 @@ export const OverviewTopSelling = (props) => {
                       direction="row"
                       spacing={2}
                     >
-                      {product.image
+                      {product.picture
                         ? (
                           <Box
                             sx={{
