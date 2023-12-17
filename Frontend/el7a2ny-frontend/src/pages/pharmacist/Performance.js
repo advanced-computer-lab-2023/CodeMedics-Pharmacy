@@ -97,7 +97,6 @@ const Page = () => {
         }}
       >
         <Typography variant="h3">
-          This Month
         </Typography>
         <Container maxWidth="xl">
           <Grid
