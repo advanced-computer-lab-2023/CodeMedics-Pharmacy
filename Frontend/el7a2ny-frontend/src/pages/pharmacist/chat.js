@@ -30,7 +30,7 @@ const Page = () => {
     }, []);
 
 
-    socket.on('newMessagePharmacy', (message) => {
+    socket.off('newMessagePharmacy').on('newMessagePharmacy', (message) => {
         console.log("Received new message from bla bla bla", message);
         changeChatAndMessages(message);
     });
