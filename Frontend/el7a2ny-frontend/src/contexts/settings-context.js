@@ -34,7 +34,7 @@ const storeSettings = (value) => {
 };
 
 const initialSettings = {
-  mode: 'dark',
+  mode: 'light',
 };
 
 const initialState = {
