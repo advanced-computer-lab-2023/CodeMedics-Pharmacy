@@ -3,6 +3,9 @@ const Order = require('../../models/Order');
 const { getUsername } = require('../../config/infoGetter');
 const Medicine = require('../../models/Medicine');
 const PharmacyWallet = require('../../models/PharmacyWallet');
+const Pharmacist = require('../../models/Pharmacist');
+
+const nodemailer = require('nodemailer');
 
 const calculateAmount = async(items) =>{
     let amount = 0;
@@ -31,6 +34,10 @@ const ifPaymentDone = async(req, res) =>{
             res.status(400).json({message: "Not enough quantity for " + medicine.name});
         }
         curMedicine.availableQuantity -= medicine.Quantity;
+        if(curMedicine.availableQuantity <= 0){
+            notifyAllPharmacists('Out of Stock', `Medicine ${curMedicine.name} is out of stock.`);
+            messageAllPharmacists(`Medicine ${curMedicine.name} is out of stock.`);
+        }
         await curMedicine.save();
     }
     let amount = await calculateAmount(medicines);
@@ -52,5 +59,68 @@ const ifPaymentDone = async(req, res) =>{
     await patient.save();
     await pharmacyWallet.save();
 }
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'codemedics2@gmail.com',
+        pass: 'wwtv oszi mcju tilf',
+    },
+});
+
+async function sendEmail(recipient, subject, message) {
+    try {
+        const mailOptions = {
+            from: 'codemedics2@gmail.com', // Replace with your Gmail email
+            to: recipient,
+            subject: subject,
+            text: message,
+        };
+
+        const info = await transporter.sendMail(mailOptions);
+        console.log('Email sent:', info.response);
+    } catch (error) {
+        console.error('Error sending email:', error);
+        throw new Error('Failed to send email');
+    }
+}
+
+const notifyAllPharmacists = async (subject, text) => {
+    try {
+        // Fetch all pharmacists from the database
+        const allPharmacists = await Pharmacist.find({}, 'Email');
+
+        // Extract the emails from the pharmacist documents
+        const pharmacistEmails = allPharmacists.map(pharmacist => pharmacist.Email);
+
+        // Loop through the emails and send the email to each pharmacist
+        for (const Email of pharmacistEmails) {
+            await sendEmail(Email, subject, text);
+        }
+    } catch (error) {
+        console.error('Error notifying pharmacists:', error);
+    }
+};
+
+const messageAllPharmacists = async (text) => {
+    try {
+      // Fetch all pharmacists from the database
+      const allPharmacists = await Pharmacist.find();
+  
+      // Loop through all pharmacists and append the message to their Messages list
+      for (const pharmacist of allPharmacists) {
+        pharmacist.Messages.push({
+            sender: 'System',
+            content: text,
+            timestamp: new Date(),
+        }); // Ensure the value is a string
+        await pharmacist.save();
+      }
+  
+      console.log(`Message "${text}" sent to all pharmacists.`);
+    } catch (error) {
+      console.error('Error notifying pharmacists:', error);
+    }
+  };
 
 module.exports = {ifPaymentDone};

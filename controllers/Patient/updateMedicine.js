@@ -73,7 +73,7 @@ const getCart = async (req, res) => {
             let picture = med.Picture;
             let medicineName = med.name;
             let price = med.price;
-            medicineArray.push({ "medicineName": medicineName, "quantity": cnt, "price": price, "medicineID": id, "picture": picture, "maxQuantity": med.availableQuantity, "Description": med.Description, "medicalUse": med.medicalUse });
+            medicineArray.push({ "medicineName": medicineName, "quantity": cnt, "price": price, "medicineID": id, "picture": picture, "maxQuantity": med.availableQuantity - cnt, "Description": med.Description, "medicalUse": med.medicalUse });
         }
         return res.status(200).json(medicineArray);
     } catch (err) {
