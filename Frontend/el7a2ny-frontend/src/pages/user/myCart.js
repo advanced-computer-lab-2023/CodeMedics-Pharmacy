@@ -54,12 +54,13 @@ const Page = () => {
   const handleAddOne = (productID) => {
     const newCart = data.map((item) => {
       if (item.medicineID === productID) {
-        if(item.quantity + 1 > item.maxQuantity){
+        if(item.maxQuantity - 1 < 0){
           setAlert(true);
         }
         else{
           updateCart(productID , 1);
           item.quantity += 1;
+          item.maxQuantity -= 1;
         }
       }
       return item;
@@ -74,6 +75,7 @@ const Page = () => {
       if(data[i].medicineID === productID){
         console.log(data[i].medicineID);
         data[i].quantity -= 1;
+        data[i].maxQuantity += 1;
         updateCart(productID , -1);
         if(data[i].quantity > 0){
           newCart.push(data[i]);

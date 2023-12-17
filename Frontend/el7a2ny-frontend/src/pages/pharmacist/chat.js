@@ -41,6 +41,7 @@ const Page = () => {
             if(chats[i].chat._id == message.chat) {
                 tmp.push(chats[i]);
                 tmp[i].chat.latestMessage = message;
+                tmp[i].chat.updatedAt = message.createdAt;
                 tmp[i].latestMessage = message;
             }
             else{
