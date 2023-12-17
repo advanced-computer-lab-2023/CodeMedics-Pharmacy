@@ -20,6 +20,15 @@ export const items = [
     )
   },
   {
+    title: 'Performance',
+    path: '/pharmacist/Performance',
+    icon: (
+      <SvgIcon fontSize="small">
+        <CogIcon />
+      </SvgIcon>
+    )
+  },
+  {
     title: 'Sales',
     path: '/pharmacist/Sales',
     icon: (
