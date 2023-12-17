@@ -9,12 +9,15 @@ const {
     removePharmacist
 } = require('../controllers/Admin/PharmacistsController');
 const {removePatient, viewPatients} = require('../controllers/Admin/PatientsController');
-const {TotalSales, SalesPerMonth} = require('../controllers/TotalSales');
+const {
+    getSalesPerYear,
+    getSalesDataByMedicine,
+} = require('../controllers/TotalSales');
 
 // ================== Admins ==================
 router.post('/createAdmin', createAdmin);
-router.get('/TotalSales', TotalSales);
-router.get('/SalesPerMonth', SalesPerMonth);
+router.get('/getSalesPerYear', getSalesPerYear);
+router.get('/getSalesDataByMedicine', getSalesDataByMedicine);
 
 
 // ================== Pharmacists ==================

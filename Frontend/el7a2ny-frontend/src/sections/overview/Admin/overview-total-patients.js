@@ -21,7 +21,7 @@ export const OverviewTotalPatients = (props) => {
               color="text.secondary"
               variant="overline"
             >
-              Total Patients
+              Patients Bought
             </Typography>
             <Typography variant="h4">
               {value}
@@ -80,7 +80,7 @@ export const OverviewTotalPatients = (props) => {
 OverviewTotalPatients.propTypes = {
   difference: PropTypes.number,
   positive: PropTypes.bool,
-  value: PropTypes.string.isRequired,
+  value: PropTypes.number,
   sx: PropTypes.object
 };
 
