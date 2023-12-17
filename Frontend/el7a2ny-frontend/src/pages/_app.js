@@ -93,8 +93,8 @@ const App = (props) => {
                                       }}
                                     >
                                       <SvgIcon>
-                                        {icon && <MoonIcon />}
-                                        {!icon && <SunIcon />}
+                                        {!icon && <MoonIcon />}
+                                        {icon && <SunIcon />}
                                       </SvgIcon>
                                     </IconButton>
                                   </Tooltip>
