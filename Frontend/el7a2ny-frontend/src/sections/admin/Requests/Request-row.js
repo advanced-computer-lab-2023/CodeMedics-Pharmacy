@@ -40,7 +40,7 @@ export const Row = (props) => {
   const router = useRouter();
   console.log(request.DateOfBirth);
   const HandleAccept = () => {
-    axios.post('http://localhost:8001/admin/acceptPharmacist', { // done new Route
+    axios.patch('http://localhost:8001/admin/acceptPharmacist', { // done new Route
       Username: request.Username,
       Email: request.Email
     })
