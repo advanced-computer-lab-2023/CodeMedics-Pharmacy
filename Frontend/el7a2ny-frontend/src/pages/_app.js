@@ -66,6 +66,7 @@ const App = (props) => {
                         const theme = createTheme({
                           mode: settings.mode,
                         });
+                        
                         return (
                           <ThemeProvider theme={theme}>
                             <CssBaseline />
@@ -103,8 +104,8 @@ const App = (props) => {
                                         }}
                                       >
                                         <SvgIcon>
-                                          {icon && <MoonIcon />}
-                                          {!icon && <SunIcon />}
+                                          {settings.mode == 'light' && <MoonIcon />}
+                                          {settings.mode == 'dark' && <SunIcon />}
                                         </SvgIcon>
                                       </ButtonBase>
                                     </Box>

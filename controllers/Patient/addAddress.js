@@ -4,15 +4,18 @@ const Address = require('../../models/Address');
 
 const addAddress = async (req, res) => {
     try {
-        const {username} = req.body;
-        const {Name, AddressLine, City, PostalCode, PatientUsername } = req.body;
+        console.log('III AAAMMM HHHEEERRREEE ------>>>>>>');
+        const username = await getUsername(req , res);
+        const {FirstName,LastName,  AddressLine,AddressLine2, City, PostalCode} = req.body;
         const patient = await Patient.findOne({ Username: username });
         const address = new Address({
-            Name: Name,
+            FirstName: FirstName,
+            LastName: LastName,
             AddressLine: AddressLine,
+            AddressLine2: AddressLine2,
             City: City,
             PostalCode: PostalCode,
-            PatientUsername: PatientUsername
+            PatientUsername: username
         });
         if(!patient.Addresses)
             patient.Addresses = [];

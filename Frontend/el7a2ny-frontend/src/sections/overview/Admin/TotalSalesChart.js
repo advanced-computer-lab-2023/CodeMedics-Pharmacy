@@ -106,7 +106,8 @@ export const TotalSalesChart = (props) => {
         backgroundColor: (theme) => theme.palette.mode === 'dark'
           ? 'neutral.800'
           : 'neutral.100',
-        p: 3
+        p: 3,
+        borderRadius: 3
       }}
     >
       <Card>

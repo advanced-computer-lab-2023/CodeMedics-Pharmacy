@@ -134,7 +134,7 @@ const Page = () => {
     <>
       <Head>
         <title>
-          Dashboard: Order List | Devias Kit PRO
+          Orders
         </title>
       </Head>
       <Divider />
@@ -172,7 +172,7 @@ const Page = () => {
                     Orders
                   </Typography>
                 </div>
-                <div>
+                {/* <div>
                   <Button
                     startIcon={(
                       <SvgIcon>
@@ -183,7 +183,7 @@ const Page = () => {
                   >
                     Add
                   </Button>
-                </div>
+                </div> */}
               </Stack>
             </Box>
             <Divider />

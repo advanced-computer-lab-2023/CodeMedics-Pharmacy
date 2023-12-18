@@ -4,8 +4,11 @@ import { Elements } from '@stripe/react-stripe-js';
 // import { paymentAxios } from '../../utils/AxiosConfig';
 import CheckoutForm from './CheckoutForm';
 import axios from 'axios';
+import { Card } from '@mui/material';
 const stripePromise = loadStripe('pk_test_51OA3YuHNsLfp0dKZSCi30qg6xY63jh2SiffqCIa42j0oTXnZ29hNOalf44tjkJZsjT27xldMpzbojdn6vYcEx9CI00kvtRqele');
 import Cookies from 'js-cookie';
+
+
 export default function PaymentForm({activeStep, setStep}) {
   const [clientSecret, setClientSecret] = useState('');
   const [products, setProducts] = useState(null);
@@ -45,11 +48,13 @@ export default function PaymentForm({activeStep, setStep}) {
   return (
     
       <div className='PaymentForm'>
+        
         {clientSecret && (
           <Elements options={options} stripe={stripePromise}>
             <CheckoutForm activeStep = {activeStep} setStep = {setStep} />
           </Elements>
         )}
+        
       </div>
   
 

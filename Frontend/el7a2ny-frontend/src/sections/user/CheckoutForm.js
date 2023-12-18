@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Button from '@mui/material/Button';
+import { Button, Card } from '@mui/material';
 import {
   PaymentElement,
   useStripe,
@@ -10,12 +10,12 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { set } from "lodash";
-export default function CheckoutForm({activeStep, setStep}) {
+export default function CheckoutForm({ activeStep, setStep }) {
   const stripe = useStripe();
   const elements = useElements();
 
   const router = useRouter();
-  
+
   const [message, setMessage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const username = Cookies.get('username');
@@ -27,11 +27,11 @@ export default function CheckoutForm({activeStep, setStep}) {
       setCallOrders(true);
     }
   }
-  , [isDone]);
+    , [isDone]);
 
   useEffect(() => {
     if (callOrders) {
-      router.push('/user/orders?username='+username);
+      router.push('/user/orders?username=' + username);
     }
   }, [callOrders]);
 
@@ -110,28 +110,30 @@ export default function CheckoutForm({activeStep, setStep}) {
 
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
-
-      <PaymentElement id="payment-element" options={paymentElementOptions} />
+      <Card sx={{ backgroundColor: "#d9dee4", p: 3 }}>
+        <PaymentElement id="payment-element" options={paymentElementOptions} />
+      </Card>
       <button
-  disabled={isLoading || !stripe || !elements}
-  id="submit"
-  style={{
-    padding: '10px 15px',
-    fontSize: '16px',
-    fontWeight: 'bold',
-    backgroundColor: '#6666FF', // Light Blue color
-    color: 'white',
-    border: 'none',
-    borderRadius: '10px',
-    cursor: 'pointer',
-    marginTop: '20px',
-    transition: 'background-color 0.3s',
-  }}
->
-  <span id="button-text">
-    {isLoading ? <div className="spinner" id="spinner" ></div> : "Pay Order"}
-  </span>
-</button>
+        disabled={isLoading || !stripe || !elements}
+        id="submit"
+        style={{
+          width: '200px',
+          padding: '10px 15px',
+          fontSize: '16px',
+          fontWeight: 'bold',
+          backgroundColor: '#6666FF', // Light Blue color
+          color: 'white',
+          border: 'none',
+          borderRadius: '10px',
+          cursor: 'pointer',
+          marginTop: '20px',
+          transition: 'background-color 0.3s',
+        }}
+      >
+        <span id="button-text">
+          {isLoading ? <div className="spinner" id="spinner" ></div> : "Pay Order"}
+        </span>
+      </button>
 
       {message && <div id="payment-message">{message}</div>}
     </form>

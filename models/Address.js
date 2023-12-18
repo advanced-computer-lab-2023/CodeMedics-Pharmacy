@@ -2,13 +2,22 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const AddressSchema = new Schema({
-    Name: {
+    FirstName: {
+        type: String,
+        required: [true, 'Please enter a name']
+    },
+    LastName: {
         type: String,
         required: [true, 'Please enter a name']
     },
     AddressLine: {
         type: String,
         required: [true, 'Please enter an address line']
+    },
+    AddressLine2: {
+        type: String,
+        required: false,
+        default: ''
     },
     City: {
         type: String,

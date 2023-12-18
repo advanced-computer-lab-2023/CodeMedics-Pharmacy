@@ -109,7 +109,8 @@ const status = [
         backgroundColor: (theme) => theme.palette.mode === 'dark'
           ? 'neutral.800'
           : 'neutral.100',
-        p: 3
+        p: 3,
+        borderRadius: 3
       }}
     > <Grid container>
       <Grid xs={12} md={4}>
@@ -121,7 +122,7 @@ const status = [
               select
               fullWidth
               label="Medicine"
-              defaultValue="None"
+              defaultValue={status[0].value}
               helperText=""
               onChange={(event) => setFilter(event.target.value)}
             >

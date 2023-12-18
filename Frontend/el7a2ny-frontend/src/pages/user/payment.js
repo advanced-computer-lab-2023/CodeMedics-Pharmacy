@@ -9,37 +9,41 @@ import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
 import ShieldCheckIcon from '@heroicons/react/24/solid/ShieldCheckIcon';
 import PaymentForm from 'src/sections/user/PaymentForm';
-import { 
-    Box, 
-    Button, 
-    Container, 
-    Stack, 
-    SvgIcon, 
-    Typography , 
-    TextField , 
-    Radio , 
-    RadioGroup, 
-    FormControl, 
-    FormControlLabel, 
-    MenuItem,
-    FormLabel ,  
-    Avatar,
-    Card,
-    CardContent,
+import {
+  Box,
+  Button,
+  Container,
+  Stack,
+  SvgIcon,
+  Typography,
+  TextField,
+  Radio,
+  RadioGroup,
+  FormControl,
+  FormControlLabel,
+  MenuItem,
+  FormLabel,
+  Avatar,
+  Card,
+  CardContent,
 } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
 import axios from 'axios';
 import { deepOrange } from '@mui/material/colors';
+import { BillingAddress } from 'src/sections/user/Checkout/billingAddress';
+import { PaymentMethod } from 'src/sections/user/Checkout/paymentMethod';
+import { OrdersSummary } from 'src/sections/user/Checkout/ordersSummary';
 
 
 
 const Page = () => {
   const router = useRouter();
 
-  const [value, setValue] = React.useState('creditCard');
-  const [credit , setCredit] = React.useState(true);
+  const [value, setValue] = useState('creditCard');
+  const [phase , setPhase] = useState(1);
+  const [credit, setCredit] = useState(true);
   const username = Cookies.get('username');
-  const [addresses , setAddresses] = useState([]);
+  const [addresses, setAddresses] = useState([]);
 
   useEffect(() => {
     fetch(`http://localhost:8001/patient/getAddress?username=${username}`) // done new Route
@@ -48,8 +52,9 @@ const Page = () => {
       })
       .then((data) => {
         const dt = [];
-        for(let i=0; i<data.length; i++){
-          dt.push({value : data[i]._id , label : `${data[i].Name} , Address: ${data[i].AddressLine} , City: ${data[i].City} , Postal Code: ${data[i].PostalCode}`});
+        for (let i = 0; i < data.length; i++) {
+          const x = data[i].AddressLine2 ? ' , ' + data[i].AddressLine2 +' ': '';
+          dt.push({ value: data[i]._id, label: `${data[i].FirstName} ${data[i].LastName} , Address: ${data[i].AddressLine} ${x}, City: ${data[i].City} , Postal Code: ${data[i].PostalCode}` });
         }
         setAddresses(dt);
       })
@@ -60,25 +65,25 @@ const Page = () => {
 
   const handleChange = (event) => {
     setValue(event.target.value);
-    if(event.target.value == 'creditCard'){
+    if (event.target.value == 'creditCard') {
       setCredit(true);
     }
-    else{
+    else {
       setCredit(false);
     }
   };
-  
-  const handleWithWallet =() =>{
-      try{
-        axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`, {type: 'Wallet'}); // done new Route
-        console.log('here --->');
-        router.push('/user/orders?username='+username);   
-      }catch(err){
-        console.log('here ---> 11  ');
-        console.log(err);
-      }
+
+  const handleWithWallet = () => {
+    try {
+      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`, { type: 'Wallet' }); // done new Route
+      console.log('here --->');
+      router.push('/user/orders?username=' + username);
+    } catch (err) {
+      console.log('here ---> 11  ');
+      console.log(err);
+    }
   }
-  
+
 
   return (
     <>
@@ -95,93 +100,39 @@ const Page = () => {
         }}
       >
         <Container maxWidth="xl" >
-          <Stack spacing={10} sx = {{pl : 15 }} direction="row">
+          <Stack spacing={10} sx={{ pl: 10 }} direction="row">
             <Stack
-              justifyContent="space-between"
-              spacing={4}
-              sx = {{width : 650}}
+              
+              spacing={3}
+              sx={{ width: 500 }}
             >
-                 <Button
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <ArrowSmallLeftIcon />
-                    </SvgIcon>
-                  )}
-                  onClick={() => router.push('/user/medicines')}
-                  sx = {{width : 90}}
-                >
-                  Back
-                </Button>
-                <Typography variant="h3">
-                  Checkout
+              <Typography variant="h3">
+                Checkout
+              </Typography>
+              {phase === 1 && <BillingAddress addresses={addresses} setPhase={setPhase}/>}
+              {phase === 2 && <PaymentMethod value={value} handleChange={handleChange} credit={credit} setPhase={setPhase}/>}
+              <Stack>
+              <Stack direction="row" spacing={2}>
+                <SvgIcon sx={{ color: 'success.light' }}>
+                  <ShieldCheckIcon />
+                </SvgIcon>
+                <Typography variant="h8" sx={{ pt: 0, }}>
+                  Secure Checkout
                 </Typography>
-                <Stack direction="row" spacing={2}>
-                    <Avatar sx={{bgcolor : 'primary.main'}}>1</Avatar>
-                    <Typography variant="h6" sx={{pt: 1,}}>
-                    Billing Address
-                    </Typography>
-                </Stack>
-                {addresses.length > 0 && <TextField
-                  sx={{ width: 200 }}
-                  id="myAddress"
-                  select
-                  label="My Addresses"
-                  defaultValue={addresses[0].value}
-                  helperText=""
-                  onChange={(str) => {console.log(str.target.value)}}
-                > {addresses.map((option) => (
-                    <MenuItem key={option.value} value={option.value} >
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>}
-                <Stack direction="row" spacing={2}>
-                    <Avatar sx={{bgcolor : 'primary.main'}}>2</Avatar>
-                    <Typography variant="h6" sx={{pt: 1,}}>
-                        Payment Method
-                    </Typography>
-                </Stack>
-                <FormControl>
-                    <RadioGroup
-                        row
-                        aria-labelledby="demo-controlled-radio-buttons-group"
-                        name="controlled-radio-buttons-group"
-                        value={value}
-                        onChange={handleChange}
-                    >
-                        <FormControlLabel value="creditCard" control={<Radio />} label="Credit Card" />
-                        <FormControlLabel value="cashOnDelivery" control={<Radio />} label="Cash On Delivery" />
-                        <FormControlLabel value="myWallet" control={<Radio />} label="My Wallet" />
-                        
-                    </RadioGroup>
-                </FormControl>
-                {credit && <PaymentForm></PaymentForm>}
-                <Stack direction="row" spacing={2}>
-                <SvgIcon sx = {{color: 'success.light'}}>
-                            <ShieldCheckIcon />
-                          </SvgIcon>
-                    <Typography variant="h8" sx={{pt:0 ,}}>
-                        Secure Checkout
-                    </Typography>
-                </Stack>
-                    <Typography variant="h10" sx={{pt:0 ,}}>
-                Your purchases are secured by our amazing platform service 
-                    </Typography>
-                    {!credit && <Button
-                        variant="contained"
-                        onClick={() => {handleWithWallet()}}
-                        sx = {{width : 180 , height : 50}}
-                        >
-                            Pay Order
-                    </Button>}
+              </Stack>
+              <Typography variant="h10" sx={{ pt: 0, }}>
+                Your purchases are secured by our amazing platform service
+              </Typography>
+              </Stack>
+              {!credit && <Button
+                variant="contained"
+                onClick={() => { handleWithWallet() }}
+                sx={{ width: 180, height: 50 }}
+              >
+                Pay Order
+              </Button>}
             </Stack>
-            <Stack sx={{pt: 25}}>
-            <Card sx={{height : 500 , width: 400}}>
-                <CardContent>
-
-                </CardContent>
-            </Card>
-            </Stack>
+            {/* <OrdersSummary /> */}
           </Stack>
         </Container>
       </Box>
@@ -189,6 +140,11 @@ const Page = () => {
   );
 };
 
+Page.getLayout = (page) => (
+  <DashboardLayout>
+    {page}
+  </DashboardLayout>
+);
 
 
 export default Page;

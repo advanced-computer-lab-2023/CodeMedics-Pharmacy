@@ -67,7 +67,7 @@ const Page = () => {
                 router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
                 Cookies.set('username', data['pharmacist']['username']);
-                router.push(`/pharmacist`);
+                router.push(`/pharmacist/performance`);
               } else if (data['Type'] === 'Admin') {
                 Cookies.set('username', data['admin']['username']);
                 router.push(`/admin`);
@@ -123,7 +123,7 @@ const Page = () => {
                 router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
                 Cookies.set('username', data['pharmacist']['Username']);
-                router.push(`/pharmacist`);
+                router.push(`/pharmacist/performance`);
               } else if (data['Type'] === 'Admin') {
                 Cookies.set('username', data['admin']['Username']);
                 router.push(`/admin`);
