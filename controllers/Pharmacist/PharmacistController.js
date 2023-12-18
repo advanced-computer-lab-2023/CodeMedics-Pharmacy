@@ -30,12 +30,13 @@ const addSalary = async(req, res) => {
     try{
         const {username} = req.query;
         const pharmacist = await pharmacistModel.findOne({Username: username});
-        const salaryAmount = pharmacist.HourlyRate * 9 * 21;
+        const salaryAmount = pharmacist.HourlyRate * 8 * 21;
         pharmacist.Wallet += salaryAmount;
         await pharmacist.save();
+        return res.status(200).json({message: "Salary Sent Successfully"});
 
     }catch(error){
-        return res.status(500).json({message: "Error Occured While Adding Salary"});
+        return res.status(500).json({message: error.message});
     }
 }; 
 

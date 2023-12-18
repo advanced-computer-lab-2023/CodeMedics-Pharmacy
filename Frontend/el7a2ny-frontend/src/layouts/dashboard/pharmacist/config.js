@@ -12,31 +12,14 @@ import { SvgIcon } from '@mui/material';
 export const items = [
   {
     title: 'Overview',
-    path: '/pharmacist',
+    path: '/pharmacist/Performance',
     icon: (
       <SvgIcon fontSize="small">
         <ChartBarIcon />
       </SvgIcon>
     )
   },
-  {
-    title: 'Performance',
-    path: '/pharmacist/Performance',
-    icon: (
-      <SvgIcon fontSize="small">
-        <CogIcon />
-      </SvgIcon>
-    )
-  },
-  {
-    title: 'Sales',
-    path: '/pharmacist/Sales',
-    icon: (
-      <SvgIcon fontSize="small">
-        <CogIcon />
-      </SvgIcon>
-    )
-  },
+  
   {
     title: 'Medicines ',
     path: '/pharmacist/medicines',
