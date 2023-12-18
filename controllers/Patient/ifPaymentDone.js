@@ -4,6 +4,7 @@ const { getUsername } = require('../../config/infoGetter');
 const Medicine = require('../../models/Medicine');
 const PharmacyWallet = require('../../models/PharmacyWallet');
 const Pharmacist = require('../../models/Pharmacist');
+const Package = require('../../models/Package');
 
 const nodemailer = require('nodemailer');
 
@@ -23,6 +24,7 @@ const ifPaymentDone = async(req, res) =>{
     const username =  req.query.username;
     const patient = await Patient.findOne({Username: username});
     const pharmacy = await PharmacyWallet.find();
+    const package = await Package.findOne({ Name: patient.HealthPackage.membership });
     if(pharmacy == []){
         return res.status(500).json({message: "Pharmacy Wallet not Found"});
     }
@@ -41,6 +43,12 @@ const ifPaymentDone = async(req, res) =>{
         await curMedicine.save();
     }
     let amount = await calculateAmount(medicines);
+    var discount = 0;
+    if(package){
+        discount = package.SessionDiscount;
+    }
+    amount -= discount;
+    amount = Math.max(amount, 0);
     if(type){
         patient.Wallet -= amount;
         pharmacyWallet.Wallet += amount;
