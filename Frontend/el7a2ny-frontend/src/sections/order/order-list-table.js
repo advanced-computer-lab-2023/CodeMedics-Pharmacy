@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { format } from 'date-fns';
 import numeral from 'numeral';
+import { subDays, subHours } from 'date-fns';
 import {
   Box,
   Table,
@@ -36,9 +37,14 @@ export const OrderListTable = (props) => {
       <Table>
         <TableBody>
           {orders.map((order) => {
-            const createdAtMonth = format(order.createdAt, 'LLL').toUpperCase();
-            const createdAtDay = format(order.createdAt, 'd');
-            const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
+            const dateObject = new Date(order.createdAt);
+
+            const milliseconds = dateObject.getTime() + 3600000;
+            console.log('date: ',dateObject , 'milliseconds: ', milliseconds);
+            const createdAt = subHours(milliseconds, 1);
+            const createdAtMonth = format(createdAt, 'LLL').toUpperCase();
+            const createdAtDay = format(createdAt, 'd');
+            const totalAmount = numeral(order.amount).format(`${order.currency}0,0.00`);
             const statusColor = statusMap[order.status] || 'warning';
 
             return (
@@ -110,6 +116,7 @@ export const OrderListTable = (props) => {
         page={page}
         rowsPerPage={rowsPerPage}
         rowsPerPageOptions={[5, 10, 25]}
+        sx={{justifyContent:"center", display: 'flex'}}
       />
     </div>
   );

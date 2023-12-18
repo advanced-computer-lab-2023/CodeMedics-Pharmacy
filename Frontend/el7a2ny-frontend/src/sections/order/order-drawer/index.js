@@ -36,7 +36,7 @@ export const OrderDrawer = (props) => {
             color="inherit"
             variant="h6"
           >
-            {order.number}
+            {order._id}
           </Typography>
           <IconButton
             color="inherit"

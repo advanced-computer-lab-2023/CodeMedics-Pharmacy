@@ -10,6 +10,7 @@ import { OrderDrawer } from '../../sections/order/order-drawer';
 import { OrderListContainer } from '../../sections/order/order-list-container';
 import { OrderListSearch } from '../../sections/order/order-list-search';
 import { OrderListTable } from '../../sections/order/order-list-table';
+import axios from 'axios';
 
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -38,12 +39,12 @@ const useOrders = (search) => {
 
   const getOrders = useCallback(async () => {
     try {
-      const response = await ordersApi.getOrders(search);
+      const response = await axios.get('http://localhost:8001/pharmacist/getOrders' , {withCredentials: true});
 
       if (isMounted()) {
         setState({
           orders: response.data,
-          ordersCount: response.count
+          ordersCount: response.data.length
         });
       }
     } catch (err) {

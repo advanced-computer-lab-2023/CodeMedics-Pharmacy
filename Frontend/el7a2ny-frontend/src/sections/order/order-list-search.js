@@ -78,6 +78,7 @@ export const OrderListSearch = (props) => {
   const handleQueryChange = useCallback((event) => {
     event.preventDefault();
     const query = queryRef.current?.value || '';
+    console.log('query  ', query);
     setFilters((prevState) => ({
       ...prevState,
       query

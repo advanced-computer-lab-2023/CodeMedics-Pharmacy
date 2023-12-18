@@ -18,6 +18,7 @@ import { PropertyList } from '../../../components/property-list';
 import { PropertyListItem } from '../../../components/property-list-item';
 import { SeverityPill } from '../../../components/severity-pill';
 import { Scrollbar } from '../../../components/scrollbar';
+import { subDays, subHours } from 'date-fns';
 
 const statusMap = {
   canceled: 'warning',
@@ -32,7 +33,10 @@ export const OrderDetails = (props) => {
 
   const align = lgUp ? 'horizontal' : 'vertical';
   const items = order.items || [];
-  const createdAt = format(order.createdAt, 'dd/MM/yyyy HH:mm');
+  const dateObject = new Date(order.createdAt);
+  const milliseconds = dateObject.getTime() + 3600000;
+  const createdAt1 = subHours(milliseconds, 1);
+  const createdAt = format(createdAt1, 'dd/MM/yyyy HH:mm');
   const statusColor = statusMap[order.status];
   const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
 
