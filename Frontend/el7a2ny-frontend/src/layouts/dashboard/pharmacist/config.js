@@ -19,9 +19,18 @@ export const items = [
       </SvgIcon>
     )
   },
+  {
+    title: 'Orders',
+    path: '/pharmacist/orders',
+    icon: (
+      <SvgIcon fontSize="small">
+        <UsersIcon />
+      </SvgIcon>
+    )
+  },
   
   {
-    title: 'Medicines ',
+    title: 'Medicines',
     path: '/pharmacist/medicines',
     icon: (
       <SvgIcon fontSize="small">
