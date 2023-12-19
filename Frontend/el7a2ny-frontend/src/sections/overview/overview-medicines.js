@@ -231,7 +231,6 @@ export const OverviewLatestProducts = (props) => {
           </Button>
         </Box>
       )}
-      <Divider />
     </CardContent>
   );
 };
