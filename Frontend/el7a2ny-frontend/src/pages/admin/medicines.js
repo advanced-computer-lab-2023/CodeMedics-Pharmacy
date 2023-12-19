@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { set } from 'nprogress';
 import { bool } from 'prop-types';
+import Message from 'src/components/Message';
 
 const now = new Date();
 
@@ -45,6 +46,8 @@ const Page = () => {
   const customersSelection = useSelection(customersIds);
   const router = useRouter();
   const [auth , setAuth] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetch('http://localhost:8001/medicine/viewMedicinesPharmacist') //done new Route
@@ -61,6 +64,8 @@ const Page = () => {
       })
       .catch((err) => {
         console.log(err);
+        setShowError(true);
+        setErrorMessage(err.message);
       });
   }, []);
 
@@ -112,6 +117,7 @@ const Page = () => {
           Medicines
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{

@@ -4,6 +4,7 @@ import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layo
 import { ChatSidebar } from 'src/sections/pharmacist/chat/ChatSidebar';
 import { ChatBox } from 'src/sections/pharmacist/chat/ChatBox';
 import socket from 'src/components/socket';
+import Message from 'src/components/Message';
 
 import axios from 'axios';
 import { useState, useEffect } from 'react';
@@ -18,6 +19,8 @@ const Page = () => {
     const [chats, setChats] = useState([]);
     const [messages, setMessages] = useState([]);
     const [selectedChat, setSelectedChat] = useState(null);
+    const [showError, setShowError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     useEffect(() => {
         axios.get('http://localhost:8001/chat/getChats', { withCredentials: true })
         .then((response) => {
@@ -25,6 +28,8 @@ const Page = () => {
             setChats(response.data.chats);
         }).catch((error) => {
             console.log(error);
+            setShowError(true);
+            setErrorMessage(error.response.data.message);
         });
         socket.emit("iWantToJoin");
     }, []);
@@ -66,6 +71,8 @@ const Page = () => {
                 setMessages(response.data.messages);
             }).catch((error) => {
                 console.log(error);
+                setShowError(true);
+                setErrorMessage(error.response.data.message);
             });
      };
 
@@ -80,6 +87,8 @@ const Page = () => {
                 socket.emit('newMessagePharmacy', {message: response.data.newMessage, receiver: selectedChat.doctor ? selectedChat.doctor.Username : selectedChat.patient.Username, sendingToPharmacy: false});
             }).catch((error) => {
                 console.log(error);
+                setShowError(true);
+                setErrorMessage(error.response.data.message);
             });
 
      };
@@ -89,6 +98,7 @@ const Page = () => {
             <Head>
                 <title>El7a2ny Clinic</title>
             </Head>
+            <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
             <Box>
                 <Divider />
                 <Stack direction="row" >

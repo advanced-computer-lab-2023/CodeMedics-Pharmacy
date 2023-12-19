@@ -6,12 +6,15 @@ import { AccountProfileDetails } from 'src/sections/patient/account-profile-deta
 import Cookies from 'js-cookie';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import Message from 'src/components/Message';
 
 
 const username = Cookies.get('username');
 
 const Page = () => {
   const [values, setValues] = useState({});
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     axios.get(`http://localhost:8001/getMe?username=${username}`) // done new Route
@@ -21,6 +24,8 @@ const Page = () => {
       })
       .catch((err) => {
         console.log(err);
+        setShowError(true);
+        setErrorMessage(err.response.data.message);
       });
   }, []);
   return(
@@ -30,6 +35,7 @@ const Page = () => {
         My Account
       </title>
     </Head>
+    <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
     <Box
       component="main"
       sx={{

@@ -12,6 +12,7 @@ import { Chart } from '../../../components/chart';
 import PropTypes from 'prop-types';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Message from 'src/components/Message';
 const chartSeries = [
   {
     data: [0, 2000, 22, 3000, 13, 2000, 37, 21, 4500, 22, 600]
@@ -93,6 +94,8 @@ const Graphic = () => {
 };
 
 export const OverviewFilter = (props) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { Data, filter, setFilter } = props;
   const Labels = [
     'Available Quantity',
@@ -108,6 +111,8 @@ export const OverviewFilter = (props) => {
          })
          .catch((error) => {
            console.log(error);
+            setShowError(true);
+            setErrorMessage(error.response.data.message);
          });
   }, []);
 
@@ -127,7 +132,9 @@ export const OverviewFilter = (props) => {
         p: 3,
         borderRadius: 3
       }}
-    > <Grid container>
+    >
+    <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" /> 
+    <Grid container>
       <Grid xs={12} md={4}>
         <Card sx={{ p: 2 }}>
           <Stack direction="row" spacing={3}>

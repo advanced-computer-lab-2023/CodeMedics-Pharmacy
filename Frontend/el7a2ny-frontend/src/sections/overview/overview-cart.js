@@ -28,8 +28,11 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/router';
 const username = Cookies.get('username');
+import Message from 'src/components/Message';
 
 export const OverviewLatestOrders = ({ orders, sx }) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [cart, setCart] = useState(orders);
   const router = useRouter();
   const username = Cookies.get('username');
@@ -43,6 +46,8 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
       })
       .catch((error) => {
         console.error('Error fetching updated cart:', error);
+        setShowError(true);
+        setErrorMessage(error.message);
       });
   }, [cart]); 
 
@@ -74,6 +79,8 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
       })
       .catch((error) => {
         console.error('Error updating product quantity:', error);
+        setShowError(true);
+        setErrorMessage(error.message);
       });
   };
 
@@ -103,6 +110,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
 
   return (
     <CardContent>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       {cart.map((product) => (
         <Card
           key={product.medicineID}

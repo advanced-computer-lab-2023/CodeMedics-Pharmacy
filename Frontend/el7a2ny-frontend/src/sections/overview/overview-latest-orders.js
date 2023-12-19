@@ -18,6 +18,7 @@ import {
 import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
 import axios from 'axios';
+import Message from 'src/components/Message';
 
 const statusMap = {
   pending: 'warning',
@@ -41,14 +42,23 @@ function formatDate(inputDate) {
 }
 
 export const OverviewLatestOrders = (props) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { orders, sx } = props;
   const handleCancel = async (orderId) => {
+    try{
     await axios.patch(`http://localhost:8001/patient/cancelOrder?orderId=${orderId}`); // done new Route
     window.location.reload();
+    } catch (error) {
+      console.error('Error removing Pharmacist:', error);
+      setShowError(true);
+      setErrorMessage(error.message);
+    }
   };
 
   return (
     <Card sx={sx}>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <CardHeader title="Latest Orders" />
       <Scrollbar sx={{ flexGrow: 1 }}>
         <Box sx={{ minWidth: 800 }}>
