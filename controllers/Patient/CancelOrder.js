@@ -6,8 +6,8 @@ const Package = require('../../models/Package');
 const PharmacyWallet = require('../../models/PharmacyWallet');
 
 const cancelOrder = async(req, res) =>{
-    console.log("ENTERED CANCEL ORDER");
-    const orderId = req.query.orderId;
+    try{
+        const orderId = req.query.orderId;
     const order = await Order.findOne({_id: orderId});
     const patient = await Patient.findOne({_id: order.PatientId});
     const pharmacy = await PharmacyWallet.find();
@@ -40,7 +40,7 @@ const cancelOrder = async(req, res) =>{
         }
         var discount = 0;
         if(package){
-            discount = package.SessionDiscount / 100;
+            discount = package.MedicineDiscount / 100;
         }
         amount -= amount * discount;
         amount = Math.max(amount, 0);
@@ -53,6 +53,10 @@ const cancelOrder = async(req, res) =>{
     else{
         res.status(200).json({message : "Order cannot be cancelled"});
     }
+    }catch(error){
+        return res.status(500).json({message: "Error happened while cancelling order"});
+    }
+    
 }
 
 module.exports = {cancelOrder};
