@@ -3,8 +3,9 @@ import BellIcon from '@heroicons/react/24/solid/BellIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import Bars3Icon from '@heroicons/react/24/solid/Bars3Icon';
 import MagnifyingGlassIcon from '@heroicons/react/24/solid/MagnifyingGlassIcon';
-import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import Link from 'next/link';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { useRouter } from 'next/router';
 import {
   Avatar,
   Badge,
@@ -18,7 +19,7 @@ import {
 import { alpha } from '@mui/material/styles';
 import { usePopover } from 'src/hooks/use-popover';
 import { AccountPopover } from './account-popover';
-
+import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
 const SIDE_NAV_WIDTH = 280;
 const TOP_NAV_HEIGHT = 64;
 
@@ -26,7 +27,7 @@ export const TopNav = (props) => {
   const { onNavOpen } = props;
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up('lg'));
   const accountPopover = usePopover();
-
+  const router = useRouter();
   return (
     <>
       <Box
@@ -67,7 +68,7 @@ export const TopNav = (props) => {
                 </SvgIcon>
               </IconButton>
             )}
-           <IconButton onClick={() => router.back()} size="small" variant="text">
+             <IconButton onClick={() => router.back()} size="small" variant="text">
             <SvgIcon fontSize="medium">
               <ArrowBackIosNewIcon />
             </SvgIcon>

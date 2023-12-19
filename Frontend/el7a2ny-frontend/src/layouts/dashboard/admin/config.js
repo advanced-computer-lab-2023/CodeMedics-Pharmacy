@@ -7,6 +7,9 @@ import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import SettingsIcon from '@mui/icons-material/Settings';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
 export const items = [
   {
@@ -19,6 +22,15 @@ export const items = [
     )
   },
   {
+    title: 'New Admin',
+    path: '/admin/register',
+    icon: (
+      <SvgIcon fontSize="small">
+        <UserPlusIcon />
+      </SvgIcon>
+    )
+  },
+  {
     title: 'Patients',
     path: '/admin/patients',
     icon: (
@@ -26,15 +38,7 @@ export const items = [
         <UsersIcon />
       </SvgIcon>
     )
-  },{
-    title: 'Medicines',
-    path: '/admin/medicines',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UsersIcon />
-      </SvgIcon>
-    )
-  },{
+  }, {
     title: 'Pharmacists',
     path: '/admin/pharmacists',
     icon: (
@@ -48,7 +52,16 @@ export const items = [
     path: '/admin/requests',
     icon: (
       <SvgIcon fontSize="small">
-        <ShoppingBagIcon />
+        <UserPlusIcon />
+      </SvgIcon>
+    )
+  },
+  {
+    title: 'Medicines',
+    path: '/admin/medicines',
+    icon: (
+      <SvgIcon fontSize="small">
+        <MedicalServicesIcon />
       </SvgIcon>
     )
   },
@@ -66,17 +79,9 @@ export const items = [
     path: '/admin/settings',
     icon: (
       <SvgIcon fontSize="small">
-        <CogIcon />
+        <SettingsIcon />
       </SvgIcon>
     )
   },
-  {
-    title: 'New Admin',
-    path: '/admin/register',
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserPlusIcon />
-      </SvgIcon>
-    )
-  }
+  
 ];
