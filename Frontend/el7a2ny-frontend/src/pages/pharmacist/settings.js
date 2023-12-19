@@ -32,7 +32,7 @@ const Page = () => {
           <Typography variant="h4">
             Settings
           </Typography>
-          <SettingsNotifications />
+
           <SettingsPassword />
         </Stack>
       </Container>
