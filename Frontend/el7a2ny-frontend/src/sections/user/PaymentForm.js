@@ -9,7 +9,8 @@ const stripePromise = loadStripe('pk_test_51OA3YuHNsLfp0dKZSCi30qg6xY63jh2SiffqC
 import Cookies from 'js-cookie';
 
 
-export default function PaymentForm({activeStep, setStep}) {
+export default function PaymentForm(props) {
+  const {activeStep, setStep , address} = props;  
   const [clientSecret, setClientSecret] = useState('');
   const [products, setProducts] = useState(null);
   const [total, setTotal] = useState(0);
@@ -51,7 +52,7 @@ export default function PaymentForm({activeStep, setStep}) {
         
         {clientSecret && (
           <Elements options={options} stripe={stripePromise}>
-            <CheckoutForm activeStep = {activeStep} setStep = {setStep} />
+            <CheckoutForm activeStep = {activeStep} setStep = {setStep} address={address}/>
           </Elements>
         )}
         

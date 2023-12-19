@@ -38,12 +38,13 @@ import { OrdersSummary } from 'src/sections/user/Checkout/ordersSummary';
 
 const Page = () => {
   const router = useRouter();
-
-  const [value, setValue] = useState('creditCard');
-  const [phase , setPhase] = useState(1);
+  
+  const [value, setValue] = useState('Credit Card');
+  const [phase , setPhase] = useState(new URLSearchParams(window.location.search).get('phase') ||'1');
   const [credit, setCredit] = useState(true);
   const username = Cookies.get('username');
   const [addresses, setAddresses] = useState([]);
+  const [address , setAddress] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:8001/patient/getAddress?username=${username}`) // done new Route
@@ -56,16 +57,17 @@ const Page = () => {
           const x = data[i].AddressLine2 ? ' , ' + data[i].AddressLine2 +' ': '';
           dt.push({ value: data[i]._id, label: `${data[i].FirstName} ${data[i].LastName} , Address: ${data[i].AddressLine} ${x}, City: ${data[i].City} , Postal Code: ${data[i].PostalCode}` });
         }
+        setAddress(dt[0].value);
         setAddresses(dt);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
-
+  
   const handleChange = (event) => {
     setValue(event.target.value);
-    if (event.target.value == 'creditCard') {
+    if (event.target.value == 'Credit Card') {
       setCredit(true);
     }
     else {
@@ -75,7 +77,7 @@ const Page = () => {
 
   const handleWithWallet = () => {
     try {
-      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`, { type: 'Wallet' }); // done new Route
+      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`, { type: value }); // done new Route
       console.log('here --->');
       router.push('/user/orders?username=' + username);
     } catch (err) {
@@ -109,8 +111,9 @@ const Page = () => {
               <Typography variant="h3">
                 Checkout
               </Typography>
-              {phase === 1 && <BillingAddress addresses={addresses} setPhase={setPhase}/>}
-              {phase === 2 && <PaymentMethod value={value} handleChange={handleChange} credit={credit} setPhase={setPhase}/>}
+              {phase === '1' && <BillingAddress addresses={addresses} setPhase={setPhase} setAddress={setAddress}/>}
+              {phase === '2' && <PaymentMethod value={value} handleChange={handleChange} credit={credit} setPhase={setPhase} address={address}/>}
+              {/* {console.log('phase in the design: ', phase)} */}
               <Stack>
               <Stack direction="row" spacing={2}>
                 <SvgIcon sx={{ color: 'success.light' }}>

@@ -35,7 +35,7 @@ import { ExistingAddress } from './existingAddress';
 
 
 export const BillingAddress = (props) => {
-    const { addresses , setPhase={setPhase} } = props;
+    const { addresses , setPhase ,setAddress} = props;
     const [value, setValue] = React.useState('New Address');
     const handleChange = (event) => {
         setValue(event.target.value);
@@ -64,8 +64,8 @@ export const BillingAddress = (props) => {
                 </FormControl>}
             </Stack>
 
-            {value == 'Existing Address' && <ExistingAddress addresses={addresses} setPhase={setPhase}/>}
-            {value == 'New Address' && <NewAddress setPhase={setPhase}/>}
+            {value == 'Existing Address' && <ExistingAddress addresses={addresses} setPhase={setPhase} setAddress={setAddress}/>}
+            {value == 'New Address' && <NewAddress setPhase={setPhase} setAddress={setAddress}/>}
         </Stack>
     );
 };

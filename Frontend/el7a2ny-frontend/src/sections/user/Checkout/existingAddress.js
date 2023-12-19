@@ -32,7 +32,7 @@ import axios from 'axios';
 import { deepOrange } from '@mui/material/colors';
 
 export const ExistingAddress = (props) => {
-    const { addresses , setPhase} = props;
+    const { addresses , setPhase , setAddress} = props;
     return (
         <Stack spacing={3}>
             {addresses.length > 0 && <TextField
@@ -44,14 +44,14 @@ export const ExistingAddress = (props) => {
                 helperText=""
                 onChange={(str) => { console.log(str.target.value) }}
             > {addresses.map((option) => (
-                <MenuItem key={option.value} value={option.value} >
+                <MenuItem key={option.value} value={option.value} onClick={() => {setAddress(option.value)}}>
                     {option.label}
                 </MenuItem>
             ))}
             </TextField>}
             <Button
                 variant="contained"
-                onClick={() => { setPhase(2);}}
+                onClick={() => { setPhase('2');}}
                 sx={{ width: 200 }}
             >
                 Continue

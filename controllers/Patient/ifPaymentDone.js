@@ -8,7 +8,7 @@ const Package = require('../../models/Package');
 
 const nodemailer = require('nodemailer');
 
-const calculateAmount = async(items) =>{
+const calculateAmount = async (items) => {
     let amount = 0;
     for (const item of items) {
         const medicine = await Medicine.findById(item.MedicineId);
@@ -19,24 +19,25 @@ const calculateAmount = async(items) =>{
     }
     return amount;
 }
-const ifPaymentDone = async(req, res) =>{
-    const {type} = req.body;
-    const username =  req.query.username;
-    const patient = await Patient.findOne({Username: username});
+const ifPaymentDone = async (req, res) => {
+    const { type } = req.body;
+    const { username, address } = req.query;
+    console.log('here in if Payment done addrees', address, username);
+    const patient = await Patient.findOne({ Username: username });
     const pharmacy = await PharmacyWallet.find();
     const package = await Package.findOne({ Name: patient.HealthPackage.membership });
-    if(pharmacy == []){
-        return res.status(500).json({message: "Pharmacy Wallet not Found"});
+    if (pharmacy == []) {
+        return res.status(500).json({ message: "Pharmacy Wallet not Found" });
     }
     const pharmacyWallet = pharmacy[0];
     const medicines = patient.Cart.items;
     for (const medicine of medicines) {
-        const curMedicine = await Medicine.findOne({_id: medicine.MedicineId});
-        if(curMedicine.availableQuantity < medicine.Quantity){
-            res.status(400).json({message: "Not enough quantity for " + medicine.name});
+        const curMedicine = await Medicine.findOne({ _id: medicine.MedicineId });
+        if (curMedicine.availableQuantity < medicine.Quantity) {
+            res.status(400).json({ message: "Not enough quantity for " + medicine.name });
         }
         curMedicine.availableQuantity -= medicine.Quantity;
-        if(curMedicine.availableQuantity <= 0){
+        if (curMedicine.availableQuantity <= 0) {
             notifyAllPharmacists('Out of Stock', `Medicine ${curMedicine.name} is out of stock.`);
             messageAllPharmacists(`Medicine ${curMedicine.name} is out of stock.`);
         }
@@ -44,21 +45,30 @@ const ifPaymentDone = async(req, res) =>{
     }
     let amount = await calculateAmount(medicines);
     var discount = 0;
-    if(package){
+    if (package) {
         discount = package.SessionDiscount;
     }
     amount -= discount;
     amount = Math.max(amount, 0);
-    if(type){
-        patient.Wallet -= amount;
-        pharmacyWallet.Wallet += amount;
+    if (type) {
+        if (type == 'Wallet') {
+            if (patient.Wallet >= amount) {
+                patient.Wallet -= amount;
+                pharmacyWallet.Wallet += amount;
+            }
+            else{
+                return res.status(400).json({ message: "Not enough money in your wallet" });
+            }
+        }
     }
     const order = new Order({
         PatientId: patient._id,
         patient: patient.FirstName + " " + patient.LastName,
         items: medicines,
         amount: amount,
-        status: "Ordered"
+        status: "ordered",
+        DeliveryAddress: address,
+        type: type,
     });
 
     await order.save();
@@ -112,23 +122,23 @@ const notifyAllPharmacists = async (subject, text) => {
 
 const messageAllPharmacists = async (text) => {
     try {
-      // Fetch all pharmacists from the database
-      const allPharmacists = await Pharmacist.find();
-  
-      // Loop through all pharmacists and append the message to their Messages list
-      for (const pharmacist of allPharmacists) {
-        pharmacist.Messages.push({
-            sender: 'System',
-            content: text,
-            timestamp: new Date(),
-        }); // Ensure the value is a string
-        await pharmacist.save();
-      }
-  
-      console.log(`Message "${text}" sent to all pharmacists.`);
-    } catch (error) {
-      console.error('Error notifying pharmacists:', error);
-    }
-  };
+        // Fetch all pharmacists from the database
+        const allPharmacists = await Pharmacist.find();
 
-module.exports = {ifPaymentDone};
+        // Loop through all pharmacists and append the message to their Messages list
+        for (const pharmacist of allPharmacists) {
+            pharmacist.Messages.push({
+                sender: 'System',
+                content: text,
+                timestamp: new Date(),
+            }); // Ensure the value is a string
+            await pharmacist.save();
+        }
+
+        console.log(`Message "${text}" sent to all pharmacists.`);
+    } catch (error) {
+        console.error('Error notifying pharmacists:', error);
+    }
+};
+
+module.exports = { ifPaymentDone };

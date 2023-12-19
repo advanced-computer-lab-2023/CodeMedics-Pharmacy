@@ -4,7 +4,6 @@ const Address = require('../../models/Address');
 
 const addAddress = async (req, res) => {
     try {
-        console.log('III AAAMMM HHHEEERRREEE ------>>>>>>');
         const username = await getUsername(req , res);
         const {FirstName,LastName,  AddressLine,AddressLine2, City, PostalCode} = req.body;
         const patient = await Patient.findOne({ Username: username });
@@ -21,7 +20,8 @@ const addAddress = async (req, res) => {
             patient.Addresses = [];
         patient.Addresses.push(address);
         await patient.save();
-        res.status(200).json({message: 'Address added successfully'});
+        res.status(200).json({message: 'Address added successfully' , address: address
+    });
     } catch (err) {
         console.log(err);
     }

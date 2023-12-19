@@ -33,7 +33,8 @@ import { deepOrange } from '@mui/material/colors';
 
 
 export const PaymentMethod = (props) => {
-    const {value , handleChange , credit} = props;
+    const {value , handleChange , credit , address} = props;
+    
     return (
         <Stack>
             <Stack direction="row" spacing={2}>
@@ -50,13 +51,13 @@ export const PaymentMethod = (props) => {
                     value={value}
                     onChange={handleChange}
                 >
-                    <FormControlLabel value="creditCard" control={<Radio />} label="Credit Card" />
-                    <FormControlLabel value="cashOnDelivery" control={<Radio />} label="Cash On Delivery" />
-                    <FormControlLabel value="myWallet" control={<Radio />} label="My Wallet" />
+                    <FormControlLabel value="Credit Card" control={<Radio />} label="Credit Card" />
+                    <FormControlLabel value="Cash On Delivery" control={<Radio />} label="Cash On Delivery" />
+                    <FormControlLabel value="Wallet" control={<Radio />} label="My Wallet" />
 
                 </RadioGroup>
             </FormControl>
-            {credit && <PaymentForm />}
+            {credit && <PaymentForm address={address}/>}
         </Stack>
     );
 };

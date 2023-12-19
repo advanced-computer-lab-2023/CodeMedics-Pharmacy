@@ -32,7 +32,7 @@ import axios from 'axios';
 import { deepOrange } from '@mui/material/colors';
 
 export const NewAddress = (props) => {
-    const { setPhase } = props;
+    const { setPhase,setAddress } = props;
     const formik = useFormik({
         initialValues: {
             firstName: '',
@@ -85,7 +85,8 @@ export const NewAddress = (props) => {
                     withCredentials: true,
                 })
                     .then((res) => {
-                        setPhase(2);
+                        setAddress(res.data.address._id);
+                        setPhase('2');
                     })
             } catch (err) {
                 console.log('here ====> ', err)

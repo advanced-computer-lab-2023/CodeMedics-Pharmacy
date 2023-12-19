@@ -10,7 +10,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
 import { set } from "lodash";
-export default function CheckoutForm({ activeStep, setStep }) {
+export default function CheckoutForm(props) {
+  const {activeStep, setStep  , address} = props;
   const stripe = useStripe();
   const elements = useElements();
 
@@ -21,9 +22,12 @@ export default function CheckoutForm({ activeStep, setStep }) {
   const username = Cookies.get('username');
   const [isDone, setIsDone] = useState(false);
   const [callOrders, setCallOrders] = useState(false);
+  const url = window.location.href;
+  const reloaded = `${url}?phase=2`;
+
   useEffect(() => {
     if (isDone) {
-      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`); // done new Route
+      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}&address=${address}` ,{ type: 'Credit Card' }); // done new Route
       setCallOrders(true);
     }
   }
@@ -84,7 +88,7 @@ export default function CheckoutForm({ activeStep, setStep }) {
       elements,
       confirmParams: {
         // return_url: "http://localhost:3000/user/orders"
-        return_url: window.location.href
+        return_url: reloaded
         // return_url: "http://localhost:3000/user/orders?username="+username
       },
     });

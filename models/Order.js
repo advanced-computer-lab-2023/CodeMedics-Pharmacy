@@ -14,6 +14,9 @@ const OrderSchema = new Schema({
     isWallet : {    
         type: Boolean
     },
+    type: {
+        type: String,
+    },
     items: {
         type: [{
             MedicineId: {
