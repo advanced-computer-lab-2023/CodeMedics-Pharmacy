@@ -66,7 +66,7 @@ const Page = () => {
           const x = data[i].AddressLine2 ? ' , ' + data[i].AddressLine2 +' ': '';
           dt.push({ value: data[i]._id, label: `${data[i].FirstName} ${data[i].LastName} , Address: ${data[i].AddressLine} ${x}, City: ${data[i].City} , Postal Code: ${data[i].PostalCode}` });
         }
-        setAddress(dt[0].value);
+        setAddress(dt.length > 0 ? dt[0].value : []);
         setAddresses(dt);
       })
       .catch((err) => {
@@ -90,7 +90,7 @@ const Page = () => {
     try {
       axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}&address=${address}`, { type: value}); // done new Route
       console.log('here --->');
-      router.push('/user/orders?username=' + username);
+      router.push('/user/my-orders');
     } catch (err) {
       console.log('here ---> 11  ');
       console.log(err);

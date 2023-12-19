@@ -8,11 +8,13 @@ import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
 import MessageChatSquareIcon from '../../../icons/untitled-ui/duocolor/message-chat-square';
 import XCircleIcon from '@heroicons/react/24/solid/XCircleIcon';
 import { SvgIcon } from '@mui/material';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 export const items = [
   {
     title: 'Overview',
-    path: '/pharmacist/Performance',
+    path: '/pharmacist/performance',
     icon: (
       <SvgIcon fontSize="small">
         <ChartBarIcon />
@@ -24,7 +26,7 @@ export const items = [
     path: '/pharmacist/orders',
     icon: (
       <SvgIcon fontSize="small">
-        <UsersIcon />
+        <ShoppingBagIcon />
       </SvgIcon>
     )
   },
@@ -34,7 +36,7 @@ export const items = [
     path: '/pharmacist/medicines',
     icon: (
       <SvgIcon fontSize="small">
-        <UsersIcon />
+        <MedicalServicesIcon />
       </SvgIcon>
     )
   },
@@ -61,7 +63,7 @@ export const items = [
     path: '/pharmacist/settings',
     icon: (
       <SvgIcon fontSize="small">
-        <CogIcon />
+        <SettingsIcon />
       </SvgIcon>
     )
   }

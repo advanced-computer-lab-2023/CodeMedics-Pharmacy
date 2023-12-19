@@ -14,11 +14,14 @@ import {
   Typography,
   useMediaQuery
 } from '@mui/material';
-import { PropertyList } from '../../../components/property-list';
-import { PropertyListItem } from '../../../components/property-list-item';
-import { SeverityPill } from '../../../components/severity-pill';
-import { Scrollbar } from '../../../components/scrollbar';
+import { PropertyList } from '../../../../components/property-list';
+import { PropertyListItem } from '../../../../components/property-list-item';
+import { SeverityPill } from '../../../../components/severity-pill';
+import { Scrollbar } from '../../../../components/scrollbar';
 import { subDays, subHours } from 'date-fns';
+import axios from 'axios';
+import  Message  from 'src/components/Message';
+import { useState } from 'react';
 
 const statusMap = {
   canceled: 'error',
@@ -41,9 +44,36 @@ export const OrderDetails = (props) => {
   const createdAt = format(createdAt1, 'dd/MM/yyyy HH:mm');
   const statusColor = statusMap[order.status];
   const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
+  const [message, setMessage] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+
+  const handleComplete = () => {
+    axios.patch(`http://localhost:8001/patient/cancelOrder`, {orderId: order.id}, {withCredentials: true})
+    .then((res) => {
+      setMessage(true);
+    })
+    .catch((err) => {
+      console.log(err);
+      setShowError(true);
+      setErrorMessage(err.response.data.message);
+    });
+  };
+
+  const handleCancel = async (orderId) => {
+    try{
+    await axios.patch(`http://localhost:8001/patient/cancelOrder?orderId=${orderId}`); // done new Route
+    window.location.reload();
+    } catch (error) {
+      console.error('Error removing Pharmacist:', error);
+
+    }
+  };
 
   return (
     <Stack spacing={6}>
+      <Message condition={message} setCondition={setMessage} title={"Success"} message={"Order Canceled Successfully"} buttonAction={"Ok"} onClick={() => {setMessage(false);window.location.reload()}}/>
       <Stack spacing={3}>
         <Stack
           alignItems="center"
@@ -152,21 +182,14 @@ export const OrderDetails = (props) => {
           justifyContent="flex-end"
           spacing={2}
         >
-          <Button
-            onClick={onApprove}
-            size="small"
-            variant="contained"
-          >
-            Compelete
-          </Button>
-          <Button
+          {order.status === 'ordered' && <Button
             color="error"
-            onClick={onReject}
+            onClick={handleComplete}
             size="small"
             variant="outlined"
           >
-            Reject
-          </Button>
+            Cancel
+          </Button>}
         </Stack>
       </Stack>
       <Stack spacing={3}>
@@ -184,7 +207,7 @@ export const OrderDetails = (props) => {
                   Quantity
                 </TableCell>
                 <TableCell>
-                  Amount
+                  Price
                 </TableCell>
               </TableRow>
             </TableHead>

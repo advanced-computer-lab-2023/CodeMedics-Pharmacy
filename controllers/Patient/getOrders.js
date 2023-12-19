@@ -1,6 +1,7 @@
 const Patient = require('../../models/Patient');
 const Address = require('../../models/Address');
 const Medicine = require('../../models/Medicine');
+const Order = require('../../models/Order');
 
 const getOrders = async (req, res) => {
     try {
@@ -11,10 +12,11 @@ const getOrders = async (req, res) => {
             return res.status(400).json({ message: "Patient not found" });
         }
         // console.log(patient, username);
-        const orders = patient.Orders;
+        const orders = await Order.find({ PatientId: patient._id });
         let result2 = [];
-        for (const order of orders) {
-            result2.push(order);
+        let result = [];
+        for (let i=0; i<orders.length; i++) {
+            result2.push(orders[i]);
             var address = patient.Addresses.find((address) => address._id == orders[i].DeliveryAddress);
             const medicines = [];
             for (let item of orders[i].items) {
@@ -50,8 +52,7 @@ const getOrders = async (req, res) => {
                 "number": 'ORDER-' + i,
             });
         }
-        // console.log(result);
-        res.status(200).json({ orders: result2 });
+        res.status(200).json({ result });
     } catch (err) {
         console.log(err);
         res.status(500).json({ message: err.message });

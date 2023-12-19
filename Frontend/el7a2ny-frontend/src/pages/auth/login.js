@@ -116,6 +116,7 @@ const Page = () => {
               Cookies.set('token', data['token']);
               if (data['Type'] === 'Patient') {
                 Cookies.set('username', data['patient']['Username']);
+                Cookies.set('type' , 'patient');
                 socket.on('me', (id) => {
                   Cookies.set('socketID', id);
                 });
@@ -123,9 +124,11 @@ const Page = () => {
                 router.push(`/user/medicines`);
               } else if (data['Type'] === 'Pharmacist') {
                 Cookies.set('username', data['pharmacist']['Username']);
+                Cookies.set('type' , 'pharmacist');
                 router.push(`/pharmacist/performance`);
               } else if (data['Type'] === 'Admin') {
                 Cookies.set('username', data['admin']['Username']);
+                Cookies.set('type' , 'admin');
                 router.push(`/admin`);
               }
             });
@@ -209,20 +212,7 @@ const Page = () => {
                 </Link>
               </Typography>
             </Stack>
-            <Tabs
-              onChange={handleMethodChange}
-              sx={{ mb: 3 }}
-              value={method}
-            >
-              <Tab
-                label="Username"
-                value="Username"
-              />
-              <Tab
-                label="Email"
-                value="email"
-              />
-            </Tabs>
+            
             {method === 'email' && (
               <form
                 noValidate

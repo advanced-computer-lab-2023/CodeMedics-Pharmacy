@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography,TextField } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography, TextField } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import { MedicinesTable } from 'src/sections/pharmacist/medicines/medicines-table';
@@ -37,15 +37,16 @@ const useMedicineIds = (customers) => {
 const Page = () => {
   const [data, setData] = useState([]);
   const [searchData, setSearchData] = useState([]);
-  const [filteredData , setFilteredData] = useState([]);
-  const [allData , setAllData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [allData, setAllData] = useState([]);
   const [page, setPage] = useState(0);
+  const [medicalUse, setMedicalUse] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const customers = useMedicines(data, page, rowsPerPage);
   const customersIds = useMedicineIds(customers);
   const customersSelection = useSelection(customersIds);
   const router = useRouter();
-  const [auth , setAuth] = useState(false);
+  const [auth, setAuth] = useState(false);
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -55,11 +56,14 @@ const Page = () => {
         return res.json();
       })
       .then((data) => {
-        if(data.medicines){
-        setData(data['medicines']);
-        setAllData(data['medicines']);
-        setSearchData(data['medicines']);
-        setFilteredData(data['medicines']);
+        if (data.medicines) {
+          setData(data['medicines']);
+          setAllData(data['medicines']);
+          setSearchData(data['medicines']);
+          setFilteredData(data['medicines']);
+        }
+        if(data.medicalUses) {
+          setMedicalUse(data['medicalUses']);
         }
       })
       .catch((err) => {
@@ -71,7 +75,7 @@ const Page = () => {
 
   useEffect(() => {
     handleData();
-  }, [searchData , filteredData]);
+  }, [searchData, filteredData]);
 
 
   const handlePageChange = useCallback(
@@ -93,19 +97,19 @@ const Page = () => {
   }
 
   const handleSearch = (str) => {
-    if(str === ""){
+    if (str === "") {
       setSearchData(allData);
     }
-    else{
+    else {
       setSearchData(allData.filter((medicine) => medicine.name.toLowerCase().includes(str.toLowerCase())));
     }
   }
 
-  const handleFilter  = (str)  => {
-    if(str === "None"){
+  const handleFilter = (str) => {
+    if (str === "None") {
       setFilteredData(allData);
     }
-    else{
+    else {
       setFilteredData(allData.filter((medicine) => medicine.medicalUse === (str)));
     }
   }
@@ -157,8 +161,8 @@ const Page = () => {
                 </Button>
               </div>
             </Stack>
-            <CustomersSearch data={data} handleSearch={handleSearch} handleFilter={handleFilter}/>
-            { <MedicinesTable
+            <CustomersSearch data={data} handleSearch={handleSearch} handleFilter={handleFilter} medicalUse={medicalUse}/>
+            {<MedicinesTable
               count={data.length}
               items={customers}
               onPageChange={handlePageChange}

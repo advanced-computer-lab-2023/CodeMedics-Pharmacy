@@ -27,7 +27,7 @@ import axios from 'axios';
 import Message from 'src/components/Message';
 
 export const OverviewLatestProducts = (props) => {
-  const { products: initialProducts = [], sx } = props;
+  const { products: initialProducts, sx } = props;
   const [products, setProducts] = useState(initialProducts);
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [viewingAlternatives, setViewingAlternatives] = useState(false);

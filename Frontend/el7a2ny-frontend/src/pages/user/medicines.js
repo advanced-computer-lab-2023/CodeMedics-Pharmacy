@@ -9,8 +9,9 @@ import { useEffect, useState } from 'react';
 
 const now = new Date();
 
-const Page = ({ medicines }) => {
+const Page = ({ medicines ,medicalUses}) => {
   const [data, setData] = useState(medicines);
+  const [medicalUse , setMedicalUse] = useState(medicalUses);
   const [searchData, setSearchData] = useState(medicines);
   const [filteredData , setFilteredData] = useState(medicines);
 
@@ -65,7 +66,7 @@ const Page = ({ medicines }) => {
           >
           </Stack>
         </Stack>
-        <CustomersSearch data={data} handleSearch={handleSearch} handleFilter={handleFilter}/>
+        <CustomersSearch data={data} handleSearch={handleSearch} handleFilter={handleFilter} medicalUse={medicalUse}/>
         <Grid container spacing={3}>
           <Grid xs={20} md={20} lg={15}>
             <OverviewLatestProducts products={data} sx={{ height: '100%' }} />
@@ -82,10 +83,11 @@ export async function getServerSideProps() {
   try {
     // Fetch data from the provided API
     const response = await axios.get('http://localhost:8001/medicine/viewMedicines'); // done new Route
-    const medicines = response.data;
-
+    
+    const medicines = response.data.medicines;
+    const medicalUses = response.data.medicalUses;
     return {
-      props: medicines,
+      props: { medicines , medicalUses, }, // Return medicines as props
     };
   } catch (error) {
     console.error('Error fetching medicines:', error);
