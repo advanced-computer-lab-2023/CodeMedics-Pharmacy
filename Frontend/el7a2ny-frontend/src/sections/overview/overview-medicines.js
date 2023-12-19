@@ -68,7 +68,7 @@ export const OverviewLatestProducts = (props) => {
  
   return (
     <CardContent>
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      {/* <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" /> */}
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"

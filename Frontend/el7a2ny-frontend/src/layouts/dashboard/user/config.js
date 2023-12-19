@@ -40,15 +40,15 @@ export const items = [
       </SvgIcon>
     )
   },
-  {
-    title: 'My Addresses',
-    path: '/user/address',
-    icon: (
-      <SvgIcon fontSize="small">
-        <MapIcon />
-      </SvgIcon>
-    )
-  },
+  // {
+  //   title: 'My Addresses',
+  //   path: '/user/address',
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <MapIcon />
+  //     </SvgIcon>
+  //   )
+  // },
   {
     title: 'Chat',
     path: '/user/chat',

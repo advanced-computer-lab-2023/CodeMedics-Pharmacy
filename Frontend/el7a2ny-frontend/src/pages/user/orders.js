@@ -15,6 +15,8 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { set } from 'lodash';
 import Message from 'src/components/Message';
+import { useRouter } from 'next/router';
+
 const now = new Date();
 
 
@@ -82,7 +84,7 @@ const Orders = () => {
         El7a2ny Pharmacy
       </title>
     </Head>
-    <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+    {/* <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" /> */}
     <Box
       component="main"
       sx={{
