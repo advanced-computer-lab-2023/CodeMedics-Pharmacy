@@ -114,7 +114,6 @@ const Page = () => {
                      router.push('/auth/login');
                    });
       } catch (err) {
-        console.log(err.response.data.message)
         if (err.response.status == 400) { setShowErrorAlert(true);}
         helpers.setStatus({ success: false });
         helpers.setErrors({ Submit: err.response.data.error });

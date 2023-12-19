@@ -14,16 +14,18 @@ import {
   Link,
   Stack,
   TextField,
-  Typography
+  Typography, Alert
 } from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import axios from 'axios';
+import React from 'react';
 //import { error } from 'console';
 
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
   const Gender = [
     {
       value: 'Male',
@@ -124,6 +126,7 @@ const Page = () => {
                      router.push('/auth/login');
                    });
       } catch (err) {
+        if (err.response.status == 400) { setShowErrorAlert(true);}
         helpers.setStatus({ success: false });
         helpers.setErrors({ Submit: err.response.data.message });
         helpers.setSubmitting(false);
@@ -177,6 +180,9 @@ const Page = () => {
                   Log in
                 </Link>
               </Typography>
+              {showErrorAlert && (
+                <Alert severity="error">Please choose a different Username or Email!</Alert>
+              )}
             </Stack>
             <form
               noValidate
