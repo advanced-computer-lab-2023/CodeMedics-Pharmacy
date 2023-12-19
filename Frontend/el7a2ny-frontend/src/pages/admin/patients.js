@@ -55,111 +55,73 @@ const Page = () => {
       .then((data) => {
         if (data['patients']) {
           console.log(data['patients']);
-        setData(data['patients']);
+          setData(data['patients']);
         }
-  })
-    .catch((err) => {
-      console.log(err);
-      setShowError(true);
-      setErrorMessage(err.response.data.message);
-    });
-}, []);
-const handlePageChange = useCallback(
-  (event, value) => {
-    setPage(value);
-  },
-  []
-);
+      })
+      .catch((err) => {
+        console.log(err);
+        setShowError(true);
+        setErrorMessage(err.response.data.message);
+      });
+  }, []);
+  const handlePageChange = useCallback(
+    (event, value) => {
+      setPage(value);
+    },
+    []
+  );
 
-const handleRowsPerPageChange = useCallback(
-  (event) => {
-    setRowsPerPage(event.target.value);
-  },
-  []
-);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      setRowsPerPage(event.target.value);
+    },
+    []
+  );
 
-return (
-  <>
-    <Head>
-      <title>
-        Patients
-      </title>
-    </Head>
-    <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        py: 8
-      }}
-    >
-      <Container maxWidth="xl">
-        <Stack spacing={3}>
-          <Stack
-            direction="row"
-            justifyContent="space-between"
-            spacing={4}
-          >
-            <Stack spacing={1}>
-              <Typography variant="h4">
-                Patients
-              </Typography>
-              <Stack
-                alignItems="center"
-                direction="row"
-                spacing={1}
-              >
-                <Button
-                  color="inherit"
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <ArrowUpOnSquareIcon/>
-                    </SvgIcon>
-                  )}
-                >
-                  Import
-                </Button>
-                <Button
-                  color="inherit"
-                  startIcon={(
-                    <SvgIcon fontSize="small">
-                      <ArrowDownOnSquareIcon/>
-                    </SvgIcon>
-                  )}
-                >
-                  Remove
-                </Button>
+  return (
+    <>
+      <Head>
+        <title>
+          Patients
+        </title>
+      </Head>
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          py: 8
+        }}
+      >
+        <Container maxWidth="xl">
+          <Stack spacing={3}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              spacing={4}
+            >
+              <Stack spacing={1}>
+                <Typography variant="h4">
+                  Patients
+                </Typography>
               </Stack>
             </Stack>
-            <div>
-              <Button
-                startIcon={(
-                  <SvgIcon fontSize="small">
-                    <PlusIcon/>
-                  </SvgIcon>
-                )}
-                variant="contained"
-              >
-                Add
-              </Button>
-            </div>
+            <PatientsSearch />
+            <PatientTable
+              count={data.length}
+              items={customers}
+              onPageChange={handlePageChange}
+              onRowsPerPageChange={handleRowsPerPageChange}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />
           </Stack>
-          <PatientsSearch/>
-          <PatientTable
-            count={data.length}
-            items={customers}
-            onPageChange={handlePageChange}
-            onRowsPerPageChange={handleRowsPerPageChange}
-            page={page}
-            rowsPerPage={rowsPerPage}
-          />
-        </Stack>
-      </Container>
-    </Box>
-  </>
-);
+        </Container>
+      </Box>
+    </>
+  );
 }
-;
+  ;
 
 Page.getLayout = (page) => (
   <DashboardLayout>

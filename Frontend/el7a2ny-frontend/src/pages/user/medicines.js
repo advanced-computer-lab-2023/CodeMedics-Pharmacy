@@ -39,7 +39,8 @@ const Page = ({ medicines ,medicalUses}) => {
       setFilteredData(medicines);
     }
     else{
-      setFilteredData(medicines.filter((medicine) => medicine.medicalUse === (str)));
+      console.log(str);
+      setFilteredData(medicines.filter((medicine) => medicine.medicalUse === str));
     }
   }
   return(
