@@ -12,7 +12,7 @@ exports.getPharmacistMessages = async (req, res) => {
 
         if (!pharmacist) {
             console.log('Pharmacist not found.');
-            return res.status(404).json({ error: 'Pharmacist not  found' });
+            return res.status(404).json({ message: 'Pharmacist not  found' });
         }
 
         console.log('Pharmacist found:', pharmacist);
@@ -20,6 +20,6 @@ exports.getPharmacistMessages = async (req, res) => {
         res.status(200).json({ Messages: pharmacist.Messages });
     } catch (error) {
         console.error('Error retrieving pharmacist messages:', error);
-        res.status(500).json({ error: 'Internal server error' });
+        res.status(500).json({ message: 'Internal server error' });
     }
 };

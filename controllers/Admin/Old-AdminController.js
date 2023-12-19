@@ -76,7 +76,7 @@ const createAdmin = async (req, res) => {
         res.cookie('jwt', token, {httpOnly: true, maxAge: maxAge * 1000});
         return res.status(201).json("Admin created successfully!");
     } else
-        return res.status(400).json("Username already exists. Please choose another one.");
+        return res.status(400).json({message: "Username already exists. Please choose another one."});
 };
 
 const removePharmacist = async (req, res) => {
@@ -90,7 +90,7 @@ const removePharmacist = async (req, res) => {
     try {
         const isFound = await pharmacistModel.find({Username: Username});
         if (isFound.length == 0) {
-            return res.status(400).json("Username does not exist");
+            return res.status(400).json({message: "Username does not exist"});
         }
 
         await Promise.all([
@@ -115,7 +115,7 @@ const removePatient = async (req, res) => {
     try {
         const isFound = await patientModel.find({Username: Username});
         if (isFound.length == 0) {
-            return res.status(400).json("Username does not exist");
+            return res.status(400).json({message: "Username does not exist"});
         }
         await Promise.all([
             patientModel.deleteOne({Username: Username}),
@@ -140,7 +140,7 @@ const viewPharmacists = async (req, res) => {
 
         return res.status(200).json({pharmacists});
     } catch (error) {
-        return res.status(500).json({error: 'Failed to fetch pharmacists.'});
+        return res.status(500).json({message: 'Failed to fetch pharmacists.'});
     }
 };
 
@@ -153,7 +153,7 @@ const viewPharmacistApplications = async (req, res) => {
         }
         return res.status(200).json({pharmacistApplications});
     } catch (error) {
-        return res.status(500).json({error: 'Failed to fetch pharmacist applications.'});
+        return res.status(500).json({message: 'Failed to fetch pharmacist applications.'});
     }
 };
 
@@ -167,7 +167,7 @@ const viewPatients = async (req, res) => {
 
         return res.status(200).json({patients});
     } catch (error) {
-        return res.status(500).json({error: 'Failed to fetch pharmacists.'});
+        return res.status(500).json({message: 'Failed to fetch pharmacists.'});
     }
 };
 const acceptPharmacist = async (req, res) => {

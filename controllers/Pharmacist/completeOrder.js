@@ -12,6 +12,6 @@ exports.completeOrder = async (req, res) => {
         await order.save();
         return res.json({ message: 'Order completed successfully' });
     }catch(error){
-        return res.status(500).json({ error: error.toString() });
+        return res.status(500).json({ message: error.message });
     }
 };
