@@ -4,14 +4,17 @@ const Schema = mongoose.Schema;
 const AddressSchema = new Schema({
     FirstName: {
         type: String,
+        default: '',
         required: [true, 'Please enter a name']
     },
     LastName: {
         type: String,
+        default: '',
         required: [true, 'Please enter a name']
     },
     AddressLine: {
         type: String,
+        default: '',
         required: [true, 'Please enter an address line']
     },
     AddressLine2: {
@@ -21,14 +24,17 @@ const AddressSchema = new Schema({
     },
     City: {
         type: String,
+        default: '',
         required: [true, 'Please enter a city']
     },
     PostalCode: {
         type: String,
+        default: '',
         required: false
     },
     PatientUsername: {
-        type: String
+        type: String,
+        default: ''
     },
 } , {timestamps: true});
 

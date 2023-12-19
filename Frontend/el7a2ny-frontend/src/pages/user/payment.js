@@ -46,6 +46,12 @@ const Page = () => {
   const [addresses, setAddresses] = useState([]);
   const [address , setAddress] = useState(null);
 
+  if(phase == '1'){
+  console.log('here ----> in phase 1', address);
+  }
+  else{
+    console.log('here ----> in phase 2', address);
+  }
   useEffect(() => {
     fetch(`http://localhost:8001/patient/getAddress?username=${username}`) // done new Route
       .then((res) => {
@@ -77,7 +83,7 @@ const Page = () => {
 
   const handleWithWallet = () => {
     try {
-      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}`, { type: value }); // done new Route
+      axios.post(`http://localhost:8001/patient/ifPaymentDone?username=${username}&address=${address}`, { type: value}); // done new Route
       console.log('here --->');
       router.push('/user/orders?username=' + username);
     } catch (err) {

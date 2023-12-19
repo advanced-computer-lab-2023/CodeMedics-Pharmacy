@@ -20,21 +20,17 @@ const tabOptions = [
     value: 'all'
   },
   {
+    label: 'Completed',
+    value: 'completed'
+  },
+  {
+    label: 'Ordered',
+    value: 'ordered'
+  },
+  {
     label: 'Canceled',
     value: 'canceled'
   },
-  {
-    label: 'Completed',
-    value: 'complete'
-  },
-  {
-    label: 'Pending',
-    value: 'pending'
-  },
-  {
-    label: 'Rejected',
-    value: 'rejected'
-  }
 ];
 
 const sortOptions = [
@@ -56,6 +52,8 @@ export const OrderListSearch = (props) => {
     query: undefined,
     status: undefined
   });
+
+  console.log('here in filters - - - - - > ',filters);
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);

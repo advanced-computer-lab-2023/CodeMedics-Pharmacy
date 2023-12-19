@@ -14,9 +14,11 @@ import {
 import { SeverityPill } from '../../components/severity-pill';
 
 const statusMap = {
+  canceled: 'error',
   complete: 'success',
+  completed: 'success',
+  ordered: 'warning',
   pending: 'info',
-  canceled: 'warning',
   rejected: 'error'
 };
 
@@ -38,9 +40,7 @@ export const OrderListTable = (props) => {
         <TableBody>
           {orders.map((order) => {
             const dateObject = new Date(order.createdAt);
-
             const milliseconds = dateObject.getTime() + 3600000;
-            console.log('date: ',dateObject , 'milliseconds: ', milliseconds);
             const createdAt = subHours(milliseconds, 1);
             const createdAtMonth = format(createdAt, 'LLL').toUpperCase();
             const createdAtDay = format(createdAt, 'd');
@@ -94,7 +94,7 @@ export const OrderListTable = (props) => {
                     >
                       Total of
                       {' '}
-                      {totalAmount}
+                      {order.totalAmount}
                     </Typography>
                   </Box>
                 </TableCell>

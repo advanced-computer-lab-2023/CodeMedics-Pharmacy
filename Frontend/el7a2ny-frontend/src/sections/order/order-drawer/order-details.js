@@ -21,8 +21,10 @@ import { Scrollbar } from '../../../components/scrollbar';
 import { subDays, subHours } from 'date-fns';
 
 const statusMap = {
-  canceled: 'warning',
+  canceled: 'error',
   complete: 'success',
+  completed: 'success',
+  ordered: 'warning',
   pending: 'info',
   rejected: 'error'
 };
@@ -52,7 +54,7 @@ export const OrderDetails = (props) => {
           <Typography variant="h6">
             Details
           </Typography>
-          <Button
+          {/* <Button
             color="inherit"
             onClick={onEdit}
             size="small"
@@ -63,7 +65,7 @@ export const OrderDetails = (props) => {
             )}
           >
             Edit
-          </Button>
+          </Button> */}
         </Stack>
         <PropertyList>
           <PropertyListItem
@@ -122,8 +124,8 @@ export const OrderDetails = (props) => {
             align={align}
             disableGutters
             divider
-            label="Promotion Code"
-            value={order.promotionCode}
+            label="Payment Method"
+            value={order.paymentMethod}
           />
           <PropertyListItem
             align={align}
@@ -155,7 +157,7 @@ export const OrderDetails = (props) => {
             size="small"
             variant="contained"
           >
-            Approve
+            Compelete
           </Button>
           <Button
             color="error"
@@ -169,17 +171,17 @@ export const OrderDetails = (props) => {
       </Stack>
       <Stack spacing={3}>
         <Typography variant="h6">
-          Line items
+          Medicines
         </Typography>
         <Scrollbar>
           <Table sx={{ minWidth: 400 }}>
             <TableHead>
               <TableRow>
                 <TableCell>
-                  Description
+                  Medicine
                 </TableCell>
                 <TableCell>
-                  Billing Cycle
+                  Quantity
                 </TableCell>
                 <TableCell>
                   Amount
@@ -194,13 +196,9 @@ export const OrderDetails = (props) => {
                   <TableRow key={item.id}>
                     <TableCell>
                       {item.name}
-                      {' '}
-                      x
-                      {' '}
-                      {item.quantity}
                     </TableCell>
                     <TableCell>
-                      {item.billingCycle}
+                    {item.quantity}
                     </TableCell>
                     <TableCell>
                       {unitAmount}

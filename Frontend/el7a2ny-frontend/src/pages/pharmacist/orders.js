@@ -64,7 +64,9 @@ const useOrders = (search) => {
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
-  let { orders, ordersCount } = useOrders(search);
+  const { orders, ordersCount } = useOrders(search);
+  
+
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined
