@@ -40,9 +40,9 @@ const cancelOrder = async(req, res) =>{
         }
         var discount = 0;
         if(package){
-            discount = package.SessionDiscount;
+            discount = package.SessionDiscount / 100;
         }
-        amount -= discount;
+        amount -= amount * discount;
         amount = Math.max(amount, 0);
         pharmacyWallet.Wallet -= amount;
         patient.Wallet += amount;   

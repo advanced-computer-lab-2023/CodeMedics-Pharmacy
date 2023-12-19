@@ -38,10 +38,16 @@ const payOrder = async(req, res) =>{
         res.redirect(300, "http://localhost:"+process.env.PORT);
     }
     else if(paymentMethod == "Wallet"){
+        var discount = 0;
+            if (package) {
+                discount = package.MedicineDiscount / 100;
+            }
+        total = total - total * discount;
         if(patient.Wallet < total){
             res.status.json({message : "Insufficient funds"});
         }
         else{
+            total = Math.max(total, 0);
             patient.Wallet -= total;
             pharmacyWallet.Wallet += total;
             await PharmacyWallet.save();
