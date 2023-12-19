@@ -99,7 +99,7 @@ export const AccountProfileDetailsPharmacist = ({ values, setValues }) => {
       >
         <Card>
           <CardHeader
-            subheader="The information can be edited"
+            subheader=""
             title="Profile"
           />
           <CardContent sx={{ pt: 0 }}>
@@ -121,6 +121,7 @@ export const AccountProfileDetailsPharmacist = ({ values, setValues }) => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     value={formik.values.FirstName}
+                    disabled
                   />
                 </Grid>
             
@@ -137,6 +138,7 @@ export const AccountProfileDetailsPharmacist = ({ values, setValues }) => {
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}
                     value={formik.values.Username}
+                    disabled
                   />
                 </Grid>
                 <Grid
@@ -153,6 +155,7 @@ export const AccountProfileDetailsPharmacist = ({ values, setValues }) => {
                     onChange={formik.handleChange}
                     type="email"
                     value={formik.values.Email}
+                    disabled
                   />
                 </Grid>
                 
@@ -184,6 +187,7 @@ export const AccountProfileDetailsPharmacist = ({ values, setValues }) => {
                         formik.setFieldValue("DateOfBirth", formattedValue);
                       }
                     }}
+                    disabled
                     type="date"
                     value={formik.values.DateOfBirth}
                     InputLabelProps={{ shrink: true }}
@@ -196,14 +200,9 @@ export const AccountProfileDetailsPharmacist = ({ values, setValues }) => {
             </Box>
           </CardContent>
           <Divider />
-          <CardActions sx={{ justifyContent: 'flex-end' }}>
-            <Button variant="contained" type="submit">
-              Save
-            </Button>
-          </CardActions>
+          
         </Card>
       </form>
-      <br />
       
     </div>
   );
