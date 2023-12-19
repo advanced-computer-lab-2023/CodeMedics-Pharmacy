@@ -3,7 +3,19 @@ import NextLink from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { Alert, Box, Button, Link, Stack, TextField, Typography } from '@mui/material';
+import {
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  FormHelperText,
+  Box,
+  Button,
+  Link,
+  Stack,
+  TextField,
+  Typography, Alert
+} from '@mui/material';
 import { useAuth } from 'src/hooks/use-auth';
 import { Layout as AuthLayout } from 'src/layouts/auth/layout';
 import axios from 'axios';
@@ -13,8 +25,21 @@ import React from 'react';
 const Page = () => {
   const router = useRouter();
   const auth = useAuth();
-  const [showErrorAlert, setShowErrorAlert] = React.useState(false);
-  const [error, setError] = React.useState('');
+  const [showErrorAlert, setShowErrorAlert] = useState(false);
+  const Gender = [
+    {
+      value: 'Male',
+      label: 'Male'
+    },
+    {
+      value: 'Female',
+      label: 'Female'
+    },
+    {
+      value: 'Other',
+      label: 'Other'
+    }
+  ];
   const formik = useFormik({
     initialValues: {
       FirstName: '',
@@ -22,10 +47,12 @@ const Page = () => {
       Username: '',
       Password: '',
       Email: '',
-      NationalID: '',
       DateOfBirth: '',
       Number: '',
-      Gender: ''
+      Gender: '',
+      EmergencyContactName: '',
+      EmergencyContactNumber: '',
+      EmergencyContactRelation: ''
     },
     validationSchema: Yup.object({
       FirstName: Yup
@@ -49,45 +76,59 @@ const Page = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      NationalID: Yup
-      .string()
-      .max(255)
-      .required('National ID is required'),
       DateOfBirth: Yup
         .date()
         .required('Date of birth is required'),
       Number: Yup
-      .string()
-      .max(255)
-      .required('Phone number is required'),
+        .string()
+        .max(255)
+        .required('Number is required'),
       Gender: Yup
-      .string()
-      .max(255)
-      .required('Gender is required')
+        .string()
+        .max(255)
+        .required('Gender is required'),
+      EmergencyContactName: Yup
+        .string()
+        .max(255)
+        .required('Emergency Contact Name is required'),
+      EmergencyContactNumber: Yup
+        .string()
+        .max(255)
+        .required('Emergency Contact Number is required'),
+      EmergencyContactRelation: Yup
+        .string()
+        .max(255)
+        .required('Emergency Contact Relation is required')
     }),
     onSubmit: async (values, helpers) => {
       try {
-        const body = {"FirstName": values.FirstName,
-        "LastName": values.LastName, 
-        "Username":values.Username , 
-        "Password": values.Password,
-        "Email": values.Email,
-        "NationalID": values.NationalID,
-        "DateOfBirth": values.DateOfBirth,
-        "Number": values.Number,
-        "Gender": values.Gender };
-          await axios.post('http://localhost:8001/registerPatient' , body) // done new Route
-          .then((res) => {
-              return res['data'];
-            })
-            .then((data) => {
-              router.push('/auth/login');
-            });
+        const body = {
+          'FirstName': values.FirstName,
+          'LastName': values.LastName,
+          'Username': values.Username,
+          'Password': values.Password,
+          'Email': values.Email,
+          'DateOfBirth': values.DateOfBirth,
+          'Number': values.Number,
+          'Gender': values.Gender,
+          'EmergencyContactName': values.EmergencyContactName,
+          'EmergencyContactNumber': values.EmergencyContactNumber,
+          'EmergencyContactRelation': values.EmergencyContactRelation
+        };
+        await axios.post('http://localhost:8001/registerPatient', body)
+                   .then((res) => {
+                     if (res.status != 200) {
+                       throw new Error(res.data.message);
+                     }
+                     return res['data'];
+                   })
+                   .then((data) => {
+                     router.push('/auth/login');
+                   });
       } catch (err) {
-        setError(err.response.data);
         if (err.response.status == 400) { setShowErrorAlert(true);}
         helpers.setStatus({ success: false });
-        helpers.setErrors({ Submit: err.response.data.error});
+        helpers.setErrors({ Submit: err.response.data.message });
         helpers.setSubmitting(false);
       }
     }
@@ -140,7 +181,7 @@ const Page = () => {
                 </Link>
               </Typography>
               {showErrorAlert && (
-                <Alert severity="error">{error}</Alert>
+                <Alert severity="error">Please choose a different Username or Email!</Alert>
               )}
             </Stack>
             <form
@@ -201,16 +242,6 @@ const Page = () => {
                   value={formik.values.Email}
                 />
                 <TextField
-                  error={!!(formik.touched.NationalID && formik.errors.NationalID)}
-                  fullWidth
-                  helperText={formik.touched.NationalID && formik.errors.NationalID}
-                  label="National ID"
-                  name="NationalID"
-                  onBlur={formik.handleBlur}
-                  onChange={formik.handleChange}
-                  value={formik.values.NationalID}
-                />
-                <TextField
                   error={!!(formik.touched.DateOfBirth && formik.errors.DateOfBirth)}
                   fullWidth
                   helperText={formik.touched.DateOfBirth && formik.errors.DateOfBirth}
@@ -218,21 +249,21 @@ const Page = () => {
                   name="DateOfBirth"
                   onBlur={formik.handleBlur}
                   onChange={(event) => {
-                  const value = event.target.value;
-                  if (value.length <= 10) { // Limit the total length to 10 characters
-                    // Allow only digits (0-9) in the "yyyy" part
-                    const yyyy = value.slice(0, 4).replace(/[^0-9]/g, '');
+                    const value = event.target.value;
+                    if (value.length <= 10) { // Limit the total length to 10 characters
+                      // Allow only digits (0-9) in the "yyyy" part
+                      const yyyy = value.slice(0, 4).replace(/[^0-9]/g, '');
 
-                    // Ensure "mm" and "dd" are not affected
-                    const mmdd = value.slice(4);
+                      // Ensure "mm" and "dd" are not affected
+                      const mmdd = value.slice(4);
 
-                    // Combine the parts and format
-                    const formattedValue = `${yyyy}${mmdd}`;
+                      // Combine the parts and format
+                      const formattedValue = `${yyyy}${mmdd}`;
 
-                    // Update the formik value
-                    formik.setFieldValue("DateOfBirth", formattedValue);
-                  }
-                }}
+                      // Update the formik value
+                      formik.setFieldValue('DateOfBirth', formattedValue);
+                    }
+                  }}
                   type="date"
                   value={formik.values.DateOfBirth}
                   InputLabelProps={{ shrink: true }}
@@ -248,14 +279,58 @@ const Page = () => {
                   value={formik.values.Number}
                 />
                 <TextField
-                  error={!!(formik.touched.Gender && formik.errors.Gender)}
-                  fullWidth
-                  helperText={formik.touched.Gender && formik.errors.Gender}
-                  label="Gender"
+                  sx={{ width: 500 }}
                   name="Gender"
+                  select
+                  label="Gender"
+                  defaultValue=""
+                  helperText=""
+                  onChange={(event) => {
+                    formik.handleChange(event);
+                    formik.setFieldValue('Gender', event.target.value);
+                  }}
+                >
+                  {Gender.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+                <TextField
+                  error={!!(formik.touched.EmergencyContactName
+                    && formik.errors.EmergencyContactName)}
+                  fullWidth
+                  helperText={formik.touched.EmergencyContactName
+                    && formik.errors.EmergencyContactName}
+                  label="Emergency Contact Name"
+                  name="EmergencyContactName"
                   onBlur={formik.handleBlur}
                   onChange={formik.handleChange}
-                  value={formik.values.Gender}
+                  value={formik.values.EmergencyContactName}
+                />
+                <TextField
+                  error={!!(formik.touched.EmergencyContactNumber
+                    && formik.errors.EmergencyContactNumber)}
+                  fullWidth
+                  helperText={formik.touched.EmergencyContactNumber
+                    && formik.errors.EmergencyContactNumber}
+                  label="Emergency Contact Number"
+                  name="EmergencyContactNumber"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.EmergencyContactNumber}
+                />
+                <TextField
+                  error={!!(formik.touched.EmergencyContactRelation
+                    && formik.errors.EmergencyContactRelation)}
+                  fullWidth
+                  helperText={formik.touched.EmergencyContactRelation
+                    && formik.errors.EmergencyContactRelation}
+                  label="Emergency Contact Relation"
+                  name="EmergencyContactRelation"
+                  onBlur={formik.handleBlur}
+                  onChange={formik.handleChange}
+                  value={formik.values.EmergencyContactRelation}
                 />
               </Stack>
               {formik.errors.Submit && (
@@ -270,7 +345,9 @@ const Page = () => {
               <Button
                 fullWidth
                 size="large"
-                sx={{ mt: 3 }}
+                sx={{
+                  mt: 5
+                }}
                 type="submit"
                 variant="contained"
               >
