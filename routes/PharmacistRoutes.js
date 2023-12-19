@@ -4,12 +4,14 @@ const {registerPharmacist, getPharmacits, addSalary} = require('../controllers/P
 const {getPharmacistMessages} = require('../controllers/Pharmacist/getPharmacistMessages');
 const upload = require('../config/multerConfig');
 const {getOrders} = require('../controllers/Pharmacist/getOrders');
+const {completeOrder} = require('../controllers/Pharmacist/completeOrder');
 
 router.post('/register', upload.fields([
     {name: 'IDDocument', maxCount: 1},
     {name: 'pharmacyDegree', maxCount: 1},
     {name: 'workingLicense', maxCount: 1}
 ]), registerPharmacist);
+router.patch('/completeOrder', completeOrder);
 router.get('/getPharmacits', getPharmacits);
 router.patch('/addSalary', addSalary);
 router.get('/getPharmacistMessages', getPharmacistMessages);

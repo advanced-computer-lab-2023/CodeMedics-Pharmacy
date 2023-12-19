@@ -19,6 +19,9 @@ import { PropertyListItem } from '../../../../components/property-list-item';
 import { SeverityPill } from '../../../../components/severity-pill';
 import { Scrollbar } from '../../../../components/scrollbar';
 import { subDays, subHours } from 'date-fns';
+import axios from 'axios';
+import  Message  from 'src/components/Message';
+import { useState } from 'react';
 
 const statusMap = {
   canceled: 'error',
@@ -41,9 +44,22 @@ export const OrderDetails = (props) => {
   const createdAt = format(createdAt1, 'dd/MM/yyyy HH:mm');
   const statusColor = statusMap[order.status];
   const totalAmount = numeral(order.totalAmount).format(`${order.currency}0,0.00`);
+  const [message, setMessage] = useState(false);
+
+  const handleComplete = () => {
+    axios.patch('http://localhost:8001/pharmacist/completeOrder', {orderId: order.id}, {withCredentials: true})
+    .then((res) => {
+      setMessage(true);
+      
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  };
 
   return (
     <Stack spacing={6}>
+      <Message condition={message} setCondition={setMessage} title={"Success"} message={"Order Completed Successfully"} buttonAction={"Ok"} onClick={() => {setMessage(false);window.location.reload()}}/>
       <Stack spacing={3}>
         <Stack
           alignItems="center"
@@ -152,21 +168,13 @@ export const OrderDetails = (props) => {
           justifyContent="flex-end"
           spacing={2}
         >
-          <Button
-            onClick={onApprove}
+          {order.status === 'ordered' && <Button
+            onClick={handleComplete}
             size="small"
             variant="contained"
           >
-            Compelete
-          </Button>
-          <Button
-            color="error"
-            onClick={onReject}
-            size="small"
-            variant="outlined"
-          >
-            Reject
-          </Button>
+            Complete
+          </Button>}
         </Stack>
       </Stack>
       <Stack spacing={3}>
@@ -184,7 +192,7 @@ export const OrderDetails = (props) => {
                   Quantity
                 </TableCell>
                 <TableCell>
-                  Amount
+                  Price
                 </TableCell>
               </TableRow>
             </TableHead>

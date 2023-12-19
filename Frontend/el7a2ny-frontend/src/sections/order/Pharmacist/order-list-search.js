@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import SearchMdIcon from '@untitled-ui/icons-react/build/esm/SearchMd';
+import SearchMdIcon from 'src/icons/untitled-ui/duocolor/SearchRefraction';
 import {
   Box,
   Divider,
@@ -45,15 +45,13 @@ const sortOptions = [
 ];
 
 export const OrderListSearch = (props) => {
-  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc' } = props;
+  const { onFiltersChange, onSortChange, sortBy = 'createdAt', sortDir = 'asc', onSearchChange} = props;
   const queryRef = useRef(null);
   const [currentTab, setCurrentTab] = useState('all');
   const [filters, setFilters] = useState({
     query: undefined,
     status: undefined
   });
-
-  console.log('here in filters - - - - - > ',filters);
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
@@ -123,9 +121,9 @@ export const OrderListSearch = (props) => {
           <OutlinedInput
             defaultValue=""
             fullWidth
-            inputProps={{ ref: queryRef }}
             name="orderNumber"
             placeholder="Search by order number"
+            onChange={(event) => onSearchChange(event.target.value)}
             startAdornment={(
               <InputAdornment position="start">
                 <SvgIcon>
@@ -135,23 +133,6 @@ export const OrderListSearch = (props) => {
             )}
           />
         </Box>
-        <TextField
-          label="Sort By"
-          name="sort"
-          onChange={handleSortChange}
-          select
-          SelectProps={{ native: true }}
-          value={sortDir}
-        >
-          {sortOptions.map((option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </option>
-          ))}
-        </TextField>
       </Stack>
     </div>
   );

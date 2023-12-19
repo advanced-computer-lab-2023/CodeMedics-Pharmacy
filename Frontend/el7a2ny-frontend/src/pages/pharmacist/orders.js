@@ -10,6 +10,8 @@ import { OrderDrawer } from '../../sections/order/Pharmacist/order-drawer';
 import { OrderListContainer } from '../../sections/order/Pharmacist/order-list-container';
 import { OrderListSearch } from '../../sections/order/Pharmacist/order-list-search';
 import { OrderListTable } from '../../sections/order/Pharmacist/order-list-table';
+import { useSelection } from 'src/hooks/use-selection';
+import { applyPagination } from 'src/utils/apply-pagination';
 import axios from 'axios';
 const useSearch = () => {
   const [search, setSearch] = useState({
@@ -61,11 +63,52 @@ const useOrders = (search) => {
 };
 
 
+
+const useOrder = (data, page, rowsPerPage) => {
+  return useMemo(
+    () => {
+      return applyPagination(data, page, rowsPerPage);
+    },
+    [data, page, rowsPerPage]
+  );
+};
+
+const useOrderId = (order) => {
+  return useMemo(
+    () => {
+      return order.map((customer) => customer.id);
+    },
+    [order]
+  );
+};
+
+
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
   const { orders, ordersCount } = useOrders(search);
-  
+  const [allData , setAllData] = useState([]);
+  const [data , setData] = useState([]);
+  const [filteredData , setFilteredData] = useState([]);
+  const [searchData , setSearchData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const tableOrders = useOrder(data, page, rowsPerPage);
+  const tableOrdersIds = useOrderId(tableOrders);
+
+  useEffect(() => {
+    axios.get('http://localhost:8001/pharmacist/getOrders' , {withCredentials: true})
+    .then((response) => {
+      setAllData(response.data);
+      setData(response.data);
+      setFilteredData(response.data);
+      setSearchData(response.data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+    
+  }, []);
 
   const [drawer, setDrawer] = useState({
     isOpen: false,
@@ -76,42 +119,65 @@ const Page = () => {
       return undefined;
     }
 
-    return orders.find((order) => order.id === drawer.data);
-  }, [drawer, orders]);
+    return allData.find((order) => order.id === drawer.data);
+  }, [drawer, allData]);
 
   usePageView();
+  
+  const handleSearchChange = (str) => {
+    setSearchData(allData.filter((order) => order.number.toString().toLowerCase().includes(str)));
+  };
 
-  const handleFiltersChange = useCallback((filters) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      filters
-    }));
-  }, [updateSearch]);
+  const handleFiltersChange = (filters) => {
+    console.log('filter changed ',filters);
+    if(filters.status == undefined){
+      setFilteredData(allData);
+    }
+    else if(filters.status == 'ordered'){
+      setFilteredData(allData.filter((order) => order.status == 'ordered'));
+    }
+    else if(filters.status == 'completed'){
+      setFilteredData(allData.filter((order) => order.status == 'completed'));
+    }
+    else if(filters.status == 'canceled'){
+      setFilteredData(allData.filter((order) => order.status == 'canceled'));
+    }
+    else{
+      setFilteredData(allData);
+    }
+  };
+
+  useEffect(() => {
+    handleData();
+  }, [searchData, filteredData]);
+
+  const handleData = () => {
+    console.log('filteredData ',filteredData);
+    setData(allData.filter((order) => filteredData.includes(order) && searchData.includes(order))); //  
+  }
 
   const handleSortChange = useCallback((sortDir) => {
     updateSearch((prevState) => ({
       ...prevState,
       sortDir
     }));
-  }, [updateSearch]);
+  }, []);
 
-  const handlePageChange = useCallback((event, page) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      page
-    }));
-  }, [updateSearch]);
+  const handlePageChange = useCallback(
+    (event, value) => {
+      setPage(value);
+    },
+    []
+  );
 
-  const handleRowsPerPageChange = useCallback((event) => {
-    updateSearch((prevState) => ({
-      ...prevState,
-      rowsPerPage: parseInt(event.target.value, 10)
-    }));
-  }, [updateSearch]);
+  const handleRowsPerPageChange = useCallback(
+    (event) => {
+      setRowsPerPage(event.target.value);
+    },
+    []
+  );
 
   const handleOrderOpen = useCallback((orderId) => {
-    // Close drawer if is the same order
-
     if (drawer.isOpen && drawer.data === orderId) {
       setDrawer({
         isOpen: false,
@@ -119,7 +185,6 @@ const Page = () => {
       });
       return;
     }
-
     setDrawer({
       isOpen: true,
       data: orderId
@@ -132,18 +197,6 @@ const Page = () => {
       data: undefined
     });
   }, []);
-//   useEffect(() => {
-//     axios.get('http://localhost:8001/Pharmacist/getOrders', { withCredentials: true })
-//          .then((response) => {
-//            console.log(response.data)
-//            orders=response.data.flat();
-//            ordersCount=response.data.length;
-//
-//          }).catch((error) => {
-//       console.log(error);
-//     });
-//   }, []);// Months API CALL
-// console.log(orders);
   return (
     <>
       <Head>
@@ -204,19 +257,20 @@ const Page = () => {
             <OrderListSearch
               onFiltersChange={handleFiltersChange}
               onSortChange={handleSortChange}
+              onSearchChange={handleSearchChange}
               sortBy={search.sortBy}
               sortDir={search.sortDir}
             />
             <Divider />
-            <OrderListTable
+            {data.length > 0 && <OrderListTable
               onOrderSelect={handleOrderOpen}
               onPageChange={handlePageChange}
               onRowsPerPageChange={handleRowsPerPageChange}
-              orders={orders}
-              ordersCount={ordersCount}
-              page={search.page}
-              rowsPerPage={search.rowsPerPage}
-            />
+              orders={tableOrders}
+              ordersCount={data.length}
+              page={page}
+              rowsPerPage={rowsPerPage}
+            />}
           </OrderListContainer>
           <OrderDrawer
             container={rootRef.current}

@@ -52,8 +52,7 @@ export const OrderListSearch = (props) => {
     query: undefined,
     status: undefined
   });
-
-  console.log('here in filters - - - - - > ',filters);
+  
 
   const handleFiltersUpdate = useCallback(() => {
     onFiltersChange?.(filters);
