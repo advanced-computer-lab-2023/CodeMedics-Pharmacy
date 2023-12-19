@@ -2,6 +2,7 @@ import ChartBarIcon from '@heroicons/react/24/solid/ChartBarIcon';
 import CogIcon from '@heroicons/react/24/solid/CogIcon';
 import LockClosedIcon from '@heroicons/react/24/solid/LockClosedIcon';
 import ShoppingBagIcon from '@heroicons/react/24/solid/ShoppingBagIcon';
+import ChatBubbleLeftRightIcon from '@heroicons/react/24/solid/ChatBubbleLeftRightIcon';
 import UserIcon from '@heroicons/react/24/solid/UserIcon';
 import UserPlusIcon from '@heroicons/react/24/solid/UserPlusIcon';
 import UsersIcon from '@heroicons/react/24/solid/UsersIcon';
@@ -45,7 +46,7 @@ export const items = [
     path: '/pharmacist/chat',
     icon: (
       <SvgIcon fontSize="small">
-        <MessageChatSquareIcon   />
+        <ChatBubbleLeftRightIcon   />
       </SvgIcon>
     )
   },

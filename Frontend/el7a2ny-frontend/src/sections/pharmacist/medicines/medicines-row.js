@@ -180,25 +180,7 @@ export const  Row = (props) => {
                             // onChange={formik.handleChange}
                             value={medicine.sales}
                        />
-                <Stack spacing={2} direction="row" sx={{mt: 3}}>
-                    <Button
-                        size="large"
-                        sx={{  height: 40}}
-                        type="submit"
-                        variant="contained"
-                    >
-                        Update
-                    </Button>
-                    <Button
-                        size="large"
-                        sx={{  height: 40 , borderColor: 'primary' }}
-                        variant='outlined'
-                        type='submit'
-                        onClick={() => {setOpen(!open)}}
-                    >
-                        Cancel
-                    </Button>
-                </Stack>
+                
               </Box> 
             </Collapse>
           </TableCell>
