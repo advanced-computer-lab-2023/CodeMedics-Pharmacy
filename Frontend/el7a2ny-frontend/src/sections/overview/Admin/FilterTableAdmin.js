@@ -80,8 +80,8 @@ const Graphic = () => {
       }}
     >
       <Chart
-        width="200"
-        height="54"
+        width={200}
+        height={54}
         options={chartOptions}
         series={chartSeries}
         type="line"

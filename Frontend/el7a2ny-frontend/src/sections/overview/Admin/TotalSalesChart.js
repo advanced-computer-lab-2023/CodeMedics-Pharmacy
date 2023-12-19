@@ -5,7 +5,7 @@ import { Chart } from '../../../components/chart';
 import { Scrollbar } from '../../../components/scrollbar';
 import PropTypes from 'prop-types';
 
-const useChartOptions = () => {
+const useChartOptions = (months) => {
   const theme = useTheme();
 
   return {
@@ -63,20 +63,7 @@ const useChartOptions = () => {
       axisTicks: {
         show: false
       },
-      categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
-      ],
+      categories: months,
       labels: {
         offsetY: 5,
         style: {
@@ -97,8 +84,8 @@ const useChartOptions = () => {
 };
 
 export const TotalSalesChart = (props) => {
-  const { chartSeries } = props;
-  const chartOptions = useChartOptions();
+  const { chartSeries, months} = props;
+  const chartOptions = useChartOptions(months);
 
   return (
     <Box
@@ -148,5 +135,6 @@ TotalSalesChart.prototype = {
   chartSeries: PropTypes.arrayOf(PropTypes.shape({
     name: PropTypes.string,
     data: PropTypes.arrayOf(PropTypes.number)
-  }))
+  })),
+  months: PropTypes.arrayOf(PropTypes.string).isRequired
 };

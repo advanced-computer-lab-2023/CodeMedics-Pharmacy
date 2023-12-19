@@ -55,7 +55,7 @@ const getSalesData = async (month, year) => {
     return Orders.aggregate([
         {
             $match: {
-                status: "Completed",
+                status: "completed",
                 createdAt: {
                     $gte: startDate,
                     $lt: endDate
@@ -100,7 +100,7 @@ const getSalesDataByMedicine = async (req, res) => {
                                         {
                                             $eq: [
                                                 "$status",
-                                                "Completed"
+                                                "completed"
                                             ]
                                         },
                                         {

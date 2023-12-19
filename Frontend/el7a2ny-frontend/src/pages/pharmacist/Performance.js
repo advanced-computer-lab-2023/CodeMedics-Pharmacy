@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { Box, Container, Typography, Unstable_Grid2 as Grid } from '@mui/material';
-import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
+import { Layout as DashboardLayout } from 'src/layouts/dashboard/admin/layout';
 import { OverviewTotalSales } from 'src/sections/overview/Admin/overview-total-sales';
 import { OverviewTasksProgress } from 'src/sections/overview/overview-tasks-progress';
 import { OverviewTotalPatients } from 'src/sections/overview/Admin/overview-total-patients';
@@ -14,9 +14,9 @@ import { OverviewFilter } from '../../sections/overview/Admin/FilterTableAdmin';
 const Page = () => {
   const [currentMonth, setCurrentMonth] = useState([]);
   const [data, setData] = useState([]);
-  const [totalSalesArray, setTotalSalesArray] = useState([]);
+  const [totalSalesArray, setTotalSalesArray] = useState([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
   const [Products, setProducts] = useState([]);
-  const [filter, setFilter] = useState('Panadol');
+  const [filter, setFilter] = useState('none');
   const [filterData, setFilterData] = useState([]);
   useEffect(() => {
     axios.get('http://localhost:8001/admin/getSalesPerYear', { withCredentials: true })
@@ -61,24 +61,52 @@ const Page = () => {
       setFilterData(modifiedFilteredData.flat());
     } else {
       // If filter is 'None', set filterData to an empty array or handle it as needed
-      setFilterData([1, 1, 1]);
+      setFilterData([]);
     }
   }, [filter, Products]); // Filter Medicine Data
 
+  const totalPatients = currentMonth[0]?.totalPatients ?? 0;
+  const totalSales = currentMonth[0]?.totalSales ?? 0;
+  const totalCompletedOrders = currentMonth[0]?.totalCompletedOrders ?? 0;
 
-  const totalPatients = currentMonth[0]?.totalPatients;
-  const totalSales = currentMonth[0]?.totalSales;
-  const totalCompletedOrders = currentMonth[0]?.totalCompletedOrders;
-
-  const totalPatientsLastMonth = data['Last Month']?.totalPatients;
-  const totalSalesLastMonth = data['Last Month']?.totalSales;
-  const totalCompletedOrdersLastMonth = data['Last Month']?.totalCompletedOrders;
+  const totalPatientsLastMonth = data['Last Month']?.totalPatients ?? 1;
+  const totalSalesLastMonth = data['Last Month']?.totalSales ?? 1;
+  const totalCompletedOrdersLastMonth = data['Last Month']?.totalCompletedOrders ?? 1;
 
   const SalesDifference = totalSales / totalSalesLastMonth;
   const PatientsDifference = totalPatients / totalPatientsLastMonth;
   const CompletedOrdersDifference = totalCompletedOrders / totalCompletedOrdersLastMonth;
+  const months = [];
 
-  if (!totalSalesArray.length || totalSalesArray == 0 || !totalSalesArray || !filterData) {
+  if (data) {
+    const keys = Object.keys(data);
+
+    for (const month of keys) {
+      months.push(month);
+    }
+  }
+
+  const currentDate = new Date();
+  const currentMonthName = currentDate.toLocaleString('default', { month: 'long' });
+
+// Get the last month name
+  const lastMonthDate = new Date();
+  lastMonthDate.setMonth(currentDate.getMonth() - 1);
+  const lastMonthName = lastMonthDate.toLocaleString('default', { month: 'long' });
+
+// Iterate through months array and replace labels
+  const labels = months.reverse().map(label => {
+    if (label === 'Last Month') {
+      return lastMonthName;
+    } else {
+      return label;
+    }
+  });
+  if (currentMonth && !labels.includes(currentMonthName)) {
+    labels.push(currentMonthName);
+  }
+
+  if (!totalSalesArray.length || !filterData) {
     return null;
   }
 
@@ -96,8 +124,6 @@ const Page = () => {
           py: 8
         }}
       >
-        <Typography variant="h3">
-        </Typography>
         <Container maxWidth="xl">
           <Grid
             container
@@ -150,6 +176,7 @@ const Page = () => {
                     data: totalSalesArray
                   }
                 ]}
+                months={labels}
               /></Grid>
             <Grid
               xs={12}
@@ -182,3 +209,4 @@ Page.getLayout = (page) => (
 );
 
 export default Page;
+

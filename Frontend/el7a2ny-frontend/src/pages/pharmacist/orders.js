@@ -11,7 +11,6 @@ import { OrderListContainer } from '../../sections/order/order-list-container';
 import { OrderListSearch } from '../../sections/order/order-list-search';
 import { OrderListTable } from '../../sections/order/order-list-table';
 import axios from 'axios';
-
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -61,10 +60,11 @@ const useOrders = (search) => {
   return state;
 };
 
+
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
-  const { orders, ordersCount } = useOrders(search);
+  let { orders, ordersCount } = useOrders(search);
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined
@@ -130,7 +130,18 @@ const Page = () => {
       data: undefined
     });
   }, []);
-
+//   useEffect(() => {
+//     axios.get('http://localhost:8001/Pharmacist/getOrders', { withCredentials: true })
+//          .then((response) => {
+//            console.log(response.data)
+//            orders=response.data.flat();
+//            ordersCount=response.data.length;
+//
+//          }).catch((error) => {
+//       console.log(error);
+//     });
+//   }, []);// Months API CALL
+// console.log(orders);
   return (
     <>
       <Head>
