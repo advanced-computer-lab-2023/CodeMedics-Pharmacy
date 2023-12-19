@@ -65,33 +65,12 @@ export const TopNav = (props) => {
                 </SvgIcon>
               </IconButton>
             )}
-            <Tooltip title="Search">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <MagnifyingGlassIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
           </Stack>
           <Stack
             alignItems="center"
             direction="row"
             spacing={2}
-          >
-            <Tooltip title="Contacts">
-              <IconButton>
-                <SvgIcon fontSize="small">
-                  <UsersIcon />
-                </SvgIcon>
-              </IconButton>
-            </Tooltip>
-            <Tooltip title="Shopping Cart">
-              <IconButton>
-                  <SvgIcon fontSize="small">
-                    <ShoppingBagIcon />
-                  </SvgIcon>
-              </IconButton>
-            </Tooltip>
+          > 
             <Avatar
               onClick={accountPopover.handleOpen}
               ref={accountPopover.anchorRef}
