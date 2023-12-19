@@ -34,7 +34,10 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 const axios = require('axios');
 import FileSaver from 'file-saver';
+import Message from 'src/components/Message';
 export const Row = (props) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const { row: request, index: index } = props;
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -44,35 +47,40 @@ export const Row = (props) => {
       Username: request.Username,
       Email: request.Email
     })
-         .then((res) => {
-           if (res.status == 200) {
-             console.log('Accepted');
-             router.refresh();
-           }
-         })
-         .catch((err) => {
-           console.log(err);
-         });
+      .then((res) => {
+        if (res.status == 200) {
+          console.log('Accepted');
+          router.refresh();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setShowError(true);
+        setErrorMessage(err.response.data.message);
+      });
   };
   const HandleReject = () => {
     axios.post('http://localhost:8001/admin/rejectPharmacist', { // done new Route
       Username: request.Username,
       Email: request.Email
     })
-         .then((res) => {
-           if (res.status == 200) {
-             router.refresh();
-           }
-         })
-         .catch((err) => {
-           console.log(err);
-         });
+      .then((res) => {
+        if (res.status == 200) {
+          router.refresh();
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setShowError(true);
+        setErrorMessage(err.response.data.message);
+      });
   };
   const handleFileDownload = (fileName) => {
     FileSaver.saveAs(`/assets/products/${fileName}`, `${fileName}`);
   };
   return (
     <Fragment>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell padding="normal">
           <IconButton
@@ -82,7 +90,7 @@ export const Row = (props) => {
             }}
           >
             <SvgIcon>
-              {!open ? <ChevronRightIcon/> : <ChevronDownIcon/>}
+              {!open ? <ChevronRightIcon /> : <ChevronDownIcon />}
             </SvgIcon>
           </IconButton>
         </TableCell>

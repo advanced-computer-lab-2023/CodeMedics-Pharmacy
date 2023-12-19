@@ -25,14 +25,17 @@ import { useState } from 'react';
 import React from 'react';
 import 'reactjs-popup/dist/index.css';
 import axios from 'axios';
+import Message from 'src/components/Message';
 
 export const PharmacistsTable = (props) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     count = 0,
     items = [],
     onDeselectAll,
     onDeselectOne,
-    onPageChange = () => {},
+    onPageChange = () => { },
     onRowsPerPageChange,
     onSelectAll,
     onSelectOne,
@@ -44,12 +47,18 @@ export const PharmacistsTable = (props) => {
   const [isOpenDelete, setOpenDelete] = useState(null);
 
   const addSalary = async (username) => {
-    await axios.patch(`http://localhost:8001/pharmacist/addSalary?username=${username}`);
-    window.alert("Salary added successfully");
+    try {
+      await axios.patch(`http://localhost:8001/pharmacist/addSalary?username=${username}`);
+      window.alert("Salary added successfully");
+    } catch (err) {
+      setShowError(true);
+      setErrorMessage(err.response.data.message);
+    }
   };
 
   return (
     <Card>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
@@ -138,7 +147,7 @@ export const PharmacistsTable = (props) => {
                         }}
                       >
                         <SvgIcon fontSize="small">
-                          <Xmark/>
+                          <Xmark />
                         </SvgIcon>
                       </IconButton>
                       <IconButton
@@ -147,20 +156,20 @@ export const PharmacistsTable = (props) => {
                         }}
                       >
                         <SvgIcon fontSize="small">
-                          <PencilIcon/>
+                          <PencilIcon />
                         </SvgIcon>
                       </IconButton>
                       <PharmacistDeletePopup width={'25%'} height={'15vh'}
-                                             isOpenDelete={isOpenDelete === customer.Username}
-                                             items={customer.Name}
-                                             onClose={() => setOpenDelete(null)}
-                                             username={customer.Username}/>
+                        isOpenDelete={isOpenDelete === customer.Username}
+                        items={customer.Name}
+                        onClose={() => setOpenDelete(null)}
+                        username={customer.Username} />
                     </TableCell>
                     <TableCell>
-                      <Button 
+                      <Button
                         variant="text"
-                        color="primary" 
-                        onClick={() => {addSalary(customer.Username);}}
+                        color="primary"
+                        onClick={() => { addSalary(customer.Username); }}
                       >
                         Add Salary
                       </Button>

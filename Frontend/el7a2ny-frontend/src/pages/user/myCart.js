@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import Head from 'next/head';
 import PlusIcon from '@heroicons/react/24/solid/PlusIcon';
-import { Box, Button, Container, Stack, SvgIcon, Typography, TextField, Divider,Alert } from '@mui/material';
+import { Box, Button, Container, Stack, SvgIcon, Typography, TextField, Divider, Alert } from '@mui/material';
 import { useSelection } from 'src/hooks/use-selection';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
 import { MedicinesTable } from 'src/sections/user/cart/medicines-table';
@@ -12,13 +12,16 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { set } from 'nprogress';
 import { bool } from 'prop-types';
+import Message from 'src/components/Message';
 
 const Page = () => {
   const [data, setData] = useState([]);
   const [cart, setCart] = useState([]);
-  const [alert , setAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
   const router = useRouter();
   const username = Cookies.get('username');
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     try {
@@ -31,34 +34,39 @@ const Page = () => {
         });
     } catch (err) {
       console.log(err);
+      setShowError(true);
+      setErrorMessage(err.message);
     }
   }, []);
 
-  const updateCart = async (productID , quantity) => {
+  const updateCart = async (productID, quantity) => {
     try {
       await axios.patch(`http://localhost:8001/patient/updateMedicine`, { // done new Route
-      Username: username,
-      productID: productID,
-      quantity,})
-          .then((res) => {
-              return res['data'];
-          })
-          .then((data) => {
-              console.log(data);
-          });
-  } catch (err) {
+        Username: username,
+        productID: productID,
+        quantity,
+      })
+        .then((res) => {
+          return res['data'];
+        })
+        .then((data) => {
+          console.log(data);
+        });
+    } catch (err) {
       console.log(err);
-  }
-  };  
+      setShowError(true);
+      setErrorMessage(err.message);
+    }
+  };
 
   const handleAddOne = (productID) => {
     const newCart = data.map((item) => {
       if (item.medicineID === productID) {
-        if(item.maxQuantity - 1 < 0){
+        if (item.maxQuantity - 1 < 0) {
           setAlert(true);
         }
-        else{
-          updateCart(productID , 1);
+        else {
+          updateCart(productID, 1);
           item.quantity += 1;
           item.maxQuantity -= 1;
         }
@@ -71,17 +79,17 @@ const Page = () => {
 
   const handleMinusOne = (productID) => {
     const newCart = [];
-    for(let i=0; i<data.length; i++){
-      if(data[i].medicineID === productID){
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].medicineID === productID) {
         console.log(data[i].medicineID);
         data[i].quantity -= 1;
         data[i].maxQuantity += 1;
-        updateCart(productID , -1);
-        if(data[i].quantity > 0){
+        updateCart(productID, -1);
+        if (data[i].quantity > 0) {
           newCart.push(data[i]);
         }
       }
-      else{
+      else {
         newCart.push(data[i]);
       }
     }
@@ -109,6 +117,7 @@ const Page = () => {
           My Cart
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{
@@ -118,8 +127,8 @@ const Page = () => {
       >
         <Container maxWidth="xl">
           <Stack spacing={3}>
-            {alert && <Box sx={{pl:40 , pr:65}}>
-              <Alert severity="warning" onClose={() => {setAlert(false)}}>
+            {alert && <Box sx={{ pl: 40, pr: 65 }}>
+              <Alert severity="warning" onClose={() => { setAlert(false) }}>
                 <strong>Warning!</strong> No Enough Items in Stock
               </Alert>
             </Box>}

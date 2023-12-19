@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import ArrowSmallLeftIcon from '@heroicons/react/24/solid/ArrowSmallLeftIcon';
 import ArrowRightIcon from '@heroicons/react/24/solid/ArrowRightIcon';
 import ShieldCheckIcon from '@heroicons/react/24/solid/ShieldCheckIcon';
+import Message from 'src/components/Message';
 
 import { 
     Box, 
@@ -37,6 +38,8 @@ const Page = () => {
 
   const [value, setValue] = React.useState('creditCard');
   const [credit , setCredit] = React.useState(true);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (event) => {
     setValue(event.target.value);
@@ -59,6 +62,8 @@ const Page = () => {
                 });
           } catch (err) {
             console.log(err)
+            setShowError(true);
+            setErrorMessage(err.response.data.message);
             // helpers.setStatus({ success: false });
             // helpers.setErrors({ Submit: err.response.data.message});
             // helpers.setSubmitting(false);
@@ -118,6 +123,7 @@ const Page = () => {
           Checkout
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{

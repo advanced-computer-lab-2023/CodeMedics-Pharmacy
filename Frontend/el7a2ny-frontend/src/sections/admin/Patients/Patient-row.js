@@ -31,10 +31,13 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { getInitials } from 'src/utils/get-initials';
 import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
+import Message from 'src/components/Message';
 const axios = require('axios');
 export const Row = (props) => {
   const { row: patient ,index:index} = props;
   const [open, setOpen] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const onRemovePatient = async (username) => {
     try {
       const removeResponse = await axios.delete('http://localhost:8001/admin/removePatient', { // done new Route
@@ -42,7 +45,8 @@ export const Row = (props) => {
       });
     } catch (error) {
       console.error('Error removing Pharmacist:', error);
-      throw error;
+      setShowError(true);
+      setErrorMessage(error.message);
     }
   };
   const router = useRouter();
@@ -50,14 +54,16 @@ export const Row = (props) => {
     try {
       await onRemovePatient(patient.Username);
     } catch (error) {
-      // Handle errors appropriately
-      console.error('Error removing patient:', error);
+      console.error('Error removing Pharmacist:', error);
+      setShowError(true);
+      setErrorMessage(error.message);
     }
     router.refresh();
   };
 
   return (
     <Fragment>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell padding="normal">
           <IconButton

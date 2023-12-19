@@ -16,7 +16,10 @@ import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useRouter } from 'next/navigation';
 const axios = require('axios');
+import Message from 'src/components/Message';
 export const PatientDeletePopup = (props) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     width = '25%',
     height = '15vh',
@@ -33,7 +36,8 @@ export const PatientDeletePopup = (props) => {
       });
     } catch (error) {
       console.error('Error removing Pharmacist:', error);
-      throw error;
+      setShowError(true);
+      setErrorMessage(error.message);
     }
   };
   const router=useRouter();
@@ -41,8 +45,9 @@ export const PatientDeletePopup = (props) => {
     try {
       await onRemovePatient(username);
     } catch (error) {
-      // Handle errors appropriately
-      console.error('Error removing patient:', error);
+      console.error('Error removing Pharmacist:', error);
+      setShowError(true);
+      setErrorMessage(error.message);
     }
     onClose();
     router.refresh();
@@ -67,6 +72,7 @@ export const PatientDeletePopup = (props) => {
         border: '5px solid #ccc'
       }}
     >
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box sx={{ minWidth: 300 }}>
         <Typography variant="h5" paragraph={true}>
           Are you sure you want to delete {items}?

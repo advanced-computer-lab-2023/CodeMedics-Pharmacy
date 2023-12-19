@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import { TotalSalesChart } from '../../sections/overview/Admin/TotalSalesChart';
 import { OverviewTopSelling } from '../../sections/overview/Admin/overview-top-selling';
 import { OverviewFilter } from '../../sections/overview/Admin/FilterTableAdmin';
+import Message from 'src/components/Message';
 
 const Page = () => {
   const [currentMonth, setCurrentMonth] = useState([]);
@@ -18,28 +19,34 @@ const Page = () => {
   const [Products, setProducts] = useState([]);
   const [filter, setFilter] = useState('none');
   const [filterData, setFilterData] = useState([]);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   useEffect(() => {
     axios.get('http://localhost:8001/admin/getSalesPerYear', { withCredentials: true })
-         .then((response) => {
+      .then((response) => {
 
-           setCurrentMonth(response.data['currentMonth']);
-           setData(response.data['pastMonths']);
+        setCurrentMonth(response.data['currentMonth']);
+        setData(response.data['pastMonths']);
 
-         }).catch((error) => {
-      console.log(error);
-    });
+      }).catch((error) => {
+        console.log(error);
+        setShowError(true);
+        setErrorMessage(error.response.data.message);
+      });
   }, []);// Months API CALL
   useEffect(() => {
     axios.get('http://localhost:8001/admin/getSalesDataByMedicine', { withCredentials: true })
-         .then((response) => {
-           // Sort the response.data array based on the "totalQuantity" property in descending order
-           const sortedData = response.data.sort((a, b) => b.totalQuantity - a.totalQuantity);
+      .then((response) => {
+        // Sort the response.data array based on the "totalQuantity" property in descending order
+        const sortedData = response.data.sort((a, b) => b.totalQuantity - a.totalQuantity);
 
-           setProducts(sortedData);
-         })
-         .catch((error) => {
-           console.log(error);
-         });
+        setProducts(sortedData);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowError(true);
+        setErrorMessage(error.response.data.message);
+      });
   }, []); // Products API CALL
   useEffect(() => {
     const salesArray = Object.values(data).map(month => month.totalSales);
@@ -54,10 +61,10 @@ const Page = () => {
         totalQuantity,
         totalAmount
       }) => [
-        availableQuantity,
-        totalQuantity,
-        totalAmount
-      ]);
+          availableQuantity,
+          totalQuantity,
+          totalAmount
+        ]);
       setFilterData(modifiedFilteredData.flat());
     } else {
       // If filter is 'None', set filterData to an empty array or handle it as needed
@@ -89,12 +96,12 @@ const Page = () => {
   const currentDate = new Date();
   const currentMonthName = currentDate.toLocaleString('default', { month: 'long' });
 
-// Get the last month name
+  // Get the last month name
   const lastMonthDate = new Date();
   lastMonthDate.setMonth(currentDate.getMonth() - 1);
   const lastMonthName = lastMonthDate.toLocaleString('default', { month: 'long' });
 
-// Iterate through months array and replace labels
+  // Iterate through months array and replace labels
   const labels = months.reverse().map(label => {
     if (label === 'Last Month') {
       return lastMonthName;
@@ -117,6 +124,7 @@ const Page = () => {
           Overview
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{
@@ -182,10 +190,10 @@ const Page = () => {
               xs={12}
               lg={4}
             >
-              <OverviewTopSelling products={Products}/>
+              <OverviewTopSelling products={Products} />
             </Grid>
             <Grid xs={12}
-                  lg={12}>
+              lg={12}>
               <OverviewFilter
                 setFilter={setFilter}
                 filter={filter}

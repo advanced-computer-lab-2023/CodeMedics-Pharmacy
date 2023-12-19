@@ -24,6 +24,7 @@ import {
   Typography,
 } from '@mui/material';
 import axios from 'axios';
+import Message from 'src/components/Message';
 
 export const OverviewLatestProducts = (props) => {
   const { products: initialProducts = [], sx } = props;
@@ -31,6 +32,8 @@ export const OverviewLatestProducts = (props) => {
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [viewingAlternatives, setViewingAlternatives] = useState(false);
   const username = Cookies.get("username");
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   // console.log(username);
   const handleQuantityChange = (event, productId) => {
     const updatedQuantities = { ...selectedQuantities };
@@ -51,6 +54,8 @@ export const OverviewLatestProducts = (props) => {
       setViewingAlternatives(true);
     } catch (error) {
       console.error('Error fetching alternative medicines:', error);
+      setShowError(true);
+      setErrorMessage(error.message);
     }
   };
 
@@ -63,6 +68,7 @@ export const OverviewLatestProducts = (props) => {
  
   return (
     <CardContent>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         display="grid"
         gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))"

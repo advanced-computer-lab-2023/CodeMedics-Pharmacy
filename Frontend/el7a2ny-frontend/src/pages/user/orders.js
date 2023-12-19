@@ -14,6 +14,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { set } from 'lodash';
+import Message from 'src/components/Message';
 const now = new Date();
 
 
@@ -22,6 +23,8 @@ const Orders = () => {
   const[myOrders, setMyOrders] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const username = Cookies.get('username');
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   useEffect(() => {
     axios.get(`http://localhost:8001/patient/getOrders?username=`+username) // done new Route
       .then((res) => {
@@ -33,6 +36,8 @@ const Orders = () => {
       })
       .catch((err) => {
         console.log(err);
+        setShowError(true);
+        setErrorMessage(err.response.data.message);
       });
   }, []);
 
@@ -77,6 +82,7 @@ const Orders = () => {
         El7a2ny Pharmacy
       </title>
     </Head>
+    <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
     <Box
       component="main"
       sx={{

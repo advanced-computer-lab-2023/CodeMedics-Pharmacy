@@ -11,6 +11,7 @@ import { OrderListContainer } from '../../sections/order/Pharmacist/order-list-c
 import { OrderListSearch } from '../../sections/order/Pharmacist/order-list-search'; //Patient
 import { OrderListTable } from '../../sections/order/Pharmacist/order-list-table';//Patient
 import axios from 'axios';
+import Message from 'src/components/Message';
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -29,46 +30,51 @@ const useSearch = () => {
   };
 };
 
-const useOrders = (search) => {
-  const isMounted = useMounted();
-  const [state, setState] = useState({
-    orders: [],
-    ordersCount: 0
-  });
-
-  const getOrders = useCallback(async () => {
-    try {
-      const response = await axios.get('http://localhost:8001/pharmacist/getOrders' , {withCredentials: true});
-
-      if (isMounted()) {
-        setState({
-          orders: response.data,
-          ordersCount: response.data.length
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [search, isMounted]);
-
-  useEffect(() => {
-      getOrders();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
-
-  return state;
-};
-
 
 const Page = () => {
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
   let { orders, ordersCount } = useOrders(search);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined
   });
+
+  const useOrders = (search) => {
+    const isMounted = useMounted();
+    const [state, setState] = useState({
+      orders: [],
+      ordersCount: 0
+    });
+
+    const getOrders = useCallback(async () => {
+      try {
+        const response = await axios.get('http://localhost:8001/pharmacist/getOrders', { withCredentials: true });
+
+        if (isMounted()) {
+          setState({
+            orders: response.data,
+            ordersCount: response.data.length
+          });
+        }
+      } catch (err) {
+        console.error(err);
+        setShowError(true);
+        setErrorMessage(err.response.data.message);
+      }
+    }, [search, isMounted]);
+
+    useEffect(() => {
+      getOrders();
+    },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [search]);
+
+    return state;
+  };
+
   const currentOrder = useMemo(() => {
     if (!drawer.data) {
       return undefined;
@@ -130,18 +136,18 @@ const Page = () => {
       data: undefined
     });
   }, []);
-//   useEffect(() => {
-//     axios.get('http://localhost:8001/Pharmacist/getOrders', { withCredentials: true })
-//          .then((response) => {
-//            console.log(response.data)
-//            orders=response.data.flat();
-//            ordersCount=response.data.length;
-//
-//          }).catch((error) => {
-//       console.log(error);
-//     });
-//   }, []);// Months API CALL
-// console.log(orders);
+  //   useEffect(() => {
+  //     axios.get('http://localhost:8001/Pharmacist/getOrders', { withCredentials: true })
+  //          .then((response) => {
+  //            console.log(response.data)
+  //            orders=response.data.flat();
+  //            ordersCount=response.data.length;
+  //
+  //          }).catch((error) => {
+  //       console.log(error);
+  //     });
+  //   }, []);// Months API CALL
+  // console.log(orders);
   return (
     <>
       <Head>
@@ -149,6 +155,7 @@ const Page = () => {
           Orders
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Divider />
       <Box
         component="main"

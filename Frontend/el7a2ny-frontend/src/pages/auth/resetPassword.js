@@ -61,7 +61,9 @@ const Page = () => {
                         console.error('Failed to update password');
                     });
                 } catch (error) {
-                    console.error('An error occurred while updating the password', error);
+                    helpers.setSubmitting(false);
+                    helpers.setErrors({ submit: error.message });
+                    helpers.setStatus({ success: false });
                 }
             }
         }

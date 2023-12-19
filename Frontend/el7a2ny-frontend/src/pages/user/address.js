@@ -12,6 +12,7 @@ import Cookies from 'js-cookie';
 import axios from 'axios';
 import { set } from 'nprogress';
 import { bool } from 'prop-types';
+import Message from 'src/components/Message';
 
 const now = new Date();
 
@@ -42,6 +43,8 @@ const Page = () => {
   const customersSelection = useSelection(customersIds);
   const router = useRouter();
   const username = Cookies.get('username');
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     fetch(`http://localhost:8001/patient/getAddress?username=${username}`) // done new Route
@@ -54,6 +57,8 @@ const Page = () => {
       })
       .catch((err) => {
         console.log(err);
+        setShowError(true);
+        setErrorMessage(err.message);
       });
   }, []);
 
@@ -79,6 +84,7 @@ const Page = () => {
           My Addresses
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{

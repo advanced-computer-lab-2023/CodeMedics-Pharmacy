@@ -3,9 +3,12 @@ import { Box, Container, Typography } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import Message from 'src/components/Message';
 
 const Page = () => {
   const [notifications, setNotifications] = useState([]);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const fetchNotifications = async () => {
     try {
@@ -24,6 +27,8 @@ const Page = () => {
       setNotifications(messages.reverse());
     } catch (error) {
       console.log(error);
+      setShowError(true);
+      setErrorMessage(error.response.data.message);
     }
   };
   
@@ -45,6 +50,7 @@ const Page = () => {
       <Head>
         <title>notifications</title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{

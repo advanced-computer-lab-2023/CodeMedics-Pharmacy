@@ -15,9 +15,12 @@ import 'reactjs-popup/dist/index.css';
 import CheckIcon from '@mui/icons-material/Check';
 import CancelIcon from '@mui/icons-material/Cancel';
 import { useRouter } from 'next/navigation';
+import Message from 'src/components/Message';
 
 const axios = require('axios');
 export const PharmacistDeletePopup = (props) => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const {
     width = '25%',
     height = '15vh',
@@ -35,8 +38,8 @@ export const PharmacistDeletePopup = (props) => {
       });
       console.log('Pharmacist removed successfully.');
     } catch (error) {
-      console.error('Error removing Pharmacist:', error);
-      throw error;
+      setShowError(true);
+      setErrorMessage(error.message);
     }
   };
   const router = useRouter();
@@ -45,8 +48,8 @@ export const PharmacistDeletePopup = (props) => {
       console.log(username + ' button handle');
       await onRemovePharmacist(username);
     } catch (error) {
-      // Handle errors appropriately
-      console.error('Error removing patient:', error);
+      setShowError(true);
+      setErrorMessage(error.message);
     }
     onClose();
     router.refresh();
@@ -71,6 +74,7 @@ export const PharmacistDeletePopup = (props) => {
         border: '5px solid #ccc'
       }}
     >
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box sx={{ minWidth: 300 }}>
         <Stack direction="column" spacing={2}>
           <Typography variant="h6" paragraph={true}>

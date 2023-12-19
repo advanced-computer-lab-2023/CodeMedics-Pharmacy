@@ -33,6 +33,7 @@ import { deepOrange } from '@mui/material/colors';
 import { BillingAddress } from 'src/sections/user/Checkout/billingAddress';
 import { PaymentMethod } from 'src/sections/user/Checkout/paymentMethod';
 import { OrdersSummary } from 'src/sections/user/Checkout/ordersSummary';
+import Message from 'src/components/Message';
 
 
 
@@ -45,6 +46,8 @@ const Page = () => {
   const username = Cookies.get('username');
   const [addresses, setAddresses] = useState([]);
   const [address , setAddress] = useState(null);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   if(phase == '1'){
   console.log('here ----> in phase 1', address);
@@ -68,6 +71,8 @@ const Page = () => {
       })
       .catch((err) => {
         console.log(err);
+        setShowError(true);
+        setErrorMessage(err.message);
       });
   }, []);
   
@@ -89,6 +94,8 @@ const Page = () => {
     } catch (err) {
       console.log('here ---> 11  ');
       console.log(err);
+      setShowError(true);
+      setErrorMessage(err.message);
     }
   }
 
@@ -100,6 +107,7 @@ const Page = () => {
           Checkout
         </title>
       </Head>
+      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{
