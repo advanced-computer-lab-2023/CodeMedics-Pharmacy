@@ -28,7 +28,7 @@ export default function PaymentForm(props) {
     ).catch(error => {
       console.log('error here ---->', error);
       setShowError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.response.data.message);
     });
   }, [])
   useEffect(() => {
@@ -38,7 +38,7 @@ export default function PaymentForm(props) {
       .then((data) => setClientSecret(data.data.clientSecret)).catch((error) => {
         console.log(error);
         setShowError(true);
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
       });
   }, []);
 

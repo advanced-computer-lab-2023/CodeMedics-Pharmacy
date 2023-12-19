@@ -39,7 +39,7 @@ export const PharmacistDeletePopup = (props) => {
       console.log('Pharmacist removed successfully.');
     } catch (error) {
       setShowError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.response.data.message);
     }
   };
   const router = useRouter();
@@ -49,7 +49,7 @@ export const PharmacistDeletePopup = (props) => {
       await onRemovePharmacist(username);
     } catch (error) {
       setShowError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.response.data.message);
     }
     onClose();
     router.refresh();

@@ -53,7 +53,6 @@ export const OverviewLatestOrders = (props) => {
     } catch (error) {
       console.error('Error removing Pharmacist:', error);
       setShowError(true);
-      console.log(error);
       setErrorMessage(error.response.data.message);
     }
   };

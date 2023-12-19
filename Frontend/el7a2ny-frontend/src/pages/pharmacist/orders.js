@@ -79,7 +79,7 @@ const Page = () => {
       .catch((error) => {
         console.log(error);
         setShowError(true);
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
       });
 
   }, []);

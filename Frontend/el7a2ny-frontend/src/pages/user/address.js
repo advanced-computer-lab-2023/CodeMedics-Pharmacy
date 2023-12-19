@@ -58,7 +58,7 @@ const Page = () => {
       .catch((err) => {
         console.log(err);
         setShowError(true);
-        setErrorMessage(err.message);
+        setErrorMessage(err.response.data.message);
       });
   }, []);
 

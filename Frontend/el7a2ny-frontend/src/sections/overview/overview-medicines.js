@@ -55,7 +55,7 @@ export const OverviewLatestProducts = (props) => {
     } catch (error) {
       console.error('Error fetching alternative medicines:', error);
       setShowError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.response.data.message);
     }
   };
 

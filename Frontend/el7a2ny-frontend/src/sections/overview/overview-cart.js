@@ -47,7 +47,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
       .catch((error) => {
         console.error('Error fetching updated cart:', error);
         setShowError(true);
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
       });
   }, [cart]); 
 
@@ -80,7 +80,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
       .catch((error) => {
         console.error('Error updating product quantity:', error);
         setShowError(true);
-        setErrorMessage(error.message);
+        setErrorMessage(error.response.data.message);
       });
   };
 

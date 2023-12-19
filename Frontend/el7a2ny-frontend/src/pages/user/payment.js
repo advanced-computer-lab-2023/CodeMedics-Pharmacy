@@ -72,7 +72,7 @@ const Page = () => {
       .catch((err) => {
         console.log(err);
         setShowError(true);
-        setErrorMessage(err.message);
+        setErrorMessage(err.response.data.message);
       });
   }, []);
   
@@ -95,7 +95,7 @@ const Page = () => {
       console.log('here ---> 11  ');
       console.log(err);
       setShowError(true);
-      setErrorMessage(err.message);
+      setErrorMessage(err.response.data.message);
     }
   }
 

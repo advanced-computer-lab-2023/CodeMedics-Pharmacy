@@ -71,7 +71,7 @@ const Page = () => {
       } catch (err) {
         console.error(err);
         setShowError(true);
-        setErrorMessage(err.message);
+        setErrorMessage(err.response.data.message);
       }
     }, [search, isMounted]);
   
@@ -154,7 +154,7 @@ const Page = () => {
           Orders
         </title>
       </Head>
-      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" /> 
       <Divider />
       <Box
         component="main"

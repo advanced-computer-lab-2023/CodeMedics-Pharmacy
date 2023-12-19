@@ -46,7 +46,7 @@ export const Row = (props) => {
     } catch (error) {
       console.error('Error removing Pharmacist:', error);
       setShowError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.response.data.message);
     }
   };
   const router = useRouter();
@@ -56,7 +56,7 @@ export const Row = (props) => {
     } catch (error) {
       console.error('Error removing Pharmacist:', error);
       setShowError(true);
-      setErrorMessage(error.message);
+      setErrorMessage(error.response.data.message);
     }
     router.refresh();
   };
