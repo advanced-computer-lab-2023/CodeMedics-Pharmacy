@@ -17,7 +17,7 @@ const Page = () => {
   <>
     <Head>
       <title>
-        Settings | Devias Kit
+        El7a2ny Virtual Pharmacy
       </title>
     </Head>
     <Box
