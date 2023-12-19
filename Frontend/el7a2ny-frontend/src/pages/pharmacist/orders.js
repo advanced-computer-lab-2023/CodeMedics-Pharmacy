@@ -6,10 +6,10 @@ import { ordersApi } from '../../api/orders';
 import { useMounted } from '../../hooks/use-mounted';
 import { usePageView } from '../../hooks/use-page-view';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/pharmacist/layout';
-import { OrderDrawer } from '../../sections/order/order-drawer';
-import { OrderListContainer } from '../../sections/order/order-list-container';
-import { OrderListSearch } from '../../sections/order/order-list-search';
-import { OrderListTable } from '../../sections/order/order-list-table';
+import { OrderDrawer } from '../../sections/order/Pharmacist/order-drawer';
+import { OrderListContainer } from '../../sections/order/Pharmacist/order-list-container';
+import { OrderListSearch } from '../../sections/order/Pharmacist/order-list-search';
+import { OrderListTable } from '../../sections/order/Pharmacist/order-list-table';
 import axios from 'axios';
 const useSearch = () => {
   const [search, setSearch] = useState({
