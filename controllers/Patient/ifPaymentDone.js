@@ -46,7 +46,7 @@ const ifPaymentDone = async (req, res) => {
     let amount = await calculateAmount(medicines);
     var discount = 0;
     if (package) {
-        discount = package.SessionDiscount / 100;
+        discount = package.MedicineDiscount / 100;
     }
     amount -= amount * discount;
     amount = Math.max(amount, 0);

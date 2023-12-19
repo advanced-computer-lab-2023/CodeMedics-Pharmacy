@@ -1,33 +1,33 @@
 import Head from 'next/head';
 import { Box, Container, Stack, Typography, Unstable_Grid2 as Grid } from '@mui/material';
 import { Layout as DashboardLayout } from 'src/layouts/dashboard/user/layout';
-import { AccountProfile } from 'src/sections/patient/account-profile';
-import { AccountProfileDetails } from 'src/sections/patient/account-profile-details';
-import Cookies from 'js-cookie';
+import { AccountProfilePatient } from 'src/sections/account/account-profile-patient';
+import { AccountProfileDetailsPatient } from 'src/sections/account/account-profile-details-patient';
+
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
 import Message from 'src/components/Message';
+import Cookies from 'js-cookie';
 
-
-const username = Cookies.get('username');
 
 const Page = () => {
+  
   const [values, setValues] = useState({});
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
+  const username = Cookies.get('username');
   useEffect(() => {
-    axios.get(`http://localhost:8001/getMe?username=${username}`) // done new Route
+    axios.get(`http://localhost:8001/getMe?username=${username}`, {withCredentials: true})
       .then((req) => {
-        console.log(req.data);
         setValues(req.data);
       })
       .catch((err) => {
         console.log(err);
         setShowError(true);
-        setErrorMessage(err.response.data.message);
+        //setErrorMessage(err.response.data.message);
       });
   }, []);
+
   return(
   <>
     <Head>
@@ -35,7 +35,7 @@ const Page = () => {
         My Account
       </title>
     </Head>
-    <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
+    <Message condition={showError} setCondition={setShowError} title={"Error"} message={errorMessage} buttonAction={"Close"} />
     <Box
       component="main"
       sx={{
@@ -60,14 +60,14 @@ const Page = () => {
                 md={6}
                 lg={4}
               >
-                <AccountProfile data={values}/>
+              {Object.keys(values).length !==0 && <AccountProfilePatient user={values}/>}
               </Grid>
               <Grid
                 xs={12}
                 md={6}
                 lg={8}
               >
-                <AccountProfileDetails />
+              {Object.keys(values).length !==0 && <AccountProfileDetailsPatient values={values} setValues={setValues} />}
               </Grid>
             </Grid>
           </div>
@@ -75,8 +75,7 @@ const Page = () => {
       </Container>
     </Box>
   </>
-);
-}
+);}
 
 Page.getLayout = (page) => (
   <DashboardLayout>
