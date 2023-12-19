@@ -119,13 +119,21 @@ const notifyAllPharmacists = async (subject, text) => {
 const viewMedicines = async (req, res) => {
     try {
         //const medicines = await medicineModel.find({availableQuantity: {$gt: 0}});
-        const medicines = await medicineModel.find();
+        const medicines = await medicineModel.find({archived: false});
 
         if (!medicines || medicines.length === 0) {
             return res.status(404).json({ message: 'No medicines found.' });
         }
-
-        return res.status(200).json({ medicines });
+        const tmp = [];
+        const medicalUses = [{ value: 'None', label: 'None'}];
+        for (let i = 0; i < medicines.length; i++) {
+            const current = medicines[i];
+            if (!tmp.some((item) => item === current.medicalUse)) {
+                tmp.push(current.medicalUse);
+                medicalUses.push({value: current.medicalUse, label: current.medicalUse});
+            }
+        }
+        return res.status(200).json({ medicines , medicalUses});
     } catch (error) {
         console.error('Error fetching medicines:', error);
         return res.status(500).json({ message: 'Failed to fetch medicines.' });
@@ -161,12 +169,19 @@ const viewAlternativeMedicines = async (req, res) => {
 const viewMedicinesPharmacist = async (req, res) => {
     try {
         const medicines = await medicineModel.find();
-
         if (!medicines || medicines.length === 0) {
             return res.status(404).json({ message: 'No medicines found.' });
         }
-
-        return res.status(200).json({ medicines });
+        const tmp = [];
+        const medicalUses = [{ value: 'None', label: 'None'}];
+        for (let i = 0; i < medicines.length; i++) {
+            const current = medicines[i];
+            if (!tmp.some((item) => item === current.medicalUse)) {
+                tmp.push(current.medicalUse);
+                medicalUses.push({value: current.medicalUse, label: current.medicalUse});
+            }
+        }
+        return res.status(200).json({ medicines , medicalUses });
     } catch (error) {
         console.error('Error fetching medicines:', error);
         return res.status(500).json({ message: 'Failed to fetch medicines.' });

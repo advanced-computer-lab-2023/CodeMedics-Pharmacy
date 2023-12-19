@@ -11,7 +11,7 @@ import {
   TableRow,
   Typography
 } from '@mui/material';
-import { SeverityPill } from '../../components/severity-pill';
+import { SeverityPill } from '../../../components/severity-pill';
 
 const statusMap = {
   canceled: 'error',

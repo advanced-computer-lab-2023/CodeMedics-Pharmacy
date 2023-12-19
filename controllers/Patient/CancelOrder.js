@@ -7,8 +7,9 @@ const PharmacyWallet = require('../../models/PharmacyWallet');
 
 const cancelOrder = async(req, res) =>{
     try{
-        const orderId = req.query.orderId;
+        const orderId = req.body.orderId;
     const order = await Order.findOne({_id: orderId});
+    console.log('OMG    --->>  ',orderId);
     const patient = await Patient.findOne({_id: order.PatientId});
     const pharmacy = await PharmacyWallet.find();
     const package = await Package.findOne({ Name: patient.HealthPackage.membership });
@@ -19,13 +20,13 @@ const cancelOrder = async(req, res) =>{
     if(!order){
         res.status(200).json({message : "Order not found"});
     }
-    if(order.status == "Ordered"){
-        order.status = "Cancelled";
+    if(order.status == "ordered"){
+        order.status = "canceled";
         await order.save();
         for(const o of patient.Orders){
             // console.log(o._id, orderId, o._id == orderId);
             if(o._id == orderId){
-                o.status = "Cancelled";
+                o.status = "canceled";
                 await o.save();
                 break;
             }
@@ -48,10 +49,10 @@ const cancelOrder = async(req, res) =>{
         patient.Wallet += amount;   
         await patient.save();
         await pharmacyWallet.save();
-        res.status(200).json({message : "Order has been cancelled successfully"});
+        res.status(200).json({message : "Order has been canceled successfully"});
     }
     else{
-        res.status(200).json({message : "Order cannot be cancelled"});
+        res.status(200).json({message : "Order cannot be canceled"});
     }
     }catch(error){
         return res.status(500).json({message: "Error happened while cancelling order"});

@@ -56,34 +56,7 @@ const useOrderId = (order) => {
 const Page = () => {
   const [showError, setShowError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const rootRef = useRef(null);
-  const { search, updateSearch } = useSearch();
-  const { orders, ordersCount } = useOrders(search);
-  const [allData, setAllData] = useState([]);
-  const [data, setData] = useState([]);
-  const [filteredData, setFilteredData] = useState([]);
-  const [searchData, setSearchData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const tableOrders = useOrder(data, page, rowsPerPage);
-  const tableOrdersIds = useOrderId(tableOrders);
-
-  useEffect(() => {
-    axios.get('http://localhost:8001/pharmacist/getOrders', { withCredentials: true })
-      .then((response) => {
-        setAllData(response.data);
-        setData(response.data);
-        setFilteredData(response.data);
-        setSearchData(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-        setShowError(true);
-        setErrorMessage(error.response.data.message);
-      });
-
-  }, []);
-
+    
   const useOrders = (search) => {
     const isMounted = useMounted();
     const [state, setState] = useState({
@@ -114,6 +87,37 @@ const Page = () => {
 
     return state;
   };
+
+ 
+  const rootRef = useRef(null);
+  const { search, updateSearch } = useSearch();
+  const { orders, ordersCount } = useOrders(search);
+  const [allData, setAllData] = useState([]);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const tableOrders = useOrder(data, page, rowsPerPage);
+  const tableOrdersIds = useOrderId(tableOrders);
+
+  useEffect(() => {
+    axios.get('http://localhost:8001/pharmacist/getOrders', { withCredentials: true })
+      .then((response) => {
+        setAllData(response.data);
+        setData(response.data);
+        setFilteredData(response.data);
+        setSearchData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowError(true);
+        setErrorMessage(error.message);
+      });
+
+  }, []);
+
+  
 
   const [drawer, setDrawer] = useState({
     isOpen: false,
