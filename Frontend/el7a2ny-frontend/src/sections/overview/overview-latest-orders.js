@@ -19,6 +19,7 @@ import { Scrollbar } from 'src/components/scrollbar';
 import { SeverityPill } from 'src/components/severity-pill';
 import axios from 'axios';
 import Message from 'src/components/Message';
+import { useState } from 'react';
 
 const statusMap = {
   pending: 'warning',
