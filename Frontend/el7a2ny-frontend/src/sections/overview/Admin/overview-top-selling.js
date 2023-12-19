@@ -133,19 +133,6 @@ export const OverviewTopSelling = (props) => {
           </TableBody>
         </Table>
       </Scrollbar>
-      <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button
-          color="inherit"
-          endIcon={(
-            <SvgIcon>
-              <ArrowRightIcon />
-            </SvgIcon>
-          )}
-          size="small"
-        >
-          See All
-        </Button>
-      </CardActions>
     </Card>
   );
 };

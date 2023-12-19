@@ -10,6 +10,8 @@ import {
 import { useTheme } from '@mui/material/styles';
 import { Chart } from '../../../components/chart';
 import PropTypes from 'prop-types';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 const chartSeries = [
   {
     data: [0, 2000, 22, 3000, 13, 2000, 37, 21, 4500, 22, 600]
@@ -97,12 +99,25 @@ export const OverviewFilter = (props) => {
     'Quantity sold',
 
   ];
-const status = [
-    { value: 'Panadol', label: 'Panadol' },
-    { value: 'Catafast', label: 'Catafast' },
-    { value: 'Vitamin', label: 'Vitamin' },
-    { value: 'Calcium', label: 'Calcium' }
-  ]
+  const [medicines, setMedicines] = useState([]);
+
+  useEffect(() => {
+    axios.get('http://localhost:8001/Medicine/getMedicinesNames', { withCredentials: true })
+         .then((response) => {
+           setMedicines(response.data['medicineNames']);
+         })
+         .catch((error) => {
+           console.log(error);
+         });
+  }, []);
+
+
+  const status = medicines.map(medicine => ({
+    value: medicine,
+    label: medicine,
+  }));
+
+  console.log(status);
   return (
     <Box
       sx={{
@@ -122,7 +137,7 @@ const status = [
               select
               fullWidth
               label="Medicine"
-              defaultValue={status[0].value}
+              defaultValue={status[0]?.value}
               helperText=""
               onChange={(event) => setFilter(event.target.value)}
             >
@@ -172,12 +187,12 @@ const status = [
                 <Typography variant="h5">
                   {Data[0]}
                 </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="caption"
-                >
-                  vs. $1,214.20 last day
-                </Typography>
+                {/*<Typography*/}
+                {/*  color="text.secondary"*/}
+                {/*  variant="caption"*/}
+                {/*>*/}
+                {/*  vs. $1,214.20 last day*/}
+                {/*</Typography>*/}
               </div>
               <Graphic/>
             </Stack>
@@ -202,12 +217,12 @@ const status = [
                 <Typography variant="h5">
                   {Data[1]}
                 </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="caption"
-                >
-                  vs. $252.00 last day
-                </Typography>
+                {/*<Typography*/}
+                {/*  color="text.secondary"*/}
+                {/*  variant="caption"*/}
+                {/*>*/}
+                {/*  vs. $252.00 last day*/}
+                {/*</Typography>*/}
               </div>
               <Graphic/>
             </Stack>
@@ -232,12 +247,12 @@ const status = [
                 <Typography variant="h5">
                   {Data[2]}
                 </Typography>
-                <Typography
-                  color="text.secondary"
-                  variant="caption"
-                >
-                  vs. $683.00 last day
-                </Typography>
+                {/*<Typography*/}
+                {/*  color="text.secondary"*/}
+                {/*  variant="caption"*/}
+                {/*>*/}
+                {/*  vs. $683.00 last day*/}
+                {/*</Typography>*/}
               </div>
               <Graphic/>
             </Stack>
