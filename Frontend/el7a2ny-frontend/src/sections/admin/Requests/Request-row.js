@@ -80,7 +80,7 @@ export const Row = (props) => {
   };
   return (
     <Fragment>
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell padding="normal">
           <IconButton

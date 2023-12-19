@@ -72,7 +72,7 @@ export const PatientDeletePopup = (props) => {
         border: '5px solid #ccc'
       }}
     >
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
       <Box sx={{ minWidth: 300 }}>
         <Typography variant="h5" paragraph={true}>
           Are you sure you want to delete {items}?

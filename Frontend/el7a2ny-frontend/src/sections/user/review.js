@@ -92,7 +92,7 @@ export default function Review() {
       </div>
     ) : (
       <React.Fragment>
-        <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+        <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
         <Container component="main" maxWidth="sm" sx={{ mb: 4 }}>
           <Paper variant="outlined" sx={{ my: { xs: 3, md: 6 }, p: { xs: 2, md: 3 } }}></Paper>
           <Typography variant="h4" gutterBottom>

@@ -133,7 +133,7 @@ export const OverviewFilter = (props) => {
         borderRadius: 3
       }}
     >
-    <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" /> 
+    <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" /> 
     <Grid container>
       <Grid xs={12} md={4}>
         <Card sx={{ p: 2 }}>

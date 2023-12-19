@@ -32,24 +32,15 @@ const useSearch = () => {
 
 
 const Page = () => {
-  const [showError, setShowError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
   let { orders, ordersCount } = useOrders(search);
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [drawer, setDrawer] = useState({
     isOpen: false,
     data: undefined
   });
-  const currentOrder = useMemo(() => {
-    if (!drawer.data) {
-      return undefined;
-    }
-
-    return orders.find((order) => order.id === drawer.data);
-  }, [drawer, orders]);
-
-  usePageView();
 
   const useOrders = (search) => {
     const isMounted = useMounted();
@@ -57,11 +48,11 @@ const Page = () => {
       orders: [],
       ordersCount: 0
     });
-  
+
     const getOrders = useCallback(async () => {
       try {
-        const response = await axios.get('http://localhost:8001/pharmacist/getOrders' , {withCredentials: true});
-  
+        const response = await axios.get('http://localhost:8001/pharmacist/getOrders', { withCredentials: true });
+
         if (isMounted()) {
           setState({
             orders: response.data,
@@ -71,18 +62,28 @@ const Page = () => {
       } catch (err) {
         console.error(err);
         setShowError(true);
-        setErrorMessage(err.message);
+        setErrorMessage(err.response.data.message);
       }
     }, [search, isMounted]);
-  
+
     useEffect(() => {
-        getOrders();
-      },
+      getOrders();
+    },
       // eslint-disable-next-line react-hooks/exhaustive-deps
       [search]);
-  
+
     return state;
   };
+
+  const currentOrder = useMemo(() => {
+    if (!drawer.data) {
+      return undefined;
+    }
+
+    return orders.find((order) => order.id === drawer.data);
+  }, [drawer, orders]);
+
+  usePageView();
 
   const handleFiltersChange = useCallback((filters) => {
     updateSearch((prevState) => ({
@@ -135,18 +136,18 @@ const Page = () => {
       data: undefined
     });
   }, []);
-//   useEffect(() => {
-//     axios.get('http://localhost:8001/Pharmacist/getOrders', { withCredentials: true })
-//          .then((response) => {
-//            console.log(response.data)
-//            orders=response.data.flat();
-//            ordersCount=response.data.length;
-//
-//          }).catch((error) => {
-//       console.log(error);
-//     });
-//   }, []);// Months API CALL
-// console.log(orders);
+  //   useEffect(() => {
+  //     axios.get('http://localhost:8001/Pharmacist/getOrders', { withCredentials: true })
+  //          .then((response) => {
+  //            console.log(response.data)
+  //            orders=response.data.flat();
+  //            ordersCount=response.data.length;
+  //
+  //          }).catch((error) => {
+  //       console.log(error);
+  //     });
+  //   }, []);// Months API CALL
+  // console.log(orders);
   return (
     <>
       <Head>

@@ -110,7 +110,7 @@ export const OverviewLatestOrders = ({ orders, sx }) => {
 
   return (
     <CardContent>
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
       {cart.map((product) => (
         <Card
           key={product.medicineID}

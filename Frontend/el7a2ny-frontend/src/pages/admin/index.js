@@ -124,7 +124,7 @@ const Page = () => {
           Overview
         </title>
       </Head>
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
       <Box
         component="main"
         sx={{

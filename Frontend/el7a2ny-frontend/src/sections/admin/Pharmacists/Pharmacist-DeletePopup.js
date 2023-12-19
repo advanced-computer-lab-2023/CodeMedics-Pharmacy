@@ -74,7 +74,7 @@ export const PharmacistDeletePopup = (props) => {
         border: '5px solid #ccc'
       }}
     >
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
       <Box sx={{ minWidth: 300 }}>
         <Stack direction="column" spacing={2}>
           <Typography variant="h6" paragraph={true}>

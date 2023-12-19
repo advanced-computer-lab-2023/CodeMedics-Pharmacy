@@ -13,6 +13,7 @@ import { OrderListTable } from '../../sections/order/Pharmacist/order-list-table
 import { useSelection } from 'src/hooks/use-selection';
 import { applyPagination } from 'src/utils/apply-pagination';
 import axios from 'axios';
+import Message from 'src/components/Message';
 const useSearch = () => {
   const [search, setSearch] = useState({
     filters: {
@@ -29,37 +30,6 @@ const useSearch = () => {
     search,
     updateSearch: setSearch
   };
-};
-
-const useOrders = (search) => {
-  const isMounted = useMounted();
-  const [state, setState] = useState({
-    orders: [],
-    ordersCount: 0
-  });
-
-  const getOrders = useCallback(async () => {
-    try {
-      const response = await axios.get('http://localhost:8001/pharmacist/getOrders' , {withCredentials: true});
-
-      if (isMounted()) {
-        setState({
-          orders: response.data,
-          ordersCount: response.data.length
-        });
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  }, [search, isMounted]);
-
-  useEffect(() => {
-      getOrders();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [search]);
-
-  return state;
 };
 
 
@@ -84,31 +54,66 @@ const useOrderId = (order) => {
 
 
 const Page = () => {
+  const [showError, setShowError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const rootRef = useRef(null);
   const { search, updateSearch } = useSearch();
   const { orders, ordersCount } = useOrders(search);
-  const [allData , setAllData] = useState([]);
-  const [data , setData] = useState([]);
-  const [filteredData , setFilteredData] = useState([]);
-  const [searchData , setSearchData] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+  const [searchData, setSearchData] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const tableOrders = useOrder(data, page, rowsPerPage);
   const tableOrdersIds = useOrderId(tableOrders);
 
   useEffect(() => {
-    axios.get('http://localhost:8001/pharmacist/getOrders' , {withCredentials: true})
-    .then((response) => {
-      setAllData(response.data);
-      setData(response.data);
-      setFilteredData(response.data);
-      setSearchData(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-    
+    axios.get('http://localhost:8001/pharmacist/getOrders', { withCredentials: true })
+      .then((response) => {
+        setAllData(response.data);
+        setData(response.data);
+        setFilteredData(response.data);
+        setSearchData(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setShowError(true);
+        setErrorMessage(error.message);
+      });
+
   }, []);
+
+  const useOrders = (search) => {
+    const isMounted = useMounted();
+    const [state, setState] = useState({
+      orders: [],
+      ordersCount: 0
+    });
+
+    const getOrders = useCallback(async () => {
+      try {
+        const response = await axios.get('http://localhost:8001/pharmacist/getOrders', { withCredentials: true });
+
+        if (isMounted()) {
+          setState({
+            orders: response.data,
+            ordersCount: response.data.length
+          });
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }, [search, isMounted]);
+
+    useEffect(() => {
+      getOrders();
+    },
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      [search]);
+
+    return state;
+  };
 
   const [drawer, setDrawer] = useState({
     isOpen: false,
@@ -123,26 +128,26 @@ const Page = () => {
   }, [drawer, allData]);
 
   usePageView();
-  
+
   const handleSearchChange = (str) => {
     setSearchData(allData.filter((order) => order.number.toString().toLowerCase().includes(str)));
   };
 
   const handleFiltersChange = (filters) => {
-    console.log('filter changed ',filters);
-    if(filters.status == undefined){
+    console.log('filter changed ', filters);
+    if (filters.status == undefined) {
       setFilteredData(allData);
     }
-    else if(filters.status == 'ordered'){
+    else if (filters.status == 'ordered') {
       setFilteredData(allData.filter((order) => order.status == 'ordered'));
     }
-    else if(filters.status == 'completed'){
+    else if (filters.status == 'completed') {
       setFilteredData(allData.filter((order) => order.status == 'completed'));
     }
-    else if(filters.status == 'canceled'){
+    else if (filters.status == 'canceled') {
       setFilteredData(allData.filter((order) => order.status == 'canceled'));
     }
-    else{
+    else {
       setFilteredData(allData);
     }
   };
@@ -152,7 +157,7 @@ const Page = () => {
   }, [searchData, filteredData]);
 
   const handleData = () => {
-    console.log('filteredData ',filteredData);
+    console.log('filteredData ', filteredData);
     setData(allData.filter((order) => filteredData.includes(order) && searchData.includes(order))); //  
   }
 
@@ -204,6 +209,7 @@ const Page = () => {
           Orders
         </title>
       </Head>
+      <Message condition={showError} setCondition={setShowError} title={"Error"} message={errorMessage} buttonAction={"Close"} />
       <Divider />
       <Box
         component="main"

@@ -104,7 +104,7 @@ const Page = () => {
             <Head>
                 <title>El7a2ny Clinic</title>
             </Head>
-            <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+            <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
             <Box>
                 <Divider />
                 <Stack direction="row" >

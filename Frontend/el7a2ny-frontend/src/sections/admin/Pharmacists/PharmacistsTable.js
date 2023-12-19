@@ -58,7 +58,7 @@ export const PharmacistsTable = (props) => {
 
   return (
     <Card>
-      <Message condition={showError} setCondition={handleClose} message={errorMessage} title="Error" buttonAction="Close" />
+      <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
       <Scrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
