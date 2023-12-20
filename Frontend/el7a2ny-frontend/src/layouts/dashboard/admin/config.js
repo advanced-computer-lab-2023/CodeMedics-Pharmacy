@@ -10,6 +10,7 @@ import { SvgIcon } from '@mui/material';
 import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import LocalPharmacyIcon from '@mui/icons-material/LocalPharmacy';
 
 export const items = [
   {
@@ -43,7 +44,7 @@ export const items = [
     path: '/admin/pharmacists',
     icon: (
       <SvgIcon fontSize="small">
-        <UsersIcon />
+        <MedicalServicesIcon />
       </SvgIcon>
     )
   },
@@ -61,7 +62,7 @@ export const items = [
     path: '/admin/medicines',
     icon: (
       <SvgIcon fontSize="small">
-        <MedicalServicesIcon />
+        <LocalPharmacyIcon/>
       </SvgIcon>
     )
   },
