@@ -71,17 +71,14 @@ export const OverviewLatestProducts = (props) => {
         productID: productId,
         quantity,
       }, { withCredentials: true })
-      .then((response) => {
-        return response.json();
-      })
       .then((data) => {
 
         console.log('Product added to cart:', data);
       })
       .catch((error) => {
+        console.log('Error adding product to cart:', error);
         setShowError(true);
         setErrorMessage(error.response.data.message);
-        console.error('Error adding product to cart:', error);
       });
   };
 
@@ -165,7 +162,7 @@ export const OverviewLatestProducts = (props) => {
                 />
               </ListItem>
               <ListItemText
-                secondary={product.price + "$"}
+                secondary={product.price + " EGP"}
                 primaryTypographyProps={{ variant: 'subtitle2' }}
                 secondaryTypographyProps={{ variant: 'body2' }}
               />

@@ -66,7 +66,7 @@ export const  Row = (props) => {
           </TableCell>
           <TableCell>
             <Typography variant="subtitle1" >
-              {medicine.price} $
+              {medicine.price} EGP
             </Typography>
           </TableCell>
           <TableCell>
@@ -76,7 +76,7 @@ export const  Row = (props) => {
           </TableCell>
           <TableCell>
             <Typography variant="subtitle1" >
-              {medicine.price * medicine.quantity} $
+              {medicine.price * medicine.quantity} EGP
             </Typography>
           </TableCell>
           <TableCell>

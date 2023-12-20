@@ -92,7 +92,7 @@ export const MedicinesTable = (props) => {
           {items.length > 0 && <Box>
             <Box sx={{pt:3 , pl:60}} align="center">
               <Typography variant="subtitle1">
-                Total Amount: {totalAmount} $
+                Total Amount: {totalAmount} EGP
               </Typography>
             </Box>
             <Box
