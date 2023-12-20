@@ -28,7 +28,7 @@ import Message from 'src/components/Message';
 
 export const OverviewLatestProducts = (props) => {
   const { products: initialProducts, sx } = props;
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
   const [selectedQuantities, setSelectedQuantities] = useState({});
   const [viewingAlternatives, setViewingAlternatives] = useState(false);
   const username = Cookies.get("username");
@@ -40,6 +40,10 @@ export const OverviewLatestProducts = (props) => {
     updatedQuantities[productId] = event.target.value;
     setSelectedQuantities(updatedQuantities);
   };
+
+  useEffect(() => {
+    setProducts(initialProducts);
+  }, [initialProducts]);
 
   const handleViewAlternatives = async (activeIngredient) => {
     try {
@@ -92,7 +96,6 @@ export const OverviewLatestProducts = (props) => {
       >
         {products.map((product, index) => {
 
-          // console.log(product);
           const isOutOfStock = product.availableQuantity === 0;
 
           const handleAddToCart = (productID) => {

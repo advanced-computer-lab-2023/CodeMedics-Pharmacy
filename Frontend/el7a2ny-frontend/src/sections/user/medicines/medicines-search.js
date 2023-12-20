@@ -34,7 +34,7 @@ export const CustomersSearch = ({handleSearch , handleFilter , medicalUse}) => {
           helperText=""
           onChange={(str) => {handleFilter(str.target.value);}}
         >
-        {medicalUse.map((option) => (
+        {medicalUse && medicalUse.map((option) => (
             <MenuItem key={option.value} value={option.value} >
               {option.label}
             </MenuItem>
