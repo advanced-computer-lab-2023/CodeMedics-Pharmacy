@@ -37,6 +37,7 @@ const ifPaymentDone = async (req, res) => {
             res.status(400).json({ message: "Not enough quantity for " + medicine.name });
         }
         curMedicine.availableQuantity -= medicine.Quantity;
+        curMedicine.sales += medicine.Quantity;
         if (curMedicine.availableQuantity <= 0) {
             notifyAllPharmacists('Out of Stock', `Medicine ${curMedicine.name} is out of stock.`);
             messageAllPharmacists(`Medicine ${curMedicine.name} is out of stock.`);

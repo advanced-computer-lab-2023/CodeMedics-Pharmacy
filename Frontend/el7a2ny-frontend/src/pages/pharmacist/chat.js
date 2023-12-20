@@ -96,7 +96,7 @@ const Page = () => {
     return (
         <>
             <Head>
-                <title>El7a2ny Clinic</title>
+                <title>El7a2ny Pharmacy</title>
             </Head>
             <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
             <Box>
