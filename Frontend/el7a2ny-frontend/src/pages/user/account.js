@@ -24,7 +24,7 @@ const Page = () => {
       .catch((err) => {
         console.log(err);
         setShowError(true);
-        //setErrorMessage(err.response.data.message);
+        setErrorMessage(err.response.data.message);
       });
   }, []);
 
