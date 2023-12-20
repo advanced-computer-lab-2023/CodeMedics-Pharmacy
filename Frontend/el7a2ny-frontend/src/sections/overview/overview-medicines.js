@@ -44,9 +44,9 @@ export const OverviewLatestProducts = (props) => {
   const handleViewAlternatives = async (activeIngredient) => {
     try {
       const alternatives = [];
-      for(let i = 0; i<products.length; i++){
+      for (let i = 0; i < products.length; i++) {
         const currentProduct = products[i];
-        if(currentProduct.availableQuantity > 0 && currentProduct.activeIngredients[0] === activeIngredient){
+        if (currentProduct.availableQuantity > 0 && currentProduct.activeIngredients[0] === activeIngredient) {
           alternatives.push(currentProduct);
         }
       }
@@ -65,7 +65,26 @@ export const OverviewLatestProducts = (props) => {
     setViewingAlternatives(false);
   };
 
- 
+  const addToCartApiCall = (username, productId, quantity) => {
+    axios.patch(`http://localhost:8001/patient/updateMedicine`, {
+        Username: username,
+        productID: productId,
+        quantity,
+      }, { withCredentials: true })
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+
+        console.log('Product added to cart:', data);
+      })
+      .catch((error) => {
+        setShowError(true);
+        setErrorMessage(error.response.data.message);
+        console.error('Error adding product to cart:', error);
+      });
+  };
+
   return (
     <CardContent>
       <Message condition={showError} setCondition={setShowError} message={errorMessage} title="Error" buttonAction="Close" />
@@ -76,42 +95,23 @@ export const OverviewLatestProducts = (props) => {
       >
         {products.map((product, index) => {
 
-            // console.log(product);
-            const isOutOfStock = product.availableQuantity === 0;
+          // console.log(product);
+          const isOutOfStock = product.availableQuantity === 0;
 
-            const handleAddToCart = (productID) => {
-                const quantity = selectedQuantities[productID];
-                
-                console.log("in CART");
-                console.log(quantity);
-                console.log(productID);
-                if (quantity) {
-                  addToCartApiCall(username, productID, quantity);
-                }else addToCartApiCall(username, productID, 1);
+          const handleAddToCart = (productID) => {
+            const quantity = selectedQuantities[productID];
 
-              };
-            
-              const addToCartApiCall = (username, productId, quantity) => {
-                fetch(`http://localhost:8001/patient/updateMedicine`, { // done new Route
-                  method: 'PATCH',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    Username: username,
-                    productID: productId,
-                    quantity,
-                  }),
-                })
-                  .then((response) => response.json())
-                  .then((data) => {
-                    console.log('Product added to cart:', data);
-                  })
-                  .catch((error) => {
-                    console.error('Error adding product to cart:', error);
-                  });
-              };
-            
+            console.log("in CART");
+            console.log(quantity);
+            console.log(productID);
+            if (quantity) {
+              addToCartApiCall(username, productID, quantity);
+            } else addToCartApiCall(username, productID, 1);
+
+          };
+
+         
+
 
           return (
             <Card
@@ -166,22 +166,22 @@ export const OverviewLatestProducts = (props) => {
               </ListItem>
               <ListItemText
                 secondary={product.price + "$"}
-                primaryTypographyProps={{variant: 'subtitle2'}}
-                secondaryTypographyProps={{variant: 'body2'}}
-                />
-                <ListItemText
+                primaryTypographyProps={{ variant: 'subtitle2' }}
+                secondaryTypographyProps={{ variant: 'body2' }}
+              />
+              <ListItemText
                 secondary={product.Description}
-                primaryTypographyProps={{variant: 'subtitle2'}}
-                secondaryTypographyProps={{variant: 'body2'}}
-                />
+                primaryTypographyProps={{ variant: 'subtitle2' }}
+                secondaryTypographyProps={{ variant: 'body2' }}
+              />
               <CardActions>
-              {isOutOfStock ? (
+                {isOutOfStock ? (
                   <Button
                     color="primary"
                     variant="contained"
                     size="small"
                     // You can implement the logic for "View Alternatives" here
-                    onClick={() => {handleViewAlternatives(product.activeIngredients[0]);}}
+                    onClick={() => { handleViewAlternatives(product.activeIngredients[0]); }}
                   >
                     View Alternatives
                   </Button>
@@ -197,22 +197,22 @@ export const OverviewLatestProducts = (props) => {
                     >
                       Add to Cart
                     </Button>
-                <Box sx={{ marginRight: 8 }} /> {/* Add space between the select and the button */}
-                <FormControl variant="outlined" size="small" sx={{ minWidth: 80 }}>
-                  <InputLabel id={`quantity-label-${product._id}`}>Quantity</InputLabel>
-                  <Select
-                    labelId={`quantity-label-${product._id}`}
-                    id={`quantity-${product._id}`}
-                    value={selectedQuantities[product._id] || 1}
-                    onChange={(event) => handleQuantityChange(event, product._id)}
-                  >
-                    <MenuItem value={1}>1</MenuItem>
-                    <MenuItem value={2}>2</MenuItem>
-                    <MenuItem value={3}>3</MenuItem>
-                    {/* Add more options as needed */}
-                  </Select>
-                </FormControl>
-                </>
+                    <Box sx={{ marginRight: 8 }} /> {/* Add space between the select and the button */}
+                    <FormControl variant="outlined" size="small" sx={{ minWidth: 80 }}>
+                      <InputLabel id={`quantity-label-${product._id}`}>Quantity</InputLabel>
+                      <Select
+                        labelId={`quantity-label-${product._id}`}
+                        id={`quantity-${product._id}`}
+                        value={selectedQuantities[product._id] || 1}
+                        onChange={(event) => handleQuantityChange(event, product._id)}
+                      >
+                        <MenuItem value={1}>1</MenuItem>
+                        <MenuItem value={2}>2</MenuItem>
+                        <MenuItem value={3}>3</MenuItem>
+                        {/* Add more options as needed */}
+                      </Select>
+                    </FormControl>
+                  </>
                 )}
               </CardActions>
             </Card>

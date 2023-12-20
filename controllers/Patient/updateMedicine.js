@@ -34,6 +34,9 @@ const updateMedicine = async (req, res) => {
                 break;
             }
         }
+        if(!medicine.otc && !foundInPrescription){
+            return res.status(400).json({message: "You can't add this medicine to your cart, you need it in your prescription"});
+        }
         if (medicine.otc || foundInPrescription) {
             console.log('added');
             for (let i = 0; i < patientCart.items.length; i++) {
